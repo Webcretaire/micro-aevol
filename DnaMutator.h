@@ -36,68 +36,67 @@
 #include "MutationEvent.h"
 
 
-
 /**
  * Class that generates the mutation events for a given Organism
  */
 class DnaMutator {
- public:
+public:
 
-  struct TypeMutation {
-    MutationEventType type_;
-    int32_t pos_1_=0,pos_2_=0,pos_3_=0;
-    int32_t seq_size_ = 0;
-    char seq[6];
-    int32_t init_genome_len=0;
-  };
+    struct TypeMutation {
+        MutationEventType type_;
+        int32_t pos_1_ = 0, pos_2_ = 0, pos_3_ = 0;
+        int32_t seq_size_ = 0;
+        char seq[6];
+        int32_t init_genome_len = 0;
+    };
 
-    DnaMutator(Threefry::Gen* mut_prng, int length,
+    DnaMutator(Threefry::Gen *mut_prng, int length,
                double mutation_rate,
                int indiv_id);
 
     ~DnaMutator() {
-      int cpt = 0;
-      for (auto repl : mutation_list_) {
-        delete repl;
-        cpt++;
-      }
+        int cpt = 0;
+        for (auto repl : mutation_list_) {
+            delete repl;
+            cpt++;
+        }
 
-      mutation_list_.clear();
+        mutation_list_.clear();
     }
 
     void generate_mutations();
+
     void generate_small_mutations();
 
-    MutationEvent* generate_next_mutation(int length);
+    MutationEvent *generate_next_mutation(int length);
 
     bool mutation_available() { return ((cpt_mut_) > 0); }
 
-    std::list<MutationEvent*> mutation_list_;
+    std::list<MutationEvent *> mutation_list_;
 
-    bool hasMutate() {return hasMutate_;}
+    bool hasMutate() { return hasMutate_; }
 
-    bool setMutate(bool mutate) {hasMutate_ = mutate;}
+    bool setMutate(bool mutate) { hasMutate_ = mutate; }
 
-  std::vector<TypeMutation> generate_mutation_array(int length, int* new_length);
+    std::vector <TypeMutation> generate_mutation_array(int length, int *new_length);
 
-  static char BacktraceBase(int32_t locus, int nb_events,
-                     const TypeMutation* muts, const std::vector<char> ori_gen, int indiv_id);
+    static char BacktraceBase(int32_t locus, int nb_events,
+                              const TypeMutation *muts, const std::vector<char> ori_gen, int indiv_id);
 
-    static int mod(int a, int b)
-    {
+    static int mod(int a, int b) {
 
-    assert(b > 0);
+        assert(b > 0);
 
-    while (a < 0)  a += b;
-    while (a >= b) a -= b;
+        while (a < 0) a += b;
+        while (a >= b) a -= b;
 
-    return a;
+        return a;
     }
 
     int id_;
 
 // private:
-	Threefry::Gen* mut_prng_;
+    Threefry::Gen *mut_prng_;
     int length_;
 
     double mutation_rate_;
@@ -109,12 +108,11 @@ class DnaMutator {
 
     int cpt_mut_;
 
-    int min_genome_length_  = 10;
-    int max_genome_length_  = 10000000;
+    int min_genome_length_ = 10;
+    int max_genome_length_ = 10000000;
 
     bool hasMutate_ = false;
 };
-
 
 
 #endif //RAEVOL_CUDA_DNAMUTATOR_H

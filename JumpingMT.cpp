@@ -52,7 +52,7 @@ constexpr const char* jump_poly = "9da17b7f8b81dd8668afea353420300fc56674207f120
 #elif SFMT_MEXP == 11213
 constexpr const char* jump_poly = "e1fb174eeaec8c048fdd060653c54c0e59746d6bc66ff4cabbbda5f086d06d3796982a80b6467dde91bcd2922b87732361602b2c5610b8146fda7090b5d82aca1c69d40fa235b4f9b44bfc75bf670d089dae22e63f416d009eda5ec00af694026ff7fa0889f830d1ffd0863785190a8c65ff1baa8f5379451d3964766c7e205aa30c66c33f7734a906f8348e008d5d8f1194625711028a77443c986cb71f19b805c9866afdf2f65aed441faa734749dab56e908d1c8edfcba9b0b65752ad5cdafb4efbb18f3bff49974f26cca3a5ac90f97a714fa0b84124f227b4cde80230911be4493a927dc1125bc055230a25c5affb018214d1a6271f3ee92156e12320014aee4321dd246edddb95c56a11b0adeeac677edf7365698f413c9871070ae258c266ed700ed3b4b83843d13d9b5dd149a31520f484da4ff3a0c6e514ed5158b5fdef19c1cb5c7b00c596c59f7175a90ac9b69141a252221bbbcf56fd60c591e34821f8b8b5453329d0b009d635d329e081906aeb61deaee2250806a12dcc235489337e3ba473df5544c6cfa39b455cdfe840fe555765cd8d93a4d6500ec87d4bb5127af2415b59319a044e0fbc9087db8b541c155f1f2e32f03ea91ec0210de1a829a11ed0ffc00d4e4fc93e9817a709cb3a97ae058c05cd57abdd9bacb0426c57acc52191881040682a92ee2342acc7c76d59490888173dc540a2636b485b231b29c07c9e0dbd1faad61f16833e77d64a286afce616657ff87fc6222c5f1cab7751b86b71444eb4adc38e5dd403002c72cd1c6d2e87f1aba5d2a9a3dabebcd7d01552ba6e960fb19bbf9566a3379dfe87e43defcd496640b838294184cde7ab949402d45c38a5e16a21bc56abad8c4422b882cde3b72a00368505afef747a3397db4b27bacee0fc1e228305bdc25216cb90dde8a0e36913f1bfa7c9a73bdd441c1c70522df14b978eca879f3997b91486e7d1159acaaef8d72fa8467d68017adb5d59012b3f950d60e0bd674766c4d104ff011ea7106a87937dd37b8c46fab7bf3e7120c93f657ce93412b15606506491a6e525cb8d0aa79f4e93e40a8bf06daf835b4efc885ba7e45db506d1d3bc4f7a94b0d0f0780f14d540b67f153a13dfc6ce225ac62ddfd8b09565aafdffd3ad82955715b57b55cf70ae2f75be37cc200b6a23c2e96674d11725ff061b18b4504e2f85894e09bb41d507881740258667670134d6ec1a625a92f5cc77d47a10a6d6ab16de5de03cdf5651133cefcd9742ad0f66b6b9395a3c44bf5b30d10527f8d3d12cca4ff4bf00b677780fae1257f10f2f84be5662fc231ffdb1df65c90ffe5910761f775b491b26fe767fca3c1a5506762f8c47a1f30894c3ec300fa4005b81416962044bf0e233b2687403aa0558c168dcc748f3183a59a295aed59ea945304734ccdc439ddcb15784e522e88fd9c21090869db9e1676e2a94f3314b67a3f8f9b9db3680e93f7fac34f5da727548c629db273a650e330d1e7fdd57896fbc4eb0e0baeae249c13ef22e62568c4ea7e7efa1710c4ee39e7cc2df19d83b46dccf96da7b91002dce4548c296c8dcc2cce50ca6ce170e81ae069e6b3f139afe75e75be15d3a9cf20cdc33066a4b43975ad5e36823f71793a0dee97c9995debd2784aa3ad20a386dc99c943ea9324e85c1a457678e0b8f7708339c2b7e9c5056f01e697e7229131b8238d64c02e43c548c1ee141f8f38ad2c34f9aebdf95cf2e821b5513d29d4d0a892fa83bd969c4feb0794d4d72ef5d9076f664fb3776ef4d6d103cc2870e642e3617a75891bf4ae88046b5fa23f9d74543c09546acece46314c4c39cede5073161ad47682268017e85327c5294a2e2835c5aa782c89741d4b783275a5d023f1679e18ee49415ff1361af6bc89adf4f6a6f52acd8da4a24b5c69623cf88ce71bb4dad9fa293dd6c83a5706e91a06b5da2b45570aee388648ffe385028cec042f3ed3ec042066cd9def7";
 #elif SFMT_MEXP == 19937
-constexpr const char* jump_poly = "a23d5563c1fff635b7d3687fe879e3d54f7caddb7371f6174fbd8870d7b7db4aedc6a2c671133f72ab011abf5a98910b1024f2e5c1e89722572831d99320b814b252d58f9433ca547804394c69f4ed2b612068320daad25dc1e0bcef4c59deaa0095329c362103eda909c683e0a9b398efc2b69ac74087f0443842ce5c618d4bb58c66b3046dc752a633f040b2be7b32c7e7de01e17f93a10329d9249bb0a9c25bc41f3831c66a255a61904ce209dee70e7448df9aa741d01da9368ff827915b6f5860cdce17ee9c0e462fdb983709229b4e011796e425d5c0c42079bdae36dcda37603310dbad7b9ec04f9716b95a541350d6df4e62fe62dfcdd185fe90a139c3a56f66be753bfabfa80bb3d52b59c9d1ac03ab01449829dca1fc0a01bdd7c1c9ff22fcfcef818158a3eeb5d4b7eb237e14e781046a5257119651c00aaa6957da10c8490826eed8103192d97d2743f6221e748e29bd7589e1a716f0047cd990230f4d72a0505fc22b48657f56461285b019856c01ed37e3c3f33cad5aee8693c07d0982333d5d19661e74d0f0a0e1f27817abe25aaec92f028d5c082a4ee9038596c7272d6775933b13b516535f0892fe3de01ade7430687be70909c612a8837be4f702165d905ddc005e183a3147a179d6a07e6296a7c36175fb6cdcf725314f77f9d6d96e09d2129a1fc013618033a89352e9388aa7c6ce8da20ed2127e9755789060f1a8a718c1c9474ca379a7a1e916145a173680b78691186ae7a8217a6a918ff612e4763dc9464c98cf82980ceea52dd40fdcea3bc63cbf0acf577495f7ee78a01736ac4532877a5a5adb65af2016b925cc7f60ce45a6aa05db46154d46f9d1ba5f867a94c8fb5b59bf802aafe09b31f94342ea5363e4e7b62f3ee05a588a7b748e39ada7a3168139f6f426860a59a0d6237377a385531a25c0c34b20770ca28589357c92cd5a480f1895a19595e9164f0adb1edbdcfcf3056a2c0e7c8ecd1f1862858239074f49f0b5cec86c71da5371682583a7a3543024946be138e29dc17458e4807c7666503d347e1e0c30d5ae0665d0fcf0ef7379db17c7f4e71258b3f1040ed17496b6549c2e8daa2f95f597ebd88e63e4f58bd9fb6308b3e6f644b33855646c559ceb1fbacab511fbb5073e457a8f10adb16ea6909267e267fc4de62489a71dad8e30164a4a932d07471f2c71836313d8d3a8acfa5fb1aff504ce2e5eb84a06a2a1a402e2f76e300d31b8f92595ab92c724ec1b78d6e80564534f835f05ec931a39bdcc45b29ba8aa44508404bec50d7eac6c03e4c0b9c87ef987c0158f9da3e0116e82ef8004a59a255864c11e3b77756e98947056f1a343e3ac250d544e0d3827d98ca4d6bdedc4605699a2635aa9ea0cf665045b44370f2bf42345cd024d8937457f7263ba26a637f9c3b6f51b4d117a8e2251619d2880c006d34a96273adccbd0cfbf7aa9a769f828cb0641e7d22774b9ecd3f72f3e382b899ccd4e11c31810374172f77ccb3b51f972e9ca26d953a1fce6fe51ad169a1f98f798a49a3825a9ca98bb8d82c48c3cc05a317555a0adc7271e35c14afe06f1217d986d3a5f27b6b6829c3b46b918a72d93783b8df2e33de27c62d5d0a8198687f0c7b2c7285be165fefea6eed24bc4b284ce286cf1e617210fbb5bc403ae3981bc11711c1d291d828c54a6e4087d437dc810d28943e902e673ba7653a0d60d6df420496b57ded084d594e3d43678d4374e81c4616f81261f39c053126c17f5bdb6409d29623bb0aecdce335571dde95b23ec145b5c663aa9a1dd749beafafdabfea1ee05d18ef0f9b0390b2909527e4b010d5a8c18133825ffc7c69fa3879b952498066a0a2de1aca65e753d6891cff04050005c29ccf5f5a293b8910fac6f2f660a3061f8922b21bc4cd3df550abca3805feb2b5c7acbda10579dc90c374b31b619472a004851262d9813193bd01cee9503ce444aefab6f07fbe80a0ef08e62d096581582845b2700824ea65b410dd7a9a6a630f6443d4b8d7d0428cb362b913e1ef380b91a4e9f58b7d97a28d2b704a3c7f8bd228c29b514eddb81b433f30242f61a4b3886b3e19ca8ea8ecccb7981a48e35009acfe59026b1014457b25af997bb4f0cf6c02d7288f21f73981f7e3d13a453d31e59b3d8bb276a8b3215c4aeb0d8b175c98737c5ec5ab482d2161783e22b1fa05e49f5b467cf1803c6bd727cd413c907a3f7ca1cf44b66934dbd1aae65bc496bcd9f935d242e3e46346781ee800afbb6c51d2e5caf6143a8bae08b8144a46adbd03fae129096e3046d907084b23d60ee7bca6557bd9601b6cc3a74aa0c8fd5cd7f4e8fd8d2e274b47d308d35909b127e5a0d728bd35e07fb89af8cc1ecf1fcdf30efdce59dd3805e31667da92341bfe23c95a999da84b15a3bd502e692648154093c16191d2ff5a807ba60e71c2cdc3e13d3ffcb221ef064eedf841ac21946bebc8dc7e3d511d8b2a25d3724d4edcf47dd6dcdb87baaa6957610251b3b84e356ff1d6d58c44555ed278866d7fc6d86e3b32e377adf618e522dc84d840225e05c3586fad0706ccef54e86aac4ad5fade89354fb90ebb46a33cc79c31b416686ee9f784eb3f2404035e2b478d094e6fbde9b19c3ca9cf45c782ad318b61ffb1efaed4edbd9e2f9697ed4db2b3d32d81e7239adfba19cf5c3faf405984de7f2d4957d231c96babfc53f47644593df18a1c438b03d25722be9633018087289469040a5f9c4dede3880a96cd08a75a21e13a7a6dfbc7e48318b2666d52b2263422eac92afe8543a0691ce33a8404cbb99b0006f29d5a0bcb95bd75051813958fd0fa4e61e93633b67d272e8cb1de0ed030cedf0223e18990c9c7e7819696cd9aa53bb84d1f0647d28ea798edc08e671ba30249a96cb4234e42ac3dd6e12472061c024fe5a6c178e9aeccc09f7e89195d34fa17822f901c886fc99ec9ce9843f444a43fc640218ae56c94eb68bfbe0053e9c290bc151c1b6f7a38b21067aca34bdcf00778a10bcafe8d4ac811668b8788a48dbe139f29de1e044bc8c83fbbd4eafc8c33d6797175da24f18bfd06032c37ff7a93cfbba1cad6761d672ade73096b556d4d7432436c186f65abebdca45cc27e99e37651b53ec8561018e40a20fdea434687d0a61b2160be096d3a9d97a9ec3d6c7a6794e70b64cc6194b8649126f192ecadc553daa84262617550c1b78e67bf8ff6c1a5d4eec82c9ae414348a61c9c812b80efb977c5451192bdeb27a47fa1ec1f98acaff71f4d399f50ac567b08477fb140d8505c9097d9c4e9f16d702cfebf9bbad9ff22d4796719babbb4cf95c1ae831e5000b68e154f388567c5ca95f56a3e20547db2426619e5a48883dd55af44c8e9ca3cb3a6f26fb0d272b69f0f537271618bb77a385d2f153d834077dca863f8ef6a705ea296fbea1e669c1aa1c45dd9161a806f9aa053784b734e93ec3a2beb7f910ccf67165aadda29e67096be9cacbafb85740932997f147649dd9cacff18562e1b774f4cd5941ad7";
+constexpr const char *jump_poly = "a23d5563c1fff635b7d3687fe879e3d54f7caddb7371f6174fbd8870d7b7db4aedc6a2c671133f72ab011abf5a98910b1024f2e5c1e89722572831d99320b814b252d58f9433ca547804394c69f4ed2b612068320daad25dc1e0bcef4c59deaa0095329c362103eda909c683e0a9b398efc2b69ac74087f0443842ce5c618d4bb58c66b3046dc752a633f040b2be7b32c7e7de01e17f93a10329d9249bb0a9c25bc41f3831c66a255a61904ce209dee70e7448df9aa741d01da9368ff827915b6f5860cdce17ee9c0e462fdb983709229b4e011796e425d5c0c42079bdae36dcda37603310dbad7b9ec04f9716b95a541350d6df4e62fe62dfcdd185fe90a139c3a56f66be753bfabfa80bb3d52b59c9d1ac03ab01449829dca1fc0a01bdd7c1c9ff22fcfcef818158a3eeb5d4b7eb237e14e781046a5257119651c00aaa6957da10c8490826eed8103192d97d2743f6221e748e29bd7589e1a716f0047cd990230f4d72a0505fc22b48657f56461285b019856c01ed37e3c3f33cad5aee8693c07d0982333d5d19661e74d0f0a0e1f27817abe25aaec92f028d5c082a4ee9038596c7272d6775933b13b516535f0892fe3de01ade7430687be70909c612a8837be4f702165d905ddc005e183a3147a179d6a07e6296a7c36175fb6cdcf725314f77f9d6d96e09d2129a1fc013618033a89352e9388aa7c6ce8da20ed2127e9755789060f1a8a718c1c9474ca379a7a1e916145a173680b78691186ae7a8217a6a918ff612e4763dc9464c98cf82980ceea52dd40fdcea3bc63cbf0acf577495f7ee78a01736ac4532877a5a5adb65af2016b925cc7f60ce45a6aa05db46154d46f9d1ba5f867a94c8fb5b59bf802aafe09b31f94342ea5363e4e7b62f3ee05a588a7b748e39ada7a3168139f6f426860a59a0d6237377a385531a25c0c34b20770ca28589357c92cd5a480f1895a19595e9164f0adb1edbdcfcf3056a2c0e7c8ecd1f1862858239074f49f0b5cec86c71da5371682583a7a3543024946be138e29dc17458e4807c7666503d347e1e0c30d5ae0665d0fcf0ef7379db17c7f4e71258b3f1040ed17496b6549c2e8daa2f95f597ebd88e63e4f58bd9fb6308b3e6f644b33855646c559ceb1fbacab511fbb5073e457a8f10adb16ea6909267e267fc4de62489a71dad8e30164a4a932d07471f2c71836313d8d3a8acfa5fb1aff504ce2e5eb84a06a2a1a402e2f76e300d31b8f92595ab92c724ec1b78d6e80564534f835f05ec931a39bdcc45b29ba8aa44508404bec50d7eac6c03e4c0b9c87ef987c0158f9da3e0116e82ef8004a59a255864c11e3b77756e98947056f1a343e3ac250d544e0d3827d98ca4d6bdedc4605699a2635aa9ea0cf665045b44370f2bf42345cd024d8937457f7263ba26a637f9c3b6f51b4d117a8e2251619d2880c006d34a96273adccbd0cfbf7aa9a769f828cb0641e7d22774b9ecd3f72f3e382b899ccd4e11c31810374172f77ccb3b51f972e9ca26d953a1fce6fe51ad169a1f98f798a49a3825a9ca98bb8d82c48c3cc05a317555a0adc7271e35c14afe06f1217d986d3a5f27b6b6829c3b46b918a72d93783b8df2e33de27c62d5d0a8198687f0c7b2c7285be165fefea6eed24bc4b284ce286cf1e617210fbb5bc403ae3981bc11711c1d291d828c54a6e4087d437dc810d28943e902e673ba7653a0d60d6df420496b57ded084d594e3d43678d4374e81c4616f81261f39c053126c17f5bdb6409d29623bb0aecdce335571dde95b23ec145b5c663aa9a1dd749beafafdabfea1ee05d18ef0f9b0390b2909527e4b010d5a8c18133825ffc7c69fa3879b952498066a0a2de1aca65e753d6891cff04050005c29ccf5f5a293b8910fac6f2f660a3061f8922b21bc4cd3df550abca3805feb2b5c7acbda10579dc90c374b31b619472a004851262d9813193bd01cee9503ce444aefab6f07fbe80a0ef08e62d096581582845b2700824ea65b410dd7a9a6a630f6443d4b8d7d0428cb362b913e1ef380b91a4e9f58b7d97a28d2b704a3c7f8bd228c29b514eddb81b433f30242f61a4b3886b3e19ca8ea8ecccb7981a48e35009acfe59026b1014457b25af997bb4f0cf6c02d7288f21f73981f7e3d13a453d31e59b3d8bb276a8b3215c4aeb0d8b175c98737c5ec5ab482d2161783e22b1fa05e49f5b467cf1803c6bd727cd413c907a3f7ca1cf44b66934dbd1aae65bc496bcd9f935d242e3e46346781ee800afbb6c51d2e5caf6143a8bae08b8144a46adbd03fae129096e3046d907084b23d60ee7bca6557bd9601b6cc3a74aa0c8fd5cd7f4e8fd8d2e274b47d308d35909b127e5a0d728bd35e07fb89af8cc1ecf1fcdf30efdce59dd3805e31667da92341bfe23c95a999da84b15a3bd502e692648154093c16191d2ff5a807ba60e71c2cdc3e13d3ffcb221ef064eedf841ac21946bebc8dc7e3d511d8b2a25d3724d4edcf47dd6dcdb87baaa6957610251b3b84e356ff1d6d58c44555ed278866d7fc6d86e3b32e377adf618e522dc84d840225e05c3586fad0706ccef54e86aac4ad5fade89354fb90ebb46a33cc79c31b416686ee9f784eb3f2404035e2b478d094e6fbde9b19c3ca9cf45c782ad318b61ffb1efaed4edbd9e2f9697ed4db2b3d32d81e7239adfba19cf5c3faf405984de7f2d4957d231c96babfc53f47644593df18a1c438b03d25722be9633018087289469040a5f9c4dede3880a96cd08a75a21e13a7a6dfbc7e48318b2666d52b2263422eac92afe8543a0691ce33a8404cbb99b0006f29d5a0bcb95bd75051813958fd0fa4e61e93633b67d272e8cb1de0ed030cedf0223e18990c9c7e7819696cd9aa53bb84d1f0647d28ea798edc08e671ba30249a96cb4234e42ac3dd6e12472061c024fe5a6c178e9aeccc09f7e89195d34fa17822f901c886fc99ec9ce9843f444a43fc640218ae56c94eb68bfbe0053e9c290bc151c1b6f7a38b21067aca34bdcf00778a10bcafe8d4ac811668b8788a48dbe139f29de1e044bc8c83fbbd4eafc8c33d6797175da24f18bfd06032c37ff7a93cfbba1cad6761d672ade73096b556d4d7432436c186f65abebdca45cc27e99e37651b53ec8561018e40a20fdea434687d0a61b2160be096d3a9d97a9ec3d6c7a6794e70b64cc6194b8649126f192ecadc553daa84262617550c1b78e67bf8ff6c1a5d4eec82c9ae414348a61c9c812b80efb977c5451192bdeb27a47fa1ec1f98acaff71f4d399f50ac567b08477fb140d8505c9097d9c4e9f16d702cfebf9bbad9ff22d4796719babbb4cf95c1ae831e5000b68e154f388567c5ca95f56a3e20547db2426619e5a48883dd55af44c8e9ca3cb3a6f26fb0d272b69f0f537271618bb77a385d2f153d834077dca863f8ef6a705ea296fbea1e669c1aa1c45dd9161a806f9aa053784b734e93ec3a2beb7f910ccf67165aadda29e67096be9cacbafb85740932997f147649dd9cacff18562e1b774f4cd5941ad7";
 #elif SFMT_MEXP == 44497
 constexpr const char* jump_poly = "6caad9646010c6e030ad6486ede1d7e2d0d9122a99553188d1972357e0eeeb500586646c540a925f430cbfef2ec953b259bc21128bc82e8e3fdd29310fc07e48578b710f4002a6bc178b59dbbab4e2d999c2ad41844859541c857e4efb86f1b66ffce0d43aa66a041ec2b48ec669cca2fb86abac00cb2e8323bf3977d0bbb2c7c711b4bed35578d7b8bfb6cd0698ca5112785bd5e94604c825e3a268cf5e83d30cf2f587d5267e7938053291e837ddfa99baa243aa39ea065f893854ff28987163ae1aa0b4c1cfa186c8046add5844d345401f8a56e0b4240484551f0431da0620cbbd33bd9cab2c83304c0df8f0fb53ace27af8ae2063b008f45a4d181ec3c618489ba2e6d6ff9cb200b74743a76d48dc7a93f92ac9987f8b551501958f86985e149f08a63d402d4d2d83cb313e60d88ed6c592dc03ec23f30d2846f29f6baa5d6422b2b0ba1120d939475300d191c67f886ed88a2453e553c4d6165b994fcf08c0d26bb5ce7063bfef50d9cc60fcd5eaf1c21d86acc26595d019bd448a3dc9bfc19216619db9eae34497f06473c5452687620790e093479b4fe780fa6373e72cf84df297c58ee53959c666376c86d863070efbd63f0e7b6fcfab07e2723e3ea9e3de5e1a0c99e58fd0a96066dfd7199ff48b304943655aa7a08222b84d9f5609fcb2f0108cd1aed86aefa9070a46380bfcdfa8a4d522500861446c4817984c165da297e235d41ad75ccbe1e03a8b0932fa588d3ad10244f07cfb8e7c7e3bde230c8d7795975f70ebf0e72a6c1faa6afbb7f19121e9796b48e13a6b0c0a20ccef3f2819e67c9e50bb9b8a11599927b52663eb01be5906d5c5b4a083d35919553f89e68f7ad67038e1d11b230c1ac60526c142deda850aee0fa2dc28e2f4b3fa6d84220b4c4d2521dc571a2bc667b4a1ce6faf013fca0fdf226437dc3f6701d705747a09696ba79f158864b997aeb46a6b76079c5cb48329873cd3e5073d7cab25b5d461fa14f63ea2f4470445977467969bae5ae2fe180a16d663f9fd77501fd944da68b5f6e6ea16d50d77a357e35958ce693cc5998401542e62026087755a2023b2f1822841d117ee6c6bee7d216c6d5e3c34aa2e2d58259e39973d206a9f5a11dbb0248d98a83161c37b578797412a00b218511a3bc6c1b85b74254bafec4242fb3b6118175952b8240d1d42e70dee240b219a0880ba0b230783e8e10f2f3ddd5e14edce7ef68cc4050dfa84c85af24d980e15386e3bd675f75bbe64ec03918c282bcd78ac309d938b35dfa483a47f6584989021d73c587f4a51d61d91d24468049ae0fa2186a1ead3a3eac066b68d3fc94bbc4f43a3cb94a6e692a6c4747d2ef95d7827d81a3abbbd70b7306385a33208c702c050afa8e0aac334c8f048602448be9dcd89f7b5af1ad83b0a102c95a84060b04ba451f875589a7d0a9c13e50cc058c9c57c0386f9a8cd68d9753cc7424d8e1555e0d45de799f551f320e2c523ab5317bf5b5f54b7320e0f6f1bb5be29175013a68e6ef33280a042bf6b37a4143193926c24529901030dbcdcf25eb78d827dd388d362c4d1dd9b19f2c932db9fa23381adad589b89b4f4f75330a0066a8e3770d894a7f91a01901270311009467b6991d036fff42f3a6eab0e6228a641e914c237f989b9f088d6eeb981fd90fa7c682d81fe164742c9f33e7b359d2bd7282cf63fc464591dec41529678c5e75ca71494ce35723bbfccde9ffa6544cfc8c3f616461f64db8cecd8a755d3f9870b5e344eb72216bdeca7f2842f18c9b3f86e803747ed395e3bff3d4c7adf7c2a7152cbb7b63fb8ccb5c610345669a81dd6faebfb6f90aa9967ccf527d16cb34e184df9b1e76c4cecf1b4944144868f1d02095735b75c1439241284b14199e1ba3d70a7fbe30e5da972843e07a5064ccecd768714959f270afe8c7098a54814cdc7c6798f95d5209e692e12491429614426c84d5f33d24175210b87511f346d6d67fb2178009f0797656716653ef0aca961cc6dc35e20315d68fe366a4720ee511a062bca11e1885d5f9db804097cb73ee52602138588bd9251ee304b88dd8dcfc1f0e108ab5bb9305689f335af29c35a713be47acafecfa0db95680df6e0b1ff1217b6fe4054eceadd95ec370c8cdbba5ba6dcbf360567f557783a01a2cc37cd63ff390e313dcaf2887b8f374c78862a316737b44a5c3ef528e0fad177c1cf6ddd1ce34f41d5274fc03e7f55fa108c8724b5c497d58856995454780f013285e71e32338c1482578f878610be1576ddb97ba95e3b9cbe46f049399c128b3346a710d34a3d12f172dd94f7cb01ee060b664c8bebd06638a103c256a3383cf4581d9a71bebd3a1b926686e11ffae27beaff3801fef3d77c750017e8c7176cfc5ea7a984f8309d15e49e551fadbe646947cd9a288b709f6e48b3614d42364a8f0d73330ccc96190204b12f33771822152cca986621e920014870f91fab5d445f947ee47455cdda9c14cc4c728ce01ad2c3725177c5eb49bed09d8a23a9449bbd8abe158c372db81d6bdb3f21e38a0464d099896d3e053b402391ebcbd12da093e5297ff098813f290ffd0056d7a0209244144e04ec568e2eaf8c9970c3217d0fd5d571c11219a4af0d41cc8bbdbc208e28eb71ee628909d3bc962554782271b281289ef851fc2fdab974ccf36f6cc2d2b9a3833ce706047c096b74b41483c190a62e8f2d8a2f09149bf7de80b3349347d3eb9fb446dc50c2bd66d0d4216de4d7499ee9403841d8c541d541816ba731b5ea694c087735062ae86efd6afcab9f00c6fc7a3a4a58ea31ada015743b22f3cf513f36c79405d928492d3d71129ab72c1790bc5bc0c4478dcde93768ce618eac0778c906e2a1d9839ebe6039394f48479f3546e04cd90c053701f89455cdcf15915c679af2e3079d34fc30df422cc07c1e0338f745c9eff8651cdff8cdb9e62890597842212a67c759d7300c79370f29cb49c38a2e44e96a7e8143e2c092441469b6c28dd0e2d06a31b0810bc2bd630548106d7d77bb16bc6ff8ae66c8bff07bac5e9911c10203f278d4e491abfc6cd77c151b84c703f578340f1eca31e9b12c02319f160f883bf4a6fdceedd77d1da6f91996824abb6944c1894b46af9ca3835375ea2b230484cfc9510c80b68054ceb5ae3a2da0c848b5c122dd1dc0ec8bc72199feb82e8130d88c8509d453566c5c0c3c3abeada5f7d399accac6290e3c55430f091c0db390e9dc28c7d53f391dc074cb5cb35aad6f13d4bbe01f4070c8ed235ecb93094685e5d632240e7cbdef7478845cc1b375f011773440e308c55533d3908bf7c2b4a2124c7fcfbc21160b14f7f774a393f6c6d20b5bc11b0e7029ebca0c72f5d219de4baffa3de1e4c49ecfd1a04bef1b0b1f1f4835f3a56f0aa8fdd0cc64d41edde62b5d8d0c5482097a32f47967168dc1c192aeee73954caeef751654a1541e04c534d201672beaab587080c7cb35b2106bd983f5da25266a3370093877f8664f207687e4c5964b9a347b25455d438995057432abc6e34a0c2bca64f1bb440c143db8ec04baf7073097ea7b9b53e794a626f66a26d0073c702fe52df3fdac89d45255d89a7a0d57384723ccd04a741ffb9c294a03afb47e7b3cc097f6c90a4602c7af7ad9439b73f4b797344e425648e20ca0eb2bb6df14bb13498685dd175c3af23686345caf99cc3d7150adc37a4e4a468bc622aebce6032f0bfdeb3114e37802ac95878f75d2a130745092212b494ade5cbc22f8953fbbf1e8317356bd3f893a7391f69ee4b4e9e5400474ed220319844ef0cfbc954f4c674b146c858e97d26882d44dad9417654aaeb0c1c05073575c743df17831cef24e1218a002831c34ff3ea2cec44581532022ba77fb0976c86d6297b16fab26de7f2fe47b18150bdab5384dcc131ea19cbe6d788f9555ea4dcd44a6bf8e857d3edab7ec888d4dc2dbbbb4d14bac32f509600a200c831f4e0a01671221f7a02aaecfdc5523e1569ce021c3f3ba45bfa48a2ff2068bb5ca75029f59cc431a824b038b2cfa00ed28bda882da84c43759f9d05c15c8c959eaf711bab8da7c46a6ee370e001f9a8610f41431d57632bb7cb8f8440b8265e87c1a5a6dff13e8e5f84843d7d6a9d204042251d91e99b532ce3795a4450266e913fa6fac460261204fd9b33419a992208bf9f3f6511752533eff3fd3dec51bfab5fd82db2103942060ee439f40914bf9d4e02b8a2786daa9e02a9ed12995d898074c4e4575b979e28e1daed08b4c914caa90407530b590bba5e19120601a2f3fb70e3f6739e2ef68e8927b5778ee5400ff65e174626063328c86183db7ddeda2d403c6fee16387ee224740613d320c97fb24e9a2b3432e771a361fedab1b61423ef40d64fbfdea7f4e66d8adca2ae6134ac85eaa1799d8a6dfe290825c04741467b606f768269c6877b2df87294849e9da9534fa5023815cdb34c67ed4b1e7c87080b9712d4f1fc42bdc01cf9009573594188bb8715d02e8c89fe5e27677e9b9384f2d1743679c751f443954be0eac01d058dd49a18b19fb735bfecf67d830c5e79fa3191e770f422e26a55be3c866ccf94c614e2d06fd97b09598f750ff78714816b67bc561978f688a7ef7dbf8e1bb67a39a6a2598da50610704aa6f6df46a428fff867f332f5f84bb899f0e934f2d7fe6ed641264763e4480cf0fabdc973af34307e1d583edd01a386fac836e578a7809747930c7bb5ff7e0715ca850f8045c77d1de34308547371da0bf8ff40cd056c38a20561c9a3511051412bc3808aef360ebbc5b36a3a2ab7d60c3a1152fec4b82f5ebe1935bc5fe63592392f01753b0610b8892cb6223456ff020e4225a4f4ff2959ed2189a0bbd41edcbafe8107ab96be7a8c084d3aabe959c101b568c68a0e86e0e51311eb09c6b62837fb46d1bf9ec264e6c1a6d15b3cafc920dcccf4b11295ffc0202d22a1b869c626f1b330b54c64d1b76c91ada174b1fec4c12beeb913903c44a1cb69a92381db3c4c30fdd2140e8c1a1cb2910c4e6f9eb0df346895d5f521def06d1ea8fcfcb7ffb90687a3cf0d10d578567c70f934ae26c9f5adda6613b7b08cd64f308a7bf17c803cbf8301902b9a077d255c3007791b3464b98ad020d4212dd2d402d685224034e097243bfb8dc603c308033812a10edc2db95324d7fe6c586583d33e0c095f0877bf02e1f5ce521600374b1b18926819b0a1dfed2a49bdaf40d619dd30ab15651b07a456419e30310921029899426b367d377de0ce1d60f4e684d8cb8129d14c40d62e505a35dd686ff9dee950b830e7187f9ddd1dba5b7dfaf8360358b7ed1a3c8834751cc6baa18d8e1351840fcad13bb9cb097c14e153a81c042f23b3b1ab91de4d0c484f71b00f03ac2d7d04da4b0cb4ba699a40fe52f90ca1bddcada1aa2e2bc2ac01d557c5f0182ba31a04e3a7b78b3ff63792c384dbe8389af0ed90c2bd3d46026b2f2b74cf883006deec89bbc15a5a61cec0d95b3f4b189b0720ef74143e0a6a86dea0f9bef46607aebbca2deb8c737eae143082b5aed7622d2da4af8ec55ac7d4e27cf5f577dc08f962f2ba5b09ddfc179ee47f249259c33219468fc295e7ce66d7bf588c4e98ce594fb563ac796a2a61c3163c1ef194627fa8a423b5c62d70f155cbdce1cc3a642299d773f791540acef1ce9fefd40601caf8b4cb070fd60d1be926d2808bbe73bb7c1e8de216f17780e2c390a7d371c7a1e0ff7c193bd7ffc5828233e2aba4c38a15184e807c70cbab91ff14f19cacc2c1abc00c57bfec032ebf77189a767d852510c43554dc08e52a2ebc8b5554f05a9655b5e2c86d24ddf82e16e9aa1455635a759c70c7f6ecc7fdeb92fc18a6420a347062e10daa45a52ffa355d20dbec1324109a56eb48e8a0c65a4064f44e64d3013f44b3b77e35b4024058e6c704b9a3b3c5f20108445639f8fb9664ebe38af4459d18fc150648da1bc08581303c6820d57acb368d0e7c5f3358e7fc3da31b75e29b70e4ce0f2fe00bc48494b6a71e855156372cba5f85d26598a5b9b87034b4cbbf9703fea767979592c05780d4f578dfd057c7bc2616316c0eabd9bc4348f0fe2efe0127a52608f1c9fe371499f73503d6acad078f315a068b737ee306699b07701964d15276d1399829731daf970889a09a0d0f95884df708c94721176386f4f61b34d55f891ee95c6fc1943c729aae22739b87d0493c50c4ee06b186ad4915d8849a05336111e8b679f6605184d6023c796aacbc30c9bc1c3c7a4bd1c0addfd5b4283184f7617f826397cd8907d524fb8b7f7b3cdcffa15ea1497dead96a4a574410309ab0468fa6a2ff68af7bbda6a1cdd5a29959ddb454f35604d6ce1eee809935a60b009ea85db057c24e5cae2647c3050db04b2a840cfbafd8d01b4cc79d37ed81d11bba99101b7a184d0951f2f8d67b4ba8ea1b1eaabd336ad9a330ae45c9854c8879d9135bf0eb532877184eaf6c76b37ee679ad395aefc6c0837afab6025eeca505304f8a76985fdd5eb6d088899b21b12a27a9c2f9d4fc202a2c2a5444ea99153fae663ebc344691ddab0cf2f24ab88dfa827006a0e44cfa12f8e656300e6b8881efbe19d9c64784eb7d0ef9ddf45b3846c2a73e97096557c63787e95302c726fcf43c03a3e16b8993e6b43ffc56679f8b701fbe5a06e3760d2e5026f85e6c245d210ca1b9075f6d71f254e706dd576f4fd29101a7db682fa90826cfb58d56bf2fd1c35894c1fa63db637e314e7e00e9cce30b0471601ae787ae60936dd65c9250cbbf05c227829a9196c1d78886aa1fd017a79748e3e16b239417d96a21130cb2f4415feccd310ae276b8bffa85386f4c9be04ff40443a96530892e6644dbbeb7d263e12834aaf9d1da071ccbf0c3f11490960088ed6c10d8571130f7bf9488c3e6c4e8294d96786543aaaa2b7f729b0dace38247b802861a9562f3b6ba38f301bffeda1858c2b0f0152326bb704acf1a3ef217e71665331d7126d841edbee3d2759c1fc7009c6f7e6ed3f677048065788e7a1065d1b8b3152dda8151f1be395a469016bb84e7a13f22d4adb0cfbfb6dfbf3fa36704b56d3b5fd38da1a138ff20666175260abb51bddafdd212891b3fd2111833473a3a53ab9de69ba6e59ff78a1c1149eb7a9ea74dacdea7d6f4b11466dcdac73cda258053bd338a6628be9c51f0e4eaa73c171978d0e9a8a42aa732498bb07190174ed8d53cfe633b9d0db21df231efa314317f8eb1084124d412ca609ff3930ee23ce7302b12e09debf3de83b23db0877495e71216cec52309cf884e11e88695a17b7f60560958d68147d8a4910e08da8019bf26e47213a598a436032c373080abb070d181f9d55c30b7539c45dff71bf0e2ca3c0afdd0c1dbe00a52fbc8bbaafa7c506848d9d2d5160fbe1c592acaf0f9e6cc390bb101079b12a618f4245c3b6d4514f8989ac04cb828555362cf9fc82e69d2157ce52bbd8facb033f34db8ddf7a5bb17cd3a57955068b9ec2c6a2b8e08e6f0acc8bb96f6148223941a34f0be4e7579bd5e7a174eead9f12c098473333397270629b0171492932906c46e691aba5d85f394e897340b0f71f079b45d1cceadd210fcc6c6a4e4882ef71d8190a1b8c28b3c5ca147cc5bce1ef2b84207a61d91e810d037b05a5043cc2f98e974dc6265880205a6dfb47d5ff17b91adfa7ca009e1d44094563fa84281026ea4530ba270bb51ef0de80cd9395bf80bfdaaf202c883e6a0f13e356b6d1201befa7cfa19abe2e58ee490553e4fd8a1d927e1aeb1ff479614aaf9aefa5f0073457ff4f8f98f238aa40367fdffb799dcdb59b3e55d2b976ff3daf46661ef00f641718ca6af830ef3d18d58427f2";
 #elif SFMT_MEXP == 86243
@@ -72,8 +72,8 @@ constexpr const char* jump_poly = "fabdf682938a008933e7f552cdb0c935af57be5a1b9ad
 // =================================================================
 //                    Definition of static attributes
 // =================================================================
-int32_t JumpingMT::nb_jumps   = 0;
-double  JumpingMT::jump_time  = 0;
+int32_t JumpingMT::nb_jumps = 0;
+double  JumpingMT::jump_time = 0;
 
 // =================================================================
 //                             Constructors
@@ -81,41 +81,37 @@ double  JumpingMT::jump_time  = 0;
 /*!
   Create a generator initialized with a simple uint32_t
  */
-JumpingMT::JumpingMT(const uint32_t& simple_seed)
-{
-  sfmt_ = new sfmt_t();
-  sfmt_init_gen_rand(sfmt_, simple_seed);
+JumpingMT::JumpingMT(const uint32_t &simple_seed) {
+    sfmt_ = new sfmt_t();
+    sfmt_init_gen_rand(sfmt_, simple_seed);
 
-  // Jump to get rid of the initializatino skew
-  jump();
+    // Jump to get rid of the initializatino skew
+    jump();
 }
 
 /*!
   Create a copy of an existing generator
  */
-JumpingMT::JumpingMT(const JumpingMT & model)
-{
-  sfmt_ = new sfmt_t();
-  memcpy(sfmt_->state, model.sfmt_->state, SFMT_N*sizeof(sfmt_->state[0]));
-  sfmt_->idx = model.sfmt_->idx;
+JumpingMT::JumpingMT(const JumpingMT &model) {
+    sfmt_ = new sfmt_t();
+    memcpy(sfmt_->state, model.sfmt_->state, SFMT_N * sizeof(sfmt_->state[0]));
+    sfmt_->idx = model.sfmt_->idx;
 }
 
 /*!
   Load a generator from a gz backup file
  */
-JumpingMT::JumpingMT(gzFile backup_file)
-{
-  sfmt_ = new sfmt_t();
-  gzread(backup_file, sfmt_->state, SFMT_N * sizeof(sfmt_->state[0]));
-  gzread(backup_file, &(sfmt_->idx), sizeof(sfmt_->idx));
+JumpingMT::JumpingMT(gzFile backup_file) {
+    sfmt_ = new sfmt_t();
+    gzread(backup_file, sfmt_->state, SFMT_N * sizeof(sfmt_->state[0]));
+    gzread(backup_file, &(sfmt_->idx), sizeof(sfmt_->idx));
 }
 
 // =================================================================
 //                             Destructors
 // =================================================================
-JumpingMT::~JumpingMT()
-{
-  delete sfmt_;
+JumpingMT::~JumpingMT() {
+    delete sfmt_;
 }
 
 // =================================================================
@@ -124,19 +120,18 @@ JumpingMT::~JumpingMT()
 /*!
   Jump Ahead by a predefined jump length
  */
-void JumpingMT::jump()
-{
-  //~ clock_t start, end;
-  //~ start = clock();
+void JumpingMT::jump() {
+    //~ clock_t start, end;
+    //~ start = clock();
 
-  #ifdef TRIVIAL_METHOD_JUMP_SIZE
+#ifdef TRIVIAL_METHOD_JUMP_SIZE
     for (int i = 0 ; i < TRIVIAL_METHOD_JUMP_SIZE ; i++)
     {
       sfmt_genrand_real2(sfmt_);
     }
-  #else
+#else
     SFMT_jump(sfmt_, jump_poly);
-  #endif
+#endif
 
 }
 
@@ -145,208 +140,184 @@ void JumpingMT::jump()
 
   Number of successes out of nb_drawings trials each of probability prob.
  */
-int32_t JumpingMT::binomial_random(int32_t nb_drawings, double prob)
-{
-  int32_t nb_success;
+int32_t JumpingMT::binomial_random(int32_t nb_drawings, double prob) {
+    int32_t nb_success;
 
-  // The binomial distribution is invariant under changing
-  // ProbSuccess to 1-ProbSuccess, if we also change the answer to
-  // NbTrials minus itself; we ll remember to do this below.
-  double p;
-  if (prob <= 0.5) p = prob;
-  else p = 1.0 - prob;
+    // The binomial distribution is invariant under changing
+    // ProbSuccess to 1-ProbSuccess, if we also change the answer to
+    // NbTrials minus itself; we ll remember to do this below.
+    double p;
+    if (prob <= 0.5) p = prob;
+    else p = 1.0 - prob;
 
-  // mean of the deviate to be produced
-  double mean = nb_drawings * p;
+    // mean of the deviate to be produced
+    double mean = nb_drawings * p;
 
 
-  if (nb_drawings < 25)
-  // Use the direct method while NbTrials is not too large.
-  // This can require up to 25 calls to the uniform random.
-  {
-    nb_success = 0;
-    for (int32_t j = 1 ; j <= nb_drawings ; j++)
+    if (nb_drawings < 25)
+        // Use the direct method while NbTrials is not too large.
+        // This can require up to 25 calls to the uniform random.
     {
-      if (random() < p) nb_success++;
+        nb_success = 0;
+        for (int32_t j = 1; j <= nb_drawings; j++) {
+            if (random() < p) nb_success++;
+        }
+    } else if (mean < 1.0)
+        // If fewer than one event is expected out of 25 or more trials,
+        // then the distribution is quite accurately Poisson. Use direct Poisson method.
+    {
+        double g = exp(-mean);
+        double t = 1.0;
+        int32_t j;
+        for (j = 0; j <= nb_drawings; j++) {
+            t = t * random();
+            if (t < g) break;
+        }
+
+        if (j <= nb_drawings) nb_success = j;
+        else nb_success = nb_drawings;
+    } else
+        // Use the rejection method.
+    {
+        double en = nb_drawings;
+        double oldg = gammln(en + 1.0);
+        double pc = 1.0 - p;
+        double plog = log(p);
+        double pclog = log(pc);
+
+        // rejection method with a Lorentzian comparison function.
+        double sq = sqrt(2.0 * mean * pc);
+        double angle, y, em, t;
+        do {
+            do {
+                angle = M_PI * random();
+                y = tan(angle);
+                em = sq * y + mean;
+            } while (em < 0.0 || em >= (en + 1.0)); // Reject.
+
+            em = floor(em); // Trick for integer-valued distribution.
+            t = 1.2 * sq * (1.0 + y * y)
+                * exp(oldg - gammln(em + 1.0) - gammln(en - em + 1.0) + em * plog + (en - em) * pclog);
+
+        } while (random() > t); // Reject. This happens about 1.5 times per deviate, on average.
+
+        nb_success = (int32_t) rint(em);
     }
-  }
-  else if (mean < 1.0)
-  // If fewer than one event is expected out of 25 or more trials,
-  // then the distribution is quite accurately Poisson. Use direct Poisson method.
-  {
-    double g = exp(-mean);
-    double t = 1.0;
-    int32_t j;
-    for (j = 0; j <= nb_drawings ; j++)
-    {
-      t = t * random();
-      if (t < g) break;
-    }
-
-    if (j <= nb_drawings) nb_success = j;
-    else nb_success = nb_drawings;
-  }
-
-  else
-  // Use the rejection method.
-  {
-    double en     = nb_drawings;
-    double oldg   = gammln(en + 1.0);
-    double pc     = 1.0 - p;
-    double plog   = log(p);
-    double pclog  = log(pc);
-
-    // rejection method with a Lorentzian comparison function.
-    double sq = sqrt(2.0 * mean * pc);
-    double angle, y, em, t;
-    do
-    {
-      do
-      {
-        angle = M_PI * random();
-        y = tan(angle);
-        em = sq*y + mean;
-      } while (em < 0.0 || em >= (en + 1.0)); // Reject.
-
-      em = floor(em); // Trick for integer-valued distribution.
-      t = 1.2 * sq * (1.0 + y*y)
-              * exp(oldg - gammln(em + 1.0) - gammln(en - em + 1.0) + em * plog + (en - em) * pclog);
-
-    } while (random() > t); // Reject. This happens about 1.5 times per deviate, on average.
-
-    nb_success = (int32_t) rint(em);
-  }
 
 
-  // Undo the symmetry transformation.
-  if (p != prob) nb_success = nb_drawings - nb_success;
+    // Undo the symmetry transformation.
+    if (p != prob) nb_success = nb_drawings - nb_success;
 
-  return nb_success;
+    return nb_success;
 }
 
-double JumpingMT::gaussian_random()
-{
-  double x1, x2;
-  double r = 0;
-  do
-  {
-    x1 = 2.0 * random() - 1.0;
-    x2 = 2.0 * random() - 1.0;
+double JumpingMT::gaussian_random() {
+    double x1, x2;
+    double r = 0;
+    do {
+        x1 = 2.0 * random() - 1.0;
+        x2 = 2.0 * random() - 1.0;
 
-    r = x1*x1 + x2*x2; // (x1,x2) must be in the unit circle
-  }
-  while ((r >= 1.0) || (r == 0));
+        r = x1 * x1 + x2 * x2; // (x1,x2) must be in the unit circle
+    } while ((r >= 1.0) || (r == 0));
 
-  r = sqrt((-2.0 * log(r)) / r); // Box-muller transformation
+    r = sqrt((-2.0 * log(r)) / r); // Box-muller transformation
 
-  return x1 * r;
+    return x1 * r;
 }
 
-int32_t JumpingMT::roulette_random(double* probs, int32_t nb_elts, bool verbose )
-{
+int32_t JumpingMT::roulette_random(double *probs, int32_t nb_elts, bool verbose) {
     //cloned_probs.resize(nb_elts);
     //for (int i = 0; i < nb_elts; i++) cloned_probs[i] = probs[i];
 
-  double pick_one = 0.0;
+    double pick_one = 0.0;
 
-  while (pick_one == 0.0)
-  {
-    pick_one = random();
-    //pickones.push_back(pick_one);
-    //if (verbose) printf("pick one : %f\n",pick_one);
-  }
+    while (pick_one == 0.0) {
+        pick_one = random();
+        //pickones.push_back(pick_one);
+        //if (verbose) printf("pick one : %f\n",pick_one);
+    }
 
-  int32_t found_org = 0;
+    int32_t found_org = 0;
 
-  pick_one -= probs[0];
-  while (pick_one > 0)
-  {
-    assert(found_org<nb_elts-1);
-    //pickones3.push_back(probs[found_org+1]);
+    pick_one -= probs[0];
+    while (pick_one > 0) {
+        assert(found_org < nb_elts - 1);
+        //pickones3.push_back(probs[found_org+1]);
 
-    pick_one -= probs[++found_org];
-    //pickones2.push_back(pick_one);
-  }
-  return found_org;
+        pick_one -= probs[++found_org];
+        //pickones2.push_back(pick_one);
+    }
+    return found_org;
 }
 
-void JumpingMT::multinomial_drawing(int32_t* destination, double* source, int32_t nb_drawings, int32_t nb_colors)
-{
-  //    This function generates a vector of random variates, each with the
-  //    binomial distribution (source code from http://www.agner.org/random/).
-  //    The multinomial distribution is the distribution you get when drawing
-  //    balls from an urn with more than two colors, with replacement.
+void JumpingMT::multinomial_drawing(int32_t *destination, double *source, int32_t nb_drawings, int32_t nb_colors) {
+    //    This function generates a vector of random variates, each with the
+    //    binomial distribution (source code from http://www.agner.org/random/).
+    //    The multinomial distribution is the distribution you get when drawing
+    //    balls from an urn with more than two colors, with replacement.
 
-  //    Parameters:
-  //    destination:    An output array to receive the number of balls of each
-  //                    color. Must have space for at least 'nb_colors' elements.
-  //    source:         An input array containing the probability or fraction
-  //                    of each color in the urn. Must have 'nb_colors' elements.
-  //                    All elements must be non-negative. The sum doesn't have
-  //                    to be 1, but the sum must be positive.
-  //    nb_drawings:    The number of balls drawn from the urn.
-  //    nb_colors:      The number of possible colors.
+    //    Parameters:
+    //    destination:    An output array to receive the number of balls of each
+    //                    color. Must have space for at least 'nb_colors' elements.
+    //    source:         An input array containing the probability or fraction
+    //                    of each color in the urn. Must have 'nb_colors' elements.
+    //                    All elements must be non-negative. The sum doesn't have
+    //                    to be 1, but the sum must be positive.
+    //    nb_drawings:    The number of balls drawn from the urn.
+    //    nb_colors:      The number of possible colors.
 
 
-  if (nb_drawings < 0 || nb_colors < 0)
-  {
-    printf("%s:%d: error: Negative parameter in multinomial function.\n", __FILE__, __LINE__);
-    assert(false);
-    exit(EXIT_FAILURE);
-  }
-  if (nb_colors == 0) return;
-
-  // compute sum of probabilities
-  double sum = 0.0;
-  double p;
-  for (int32_t i = 0 ; i < nb_colors ; i++)
-  {
-    p = source[i];
-    if (p < 0)
-    {
-      printf("%s:%d: error: Negative parameter in multinomial function.\n", __FILE__, __LINE__);
-      assert(false);
-      exit(EXIT_FAILURE);
+    if (nb_drawings < 0 || nb_colors < 0) {
+        printf("%s:%d: error: Negative parameter in multinomial function.\n", __FILE__, __LINE__);
+        assert(false);
+        exit(EXIT_FAILURE);
     }
-    sum += p;
-  }
-  if (sum == 0 && nb_drawings > 0)
-  {
-    printf("Zero sum in multinomial function\n");
-    assert(false);
-    exit(EXIT_FAILURE);
-  }
+    if (nb_colors == 0) return;
 
-  int32_t x;
-  int32_t n = nb_drawings;
-  for (int32_t i = 0 ; i < nb_colors - 1 ; i++)
-  {
-    // generate output by calling binomial (nb_colors-1) times
-    p = source[i];
-    if (sum <= p)
-    {
-      // this fixes two problems:
-      // 1. prevent division by 0 when sum = 0
-      // 2. prevent p/sum getting bigger than 1 in case of rounding errors
-      x = n;
+    // compute sum of probabilities
+    double sum = 0.0;
+    double p;
+    for (int32_t i = 0; i < nb_colors; i++) {
+        p = source[i];
+        if (p < 0) {
+            printf("%s:%d: error: Negative parameter in multinomial function.\n", __FILE__, __LINE__);
+            assert(false);
+            exit(EXIT_FAILURE);
+        }
+        sum += p;
     }
-    else
-    {
-      x = binomial_random(n, p/sum);
+    if (sum == 0 && nb_drawings > 0) {
+        printf("Zero sum in multinomial function\n");
+        assert(false);
+        exit(EXIT_FAILURE);
     }
-    n = n - x;
-    sum = sum - p;
-    destination[i] = x;
-  }
 
-  // get the last one
-  destination[nb_colors-1] = n;
+    int32_t x;
+    int32_t n = nb_drawings;
+    for (int32_t i = 0; i < nb_colors - 1; i++) {
+        // generate output by calling binomial (nb_colors-1) times
+        p = source[i];
+        if (sum <= p) {
+            // this fixes two problems:
+            // 1. prevent division by 0 when sum = 0
+            // 2. prevent p/sum getting bigger than 1 in case of rounding errors
+            x = n;
+        } else {
+            x = binomial_random(n, p / sum);
+        }
+        n = n - x;
+        sum = sum - p;
+        destination[i] = x;
+    }
+
+    // get the last one
+    destination[nb_colors - 1] = n;
 }
 
-void JumpingMT::save(gzFile backup_file) const
-{
-  gzwrite(backup_file, sfmt_->state, SFMT_N * sizeof(sfmt_->state[0]));
-  gzwrite(backup_file, &(sfmt_->idx), sizeof(sfmt_->idx));
+void JumpingMT::save(gzFile backup_file) const {
+    gzwrite(backup_file, sfmt_->state, SFMT_N * sizeof(sfmt_->state[0]));
+    gzwrite(backup_file, &(sfmt_->idx), sizeof(sfmt_->idx));
 }
 
 
@@ -359,25 +330,24 @@ double JumpingMT::gammln(double X)
 // When the argument z is an integer, the gamma function is just the familiar factorial
 // function, but offset by one, n! = gamma(n + 1).
 {
-  double x, y, tmp, ser;
-  static double cof[6] = {  76.18009172947146,
+    double x, y, tmp, ser;
+    static double cof[6] = {76.18009172947146,
                             -86.50532032941677,
                             24.01409824083091,
                             -1.231739572450155,
                             0.1208650973866179e-2,
-                            -0.5395239384953e-5 };
+                            -0.5395239384953e-5};
 
-  y = x = X;
-  tmp = x + 5.5;
-  tmp -= (x+0.5) * log(tmp);
-  ser = 1.000000000190015;
+    y = x = X;
+    tmp = x + 5.5;
+    tmp -= (x + 0.5) * log(tmp);
+    ser = 1.000000000190015;
 
-  for (int8_t j = 0 ; j <= 5 ; j++)
-  {
-    ser += cof[j] / ++y;
-  }
+    for (int8_t j = 0; j <= 5; j++) {
+        ser += cof[j] / ++y;
+    }
 
-  return -tmp + log(2.5066282746310005 * ser / x);
+    return -tmp + log(2.5066282746310005 * ser / x);
 }
 
 // =================================================================

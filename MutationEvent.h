@@ -33,8 +33,8 @@
 #include <vector>
 
 enum MutationEventType {
-    DO_SWITCH           = 0,
-  NONE
+    DO_SWITCH = 0,
+    NONE
 };
 
 /**
@@ -44,8 +44,9 @@ class Dna;
 
 class MutationEvent {
 
- public:
+public:
     MutationEvent() = default;
+
     ~MutationEvent();
 
     void switch_pos(int32_t pos);
@@ -53,7 +54,9 @@ class MutationEvent {
     int32_t type() { return type_; };
 
     int32_t pos_1() { return pos_1_; }
+
     int32_t pos_2() { return pos_2_; }
+
     int32_t pos_3() { return pos_3_; }
 
     int32_t number() { return number_; }
@@ -61,23 +64,22 @@ class MutationEvent {
     int32_t invert() { return invert_; }
 
 
-    Dna* seq() { return seq_; }
+    Dna *seq() { return seq_; }
 
 
- private:
+private:
     int32_t type_;
 
-    int32_t pos_1_,pos_2_,pos_3_;
+    int32_t pos_1_, pos_2_, pos_3_;
 
     int32_t number_; // insertion or deletion
 
     bool invert_;
 
 
-    Dna* seq_;
+    Dna *seq_;
 
 };
-
 
 
 #endif //RAEVOL_CUDA_MUTATIONEVENT_H

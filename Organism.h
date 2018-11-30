@@ -53,18 +53,19 @@ class ExpManager;
 class Organism {
 
 public:
-    Organism(ExpManager* exp_m, int length, int indiv_id);
+    Organism(ExpManager *exp_m, int length, int indiv_id);
 
-  /// Create an organism with a given genome
-  Organism(ExpManager* exp_m, char* genome, int indiv_id);
+    /// Create an organism with a given genome
+    Organism(ExpManager *exp_m, char *genome, int indiv_id);
 
-    Organism(ExpManager* exp_m, std::shared_ptr<Organism> clone);
+    Organism(ExpManager *exp_m, std::shared_ptr <Organism> clone);
 
     Organism(ExpManager *exp_m, gzFile backup_file);
 
     ~Organism();
 
     void save(gzFile backup_file);
+
     void load(gzFile backup_file);
 
     int length() { return dna_->length(); };
@@ -74,13 +75,13 @@ public:
     void reset_stats();
 
 
-    std::map<int,Promoter*> promoters;
-    std::map<int,int> prom_pos;
+    std::map<int, Promoter *> promoters;
+    std::map<int, int> prom_pos;
     int count_prom = 0;
 
     std::set<int> terminators;
-    std::vector<RNA*> rnas;
-    std::vector<Protein*> proteins;
+    std::vector<RNA *> rnas;
+    std::vector<Protein *> proteins;
 
     double phenotype[300];
     double delta[300];
@@ -88,7 +89,7 @@ public:
     double fitness;
     double metaerror;
 
-    Dna* dna_;
+    Dna *dna_;
     int parent_length_;
 
     int indiv_id_;
@@ -97,29 +98,29 @@ public:
     int protein_count_ = 0;
     int rna_count_ = 0;
 
-    ExpManager* exp_m_;
+    ExpManager *exp_m_;
 
     int global_id = -1;
 
     int usage_count_ = 1;
 
     // Stats
-    int  nb_genes_activ = 0;
-    int  nb_genes_inhib = 0;
-    int  nb_func_genes = 0;
-    int  nb_non_func_genes = 0;
-    int  nb_coding_RNAs = 0;
-    int  nb_non_coding_RNAs = 0;
+    int nb_genes_activ = 0;
+    int nb_genes_inhib = 0;
+    int nb_func_genes = 0;
+    int nb_non_func_genes = 0;
+    int nb_coding_RNAs = 0;
+    int nb_non_coding_RNAs = 0;
 
     int nb_swi_ = 0;
-    int nb_indels_= 0;
-    int nb_mut_= 0;
+    int nb_indels_ = 0;
+    int nb_mut_ = 0;
 
-    int nb_large_dupl_= 0;
-    int nb_large_del_= 0;
-    int nb_large_trans_= 0;
-    int nb_large_inv_= 0;
-    int nb_rear_= 0;
+    int nb_large_dupl_ = 0;
+    int nb_large_del_ = 0;
+    int nb_large_trans_ = 0;
+    int nb_large_inv_ = 0;
+    int nb_rear_ = 0;
 
 //private:
 
@@ -128,10 +129,15 @@ public:
     void replace(int pos, char *seq, int seq_length);
 
     void remove_all_promoters();
+
     void remove_promoters_around(int32_t pos);
+
     void remove_promoters_around(int32_t pos_1, int32_t pos_2);
-    void remove_promoters_starting_between(int32_t pos_1,int32_t pos_2);
+
+    void remove_promoters_starting_between(int32_t pos_1, int32_t pos_2);
+
     void remove_promoters_starting_after(int32_t pos);
+
     void remove_promoters_starting_before(int32_t pos);
 
     void move_all_promoters_after(int32_t pos, int32_t delta_pos);
@@ -139,53 +145,57 @@ public:
     void locate_promoters();
 
     void look_for_new_promoters_around(int32_t pos_1, int32_t pos_2);
+
     void look_for_new_promoters_around(int32_t pos);
-    void look_for_new_promoters_starting_between(int32_t pos_1,int32_t pos_2);
+
+    void look_for_new_promoters_starting_between(int32_t pos_1, int32_t pos_2);
+
     void look_for_new_promoters_starting_after(int32_t pos);
+
     void look_for_new_promoters_starting_before(int32_t pos);
 
-    void insert_promoters_at(std::list<Promoter*>& promoters_to_insert, int32_t pos);
-    void insert_promoters(std::list<Promoter*>& promoters_to_insert);
+    void insert_promoters_at(std::list<Promoter *> &promoters_to_insert, int32_t pos);
+
+    void insert_promoters(std::list<Promoter *> &promoters_to_insert);
 
     void duplicate_promoters_included_in(int32_t pos_1,
-                                                   int32_t pos_2,
-                                                   std::list<Promoter*>& duplicated_promoters);
+                                         int32_t pos_2,
+                                         std::list<Promoter *> &duplicated_promoters);
 
     void extract_promoters_included_in(int32_t pos_1,
-                                                 int32_t pos_2,
-                                                 std::list<Promoter*>& extracted_promoters);
-    void extract_promoters_starting_between(int32_t pos_1,
-                                                      int32_t pos_2, std::list<Promoter*>& extracted_promoters);
+                                       int32_t pos_2,
+                                       std::list<Promoter *> &extracted_promoters);
 
-    void promoters_included_in(int32_t pos_1, int32_t pos_2, std::list<Promoter*>& promoters_list);
+    void extract_promoters_starting_between(int32_t pos_1,
+                                            int32_t pos_2, std::list<Promoter *> &extracted_promoters);
+
+    void promoters_included_in(int32_t pos_1, int32_t pos_2, std::list<Promoter *> &promoters_list);
 
     void lst_promoters(Position before_after_btw, // with regard to the strand's reading direction
-                                 int32_t pos1,
-                                 int32_t pos2,
-                                 std::list<Promoter*>& promoters_list);
+                       int32_t pos1,
+                       int32_t pos2,
+                       std::list<Promoter *> &promoters_list);
 
-    inline int32_t mod(int32_t a, int32_t b)
-    {
+    inline int32_t mod(int32_t a, int32_t b) {
 
-      assert(b > 0);
+        assert(b > 0);
 
-      while (a < 0)  a += b;
-      while (a >= b) a -= b;
+        while (a < 0) a += b;
+        while (a >= b) a -= b;
 
-      return a;
-      //return m >= 0 ? m % n : ( n - abs ( m%n ) ) % n;
+        return a;
+        //return m >= 0 ? m % n : ( n - abs ( m%n ) ) % n;
     }
 
-    inline int64_t mod(int64_t a, int64_t b)
-    {
+    inline int64_t mod(int64_t a, int64_t b) {
 
-      assert(b > 0);
+        assert(b > 0);
 
-      while (a < 0)  a += b;
-      while (a >= b) a -= b;
+        while (a < 0) a += b;
+        while (a >= b) a -= b;
 
-      return a;
-      //return m >= 0 ? m % n : ( n - abs ( m%n ) ) % n;
+        return a;
+        //return m >= 0 ? m % n : ( n - abs ( m%n ) ) % n;
     }
 };
 

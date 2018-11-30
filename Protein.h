@@ -33,6 +33,7 @@
 class Protein {
 public:
     Protein() {};
+
     Protein(int t_protein_start, int t_protein_end, int t_protein_length, double t_e) {
         protein_start = t_protein_start;
         protein_end = t_protein_end;

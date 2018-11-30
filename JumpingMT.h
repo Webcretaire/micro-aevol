@@ -65,13 +65,12 @@
 #define MT_RAND_MAX         4294967295.0
 #define MT_RAND_MAX_PLUS_1  4294967296.0
 
-class JumpingMT
-{
-  public :
+class JumpingMT {
+public :
     // =================================================================
     //                             Constructors
     // =================================================================
-    JumpingMT(const uint32_t& simple_seed);   // Initialize with a simple uint32_t
+    JumpingMT(const uint32_t &simple_seed);   // Initialize with a simple uint32_t
     JumpingMT(const JumpingMT &model);    // Create a copy of an existing generator
     JumpingMT(gzFile backup_file);           // Load from a gz backup file
 
@@ -95,15 +94,15 @@ class JumpingMT
     // =================================================================
     //                            Public Methods
     // =================================================================
-    inline double   random();         // Double in [0, 1[ (uniform distribution)
-    inline int8_t   random(int8_t max);   // ~
-    inline int16_t  random(int16_t max);  // ~
-    inline int32_t  random(int32_t max);  // ~ > Integer in [0, max[ (uniform distribution)
-    inline int64_t  random(int64_t max);  // ~
-    int32_t         binomial_random(int32_t nb, double prob); // Binomial drawing of parameters (nb, prob)
-    double          gaussian_random();                    // Double following a Standard Normal distribution
-    int32_t          roulette_random(double* probs, int32_t nb_elts, bool verbose = false); // Roulette selection
-    void            multinomial_drawing (int32_t* destination, double* source, int32_t nb_drawings, int32_t colors);
+    inline double random();         // Double in [0, 1[ (uniform distribution)
+    inline int8_t random(int8_t max);   // ~
+    inline int16_t random(int16_t max);  // ~
+    inline int32_t random(int32_t max);  // ~ > Integer in [0, max[ (uniform distribution)
+    inline int64_t random(int64_t max);  // ~
+    int32_t binomial_random(int32_t nb, double prob); // Binomial drawing of parameters (nb, prob)
+    double gaussian_random();                    // Double following a Standard Normal distribution
+    int32_t roulette_random(double *probs, int32_t nb_elts, bool verbose = false); // Roulette selection
+    void multinomial_drawing(int32_t *destination, double *source, int32_t nb_drawings, int32_t colors);
     // Multinomial drawing of parameters (nb, {source[0], source[1], ... source[colors-1]})
 
     void jump();
@@ -114,7 +113,7 @@ class JumpingMT
     //                           Public Attributes
     // =================================================================
     static int32_t nb_jumps;
-    static double  jump_time;
+    static double jump_time;
 /*
 
 
@@ -124,15 +123,14 @@ class JumpingMT
     std::vector<double> pickones3;
 
     std::vector<double> cloned_probs;*/
-  protected :
+protected :
 
     // =================================================================
     //                         Forbidden Constructors
     // =================================================================
-    JumpingMT()
-    {
-      printf("%s:%d: error: call to forbidden constructor.\n", __FILE__, __LINE__);
-      exit(EXIT_FAILURE);
+    JumpingMT() {
+        printf("%s:%d: error: call to forbidden constructor.\n", __FILE__, __LINE__);
+        exit(EXIT_FAILURE);
     };
     /*JumpingMT(const JumpingMT &model)
     {
@@ -149,7 +147,7 @@ class JumpingMT
     // =================================================================
     //                          Protected Attributes
     // =================================================================
-    sfmt_t* sfmt_;
+    sfmt_t *sfmt_;
 
 };
 
@@ -172,41 +170,36 @@ class JumpingMT
 /*!
   Draw a double precision real-number in [0, 1) with a uniform distribution
  */
-inline double JumpingMT::random()
-{
-  return sfmt_genrand_real2(sfmt_);
+inline double JumpingMT::random() {
+    return sfmt_genrand_real2(sfmt_);
 }
 
 /*!
   Draw an 8-bit integer in [0, max[ with a uniform distribution
  */
-inline int8_t JumpingMT::random(int8_t max)
-{
-  return (int8_t) floor(((double)max) * sfmt_genrand_real2(sfmt_));
+inline int8_t JumpingMT::random(int8_t max) {
+    return (int8_t) floor(((double) max) * sfmt_genrand_real2(sfmt_));
 }
 
 /*!
   Draw an 16-bit integer in [0, max[ with a uniform distribution
  */
-inline int16_t JumpingMT::random(int16_t max)
-{
-  return (int16_t) floor(((double)max) * sfmt_genrand_real2(sfmt_));
+inline int16_t JumpingMT::random(int16_t max) {
+    return (int16_t) floor(((double) max) * sfmt_genrand_real2(sfmt_));
 }
 
 /*!
   Draw an 32-bit integer in [0, max[ with a uniform distribution
  */
-inline int32_t JumpingMT::random(int32_t max)
-{
-  return (int32_t) floor(((double)max) * sfmt_genrand_real2(sfmt_));
+inline int32_t JumpingMT::random(int32_t max) {
+    return (int32_t) floor(((double) max) * sfmt_genrand_real2(sfmt_));
 }
 
 /*!
   Draw an 64-bit integer in [0, max[ with a uniform distribution
  */
-inline int64_t JumpingMT::random(int64_t max)
-{
-  return (int64_t) floor(((double)max) * sfmt_genrand_real2(sfmt_));
+inline int64_t JumpingMT::random(int64_t max) {
+    return (int64_t) floor(((double) max) * sfmt_genrand_real2(sfmt_));
 }
 
 #endif // AEVOL_JUMPING_MT_H_

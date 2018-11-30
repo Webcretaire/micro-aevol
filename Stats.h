@@ -40,7 +40,7 @@
  */
 class Stats {
 public:
-    Stats(ExpManager* exp_m, int generation, bool best_or_not);
+    Stats(ExpManager *exp_m, int generation, bool best_or_not);
 
     ~Stats() {
         if (is_indiv_) {
@@ -53,9 +53,11 @@ public:
     }
 
     void compute_best();
+
     void compute_average();
 
     void write_best();
+
     void write_average();
 
     void reinit(int generation);
@@ -64,7 +66,7 @@ public:
 
 
 protected:
-    ExpManager* exp_m_;
+    ExpManager *exp_m_;
 
     int generation_;
 

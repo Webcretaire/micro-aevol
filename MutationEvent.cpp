@@ -30,8 +30,8 @@
 #include "Dna.h"
 
 void MutationEvent::switch_pos(int32_t pos) {
-  type_ = MutationEventType::DO_SWITCH;
-  pos_1_ = pos;
+    type_ = MutationEventType::DO_SWITCH;
+    pos_1_ = pos;
 }
 
 MutationEvent::~MutationEvent() {

@@ -35,15 +35,18 @@
 class Promoter {
 public:
     Promoter(int t_pos, int t_error) {
-        pos = t_pos; error = t_error;
+        pos = t_pos;
+        error = t_error;
     }
 
-    Promoter(const Promoter& clone) {
-        pos=clone.pos;error=clone.error;
+    Promoter(const Promoter &clone) {
+        pos = clone.pos;
+        error = clone.error;
     }
 
-    Promoter(Promoter* clone) {
-        pos=clone->pos;error=clone->error;
+    Promoter(Promoter *clone) {
+        pos = clone->pos;
+        error = clone->error;
     }
 
     int pos = -1;

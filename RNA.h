@@ -36,6 +36,7 @@
 class RNA {
 public:
     RNA() {};
+
     RNA(int t_begin, int t_end, double t_e, int t_length) {
         begin = t_begin;
         end = t_end;

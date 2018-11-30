@@ -34,7 +34,7 @@
  * @param generation : Create statistics beginning from this generation (or resuming from this generation)
  * @param best_or_not : Statistics for the best organisms or mean of all the organisms
  */
-Stats::Stats(ExpManager* exp_m, int generation, bool best_or_not) {
+Stats::Stats(ExpManager *exp_m, int generation, bool best_or_not) {
     exp_m_ = exp_m;
     is_indiv_ = best_or_not;
     generation_ = generation;
@@ -55,11 +55,11 @@ Stats::Stats(ExpManager* exp_m, int generation, bool best_or_not) {
     nb_switch_ = 0;
 
 
-    if (generation_==1) {
+    if (generation_ == 1) {
         if (is_indiv_)
-            statfile_best_.open("stats/stats_simd_best.csv",std::ofstream::trunc);
+            statfile_best_.open("stats/stats_simd_best.csv", std::ofstream::trunc);
         else
-            statfile_mean_.open("stats/stats_simd_mean.csv",std::ofstream::trunc);
+            statfile_mean_.open("stats/stats_simd_mean.csv", std::ofstream::trunc);
 
         if (is_indiv_) {
             statfile_best_ << "Generation" << "," << "fitness" << "," << "metabolic_error" << "," <<
@@ -82,10 +82,10 @@ Stats::Stats(ExpManager* exp_m, int generation, bool best_or_not) {
         std::ifstream tmp_best;
 
         if (is_indiv_) {
-            tmp_best.open("stats/stats_simd_best.csv",std::ifstream::in);
+            tmp_best.open("stats/stats_simd_best.csv", std::ifstream::in);
             statfile_best_.open("stats/stats_simd_best.csv.tmp", std::ofstream::trunc);
         } else {
-            tmp_mean.open("stats/stats_simd_mean.csv",std::ifstream::in);
+            tmp_mean.open("stats/stats_simd_mean.csv", std::ifstream::in);
             statfile_mean_.open("stats/stats_simd_mean.csv.tmp", std::ofstream::trunc);
         }
 
@@ -142,7 +142,7 @@ void Stats::compute_best() {
     is_indiv_ = true;
 
     fitness_ = exp_m_->best_indiv->fitness;
-    metabolic_error_  = exp_m_->best_indiv->metaerror;
+    metabolic_error_ = exp_m_->best_indiv->metaerror;
 
     amount_of_dna_ = exp_m_->best_indiv->length();
 
@@ -172,11 +172,11 @@ void Stats::compute_average() {
     mean_nb_non_coding_rnas_ = 0;
     mean_nb_functional_genes_ = 0;
     mean_nb_non_functional_genes_ = 0;
-    
+
     mean_nb_mut_ = 0;
     mean_nb_switch_ = 0;
 
-    
+
     for (int indiv_id = 0; indiv_id < pop_size_; indiv_id++) {
         mean_fitness_ += exp_m_->prev_internal_organisms_[indiv_id]->fitness;
         mean_metabolic_error_ += exp_m_->prev_internal_organisms_[indiv_id]->metaerror;
@@ -222,11 +222,11 @@ void Stats::write_best() {
 
     if (is_indiv_ && is_computed_) {
         // Write best stats
-        statfile_best_<<generation_<<","<<fitness_<<","<<metabolic_error_<<","<<
-                      amount_of_dna_<<","<<nb_coding_rnas_<<","<<nb_non_coding_rnas_<<","<<
-                      nb_functional_genes_<<","<<nb_non_functional_genes_<<","<<nb_mut_
-                      <<","<<nb_switch_
-                      <<std::endl;
+        statfile_best_ << generation_ << "," << fitness_ << "," << metabolic_error_ << "," <<
+                       amount_of_dna_ << "," << nb_coding_rnas_ << "," << nb_non_coding_rnas_ << "," <<
+                       nb_functional_genes_ << "," << nb_non_functional_genes_ << "," << nb_mut_
+                       << "," << nb_switch_
+                       << std::endl;
         statfile_best_.flush();
     }
 }
@@ -240,11 +240,11 @@ void Stats::write_average() {
 
     if (!is_indiv_ && is_computed_) {
         // Write average stats
-        statfile_mean_<<generation_<<","<<mean_fitness_<<","<<mean_metabolic_error_<<","<<
-                      mean_amount_of_dna_<<","<<mean_nb_coding_rnas_<<","<<mean_nb_non_coding_rnas_<<","<<
-                      mean_nb_functional_genes_<<","<<mean_nb_non_functional_genes_<<","<<mean_nb_mut_
-                      <<","<<mean_nb_switch_
-                      <<std::endl;
+        statfile_mean_ << generation_ << "," << mean_fitness_ << "," << mean_metabolic_error_ << "," <<
+                       mean_amount_of_dna_ << "," << mean_nb_coding_rnas_ << "," << mean_nb_non_coding_rnas_ << "," <<
+                       mean_nb_functional_genes_ << "," << mean_nb_non_functional_genes_ << "," << mean_nb_mut_
+                       << "," << mean_nb_switch_
+                       << std::endl;
         statfile_mean_.flush();
     }
 }

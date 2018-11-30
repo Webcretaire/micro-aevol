@@ -38,37 +38,37 @@
  * @param mutation_rate : Mutation rate of the organisms
  * @param indiv_id : Unique identification number for the Organism
  */
-DnaMutator::DnaMutator(Threefry::Gen* mut_prng,
-      int length,
-      double mutation_rate, int indiv_id) {
-  mut_prng_ = mut_prng;
-  length_ = length;
-  mutation_rate_ = mutation_rate;
+DnaMutator::DnaMutator(Threefry::Gen *mut_prng,
+                       int length,
+                       double mutation_rate, int indiv_id) {
+    mut_prng_ = mut_prng;
+    length_ = length;
+    mutation_rate_ = mutation_rate;
 
-  id_ = indiv_id;
+    id_ = indiv_id;
 }
 
 /**
  * Generate both type of the mutations (see below)
  */
 void DnaMutator::generate_mutations() {
-  generate_small_mutations();
+    generate_small_mutations();
 }
 
 /**
  * Generate the number of each  switch events
  */
 void DnaMutator::generate_small_mutations() {
-  nb_swi_ = mut_prng_->
-      binomial_random(length_, mutation_rate_);
-  nb_mut_ = nb_swi_;
-  cpt_mut_ = nb_mut_;
+    nb_swi_ = mut_prng_->
+            binomial_random(length_, mutation_rate_);
+    nb_mut_ = nb_swi_;
+    cpt_mut_ = nb_mut_;
 
-  if (nb_mut_ > 0) {
-    if (!hasMutate_) {
-      hasMutate_ = true;
+    if (nb_mut_ > 0) {
+        if (!hasMutate_) {
+            hasMutate_ = true;
+        }
     }
-  }
 }
 
 /**
@@ -77,79 +77,79 @@ void DnaMutator::generate_small_mutations() {
  * @param length : Update size of the DNA of the Organism
  * @return The generated mutation event (or nullptr if none was created)
  */
-MutationEvent* DnaMutator::generate_next_mutation(int length) {
-  length_ = length;
-  int random_value;
-  MutationEvent* mevent = nullptr;
+MutationEvent *DnaMutator::generate_next_mutation(int length) {
+    length_ = length;
+    int random_value;
+    MutationEvent *mevent = nullptr;
 
-  if (cpt_mut_>0) {
-    random_value = mut_prng_->random(cpt_mut_);
-    cpt_mut_--;
+    if (cpt_mut_ > 0) {
+        random_value = mut_prng_->random(cpt_mut_);
+        cpt_mut_--;
 
 
-    if (random_value < nb_swi_) {
-      nb_swi_--;
+        if (random_value < nb_swi_) {
+            nb_swi_--;
 
-      int pos = mut_prng_->random(length_);
+            int pos = mut_prng_->random(length_);
 
-      mevent = new MutationEvent();
-      mevent->switch_pos(pos);
-      mutation_list_.push_back(mevent);
+            mevent = new MutationEvent();
+            mevent->switch_pos(pos);
+            mutation_list_.push_back(mevent);
 
+        }
     }
-  }
 
-  return mevent;
+    return mevent;
 }
 
 
-std::vector<DnaMutator::TypeMutation> DnaMutator::generate_mutation_array(int length, int* new_length) {
-  length_ = length;
-  int random_value;
-  MutationEvent* mevent = nullptr;
-  std::vector<TypeMutation> tab_mut(nb_mut_);
+std::vector <DnaMutator::TypeMutation> DnaMutator::generate_mutation_array(int length, int *new_length) {
+    length_ = length;
+    int random_value;
+    MutationEvent *mevent = nullptr;
+    std::vector <TypeMutation> tab_mut(nb_mut_);
 
-  int transient_size = length;
+    int transient_size = length;
 
-  for (int mut_idx = 0; mut_idx < nb_mut_; mut_idx++) {
-    if (cpt_mut_ > 0) {
-      random_value = mut_prng_->random(cpt_mut_);
+    for (int mut_idx = 0; mut_idx < nb_mut_; mut_idx++) {
+        if (cpt_mut_ > 0) {
+            random_value = mut_prng_->random(cpt_mut_);
 
-      cpt_mut_--;
+            cpt_mut_--;
 
-      if (random_value < nb_swi_) {
-        nb_swi_--;
+            if (random_value < nb_swi_) {
+                nb_swi_--;
 
-        int pos = mut_prng_->random(transient_size);
+                int pos = mut_prng_->random(transient_size);
 
-        tab_mut[mut_idx].type_ = MutationEventType::DO_SWITCH;
-        tab_mut[mut_idx].pos_1_ = pos;
-      }
+                tab_mut[mut_idx].type_ = MutationEventType::DO_SWITCH;
+                tab_mut[mut_idx].pos_1_ = pos;
+            }
+        }
     }
-  }
 
-  *new_length = transient_size;
-  return tab_mut;
+    *new_length = transient_size;
+    return tab_mut;
 }
 
 char DnaMutator::BacktraceBase(int32_t locus, int nb_events,
-                               const TypeMutation* muts, const std::vector<char> ori_gen, int indiv_id) {
-  int8_t mutate = 0;
+                               const TypeMutation *muts, const std::vector<char> ori_gen, int indiv_id) {
+    int8_t mutate = 0;
 
-  for (; nb_events > 0; nb_events--) {
-    auto& mut = muts[nb_events-1];
-    switch (mut.type_) {
-      case DO_SWITCH:
-        if (locus == mut.pos_1_)
-          mutate = not mutate;
-        break;
+    for (; nb_events > 0; nb_events--) {
+        auto &mut = muts[nb_events - 1];
+        switch (mut.type_) {
+            case DO_SWITCH:
+                if (locus == mut.pos_1_)
+                    mutate = not mutate;
+                break;
+        }
     }
-  }
 
-  assert(locus >= 0);
-  assert(locus < ori_gen.size());
+    assert(locus >= 0);
+    assert(locus < ori_gen.size());
 
-  auto base = ori_gen[locus];
-  if (mutate) base = (base == '0') ? '1' : '0';
-  return base;
+    auto base = ori_gen[locus];
+    if (mutate) base = (base == '0') ? '1' : '0';
+    return base;
 };
