@@ -7,3 +7,4 @@ CMakeFiles/
 *.cmake
 *.a
 /experiments/**
+*.cbp

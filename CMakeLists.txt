@@ -7,6 +7,11 @@ add_subdirectory(SFMT-src-1.4)
 
 add_definitions(-DSFMT_MEXP=607)
 
+# Flags for profiling
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
+
 #find_package(CUDA REQUIRED)
 #enable_language(CUDA)
 #set(CUDA_NVCC_FLAGS "-std=c++11 -arch=compute_60 -lineinfo")
