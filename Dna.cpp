@@ -48,7 +48,9 @@ void Dna::do_switch(int pos) {
     else seq_[pos] = '0';
 }
 
-
+/*
+ * TODO: This function is used a lot (41.05 % of time)
+ */
 int Dna::promoter_at(int pos) {
     int prom_dist[22];
 
