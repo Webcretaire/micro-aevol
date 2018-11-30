@@ -1,7 +1,8 @@
 /.idea/
 /cmake-build-debug/
-/CMakeFiles/
-/Makefile
+Makefile
 /CMakeCache.txt
 /pdc_mini_aevol
-/cmake_install.cmake
+CMakeFiles/
+*.cmake
+*.a
