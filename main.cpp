@@ -29,6 +29,7 @@
 #include <iostream>
 #include <getopt.h>
 #include <cstring>
+#include <omp.h>
 
 #include "ExpManager.h"
 
@@ -154,6 +155,10 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+
+#ifdef OMP_USE
+    omp_set_num_threads(1);
+#endif // OMP_USE
 
     printf("Start ExpManager\n");
 
