@@ -1,10 +1,17 @@
+# IDE related files
 /.idea/
+
+# Cmake related files
 /cmake-build-debug/
 Makefile
 CMakeCache.txt
-/pdc_mini_aevol
 CMakeFiles/
 *.cmake
+
+# Build
+pdc_mini_aevol
 *.a
-/experiments/**
 *.cbp
+
+# Runs
+/experiments/
