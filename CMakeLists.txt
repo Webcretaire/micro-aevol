@@ -7,10 +7,13 @@ add_subdirectory(SFMT-src-1.4)
 
 add_definitions(-DSFMT_MEXP=607)
 
-# Flags for profiling
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
-SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
+if (PROFILING)
+    message("Buiding for profiling")
+    # Flags for profiling
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+    SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
+endif (PROFILING)
 
 #find_package(CUDA REQUIRED)
 #enable_language(CUDA)
@@ -22,14 +25,14 @@ add_library(mini_aevol_gpu ExpManager.cpp ExpManager.h AeTime.cpp AeTime.h Jumpi
 target_include_directories(mini_aevol_gpu INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
 
-find_package( ZLIB REQUIRED )
-if ( ZLIB_FOUND )
-    include_directories( ${ZLIB_INCLUDE_DIRS} )
+find_package(ZLIB REQUIRED)
+if (ZLIB_FOUND)
+    include_directories(${ZLIB_INCLUDE_DIRS})
     #target_link_libraries(mini_aevol PUBLIC sfmt PUBLIC ${ZLIB_LIBRARIES})
     target_link_libraries(mini_aevol_gpu PUBLIC sfmt PUBLIC ${ZLIB_LIBRARIES})
-endif( ZLIB_FOUND )
+endif (ZLIB_FOUND)
 
-add_executable(pdc_mini_aevol main.cpp )
+add_executable(pdc_mini_aevol main.cpp)
 #cuda_add_executable(pdc_mini_aevol_gpu main.cpp ${cuda_aevol})
 # nvToolsExt for enhanced profiling (ad-hoc chunks)
 target_link_libraries(pdc_mini_aevol sfmt ${ZLIB_LIBRARIES} mini_aevol_gpu)
