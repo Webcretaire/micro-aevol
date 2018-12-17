@@ -217,15 +217,12 @@ void Organism::replace(int pos, char *seq, int seq_length) {
 bool Organism::do_switch(int pos) {
     dna_->do_switch(pos);
 
-    /*
-     * Useless code : we will delete all the promoters anyway after
-     */
-//    // Remove promoters containing the switched base
-//    remove_promoters_around(pos, mod(pos + 1, length()));
-//
-//    // Look for potential new promoters containing the switched base
-//    if (length() >= PROM_SIZE)
-//        look_for_new_promoters_around(pos, mod(pos + 1, length()));
+    // Remove promoters containing the switched base
+    remove_promoters_around(pos, mod(pos + 1, length()));
+
+    // Look for potential new promoters containing the switched base
+    if (length() >= PROM_SIZE)
+        look_for_new_promoters_around(pos, mod(pos + 1, length()));
 
     return true;
 }

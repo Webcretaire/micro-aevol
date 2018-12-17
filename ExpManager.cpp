@@ -353,8 +353,8 @@ void ExpManager::do_mutation(int indiv_id) {
                 next_generation_reproducer_[indiv_id];
 
         internal_organisms_[indiv_id]->apply_mutations();
-        internal_organisms_[indiv_id]->remove_all_promoters();
-        internal_organisms_[indiv_id]->locate_promoters();
+//        internal_organisms_[indiv_id]->remove_all_promoters();
+//        internal_organisms_[indiv_id]->locate_promoters();
     } else {
         int parent_id = next_generation_reproducer_[indiv_id];
 
@@ -409,7 +409,9 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
 
         t1 = high_resolution_clock::now();
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            opt_prom_compute_RNA(indiv_id);
+            if (dna_mutator_array_[indiv_id]->hasMutate()) {
+                opt_prom_compute_RNA(indiv_id);
+            }
         }
         t2 = high_resolution_clock::now();
         auto duration_start_stop_RNA = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
@@ -1141,7 +1143,7 @@ void ExpManager::translate_protein(int indiv_id, double w_max) {
     }
 
 
-    std::map < int, Protein * > lookup;
+    std::map<int, Protein *> lookup;
 
     for (int protein_idx = 0; protein_idx <
                               (int) internal_organisms_[indiv_id]->protein_count_; protein_idx++) {
@@ -1174,8 +1176,7 @@ void ExpManager::compute_phenotype(int indiv_id) {
         }
     }
 
-    for (int protein_idx = 0; protein_idx <
-                              (int) internal_organisms_[indiv_id]->protein_count_; protein_idx++) {
+    for (int protein_idx = 0; protein_idx < internal_organisms_[indiv_id]->protein_count_; protein_idx++) {
         if (internal_organisms_[indiv_id]->proteins[protein_idx]->is_init_) {
             if (fabs(
                     internal_organisms_[indiv_id]->proteins[protein_idx]->w) >=
