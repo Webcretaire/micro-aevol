@@ -569,105 +569,96 @@ void ExpManager::start_stop_RNA(int indiv_id) {
 }
 
 /**
- * Optimize version that do not need to search the whole Dna for promoters
+ * Optimized version that do not need to search the whole Dna for promoters
  */
 void ExpManager::opt_prom_compute_RNA(int indiv_id) {
+/*
+ * If is in run_a_step
+ */
+//    if (dna_mutator_array_[indiv_id]->hasMutate()) {
+    internal_organisms_[indiv_id]->proteins.clear();
+    internal_organisms_[indiv_id]->rnas.clear();
+    internal_organisms_[indiv_id]->terminators.clear();
 
-    if (dna_mutator_array_[indiv_id]->hasMutate()) {
-        internal_organisms_[indiv_id]->proteins.clear();
-        internal_organisms_[indiv_id]->rnas.clear();
-        internal_organisms_[indiv_id]->terminators.clear();
+    internal_organisms_[indiv_id]->rnas.resize(internal_organisms_[indiv_id]->promoters.size());
 
-        internal_organisms_[indiv_id]->rnas.resize(
-                internal_organisms_[indiv_id]->promoters.size());
+    for (int prom_idx = 0; prom_idx < internal_organisms_[indiv_id]->promoters.size(); prom_idx++) {
+        if (internal_organisms_[indiv_id]->promoters[prom_idx] != nullptr) {
+            int rna_idx = prom_idx;
+            Promoter *prom;
+            prom = internal_organisms_[indiv_id]->promoters[rna_idx];
 
-        for (int prom_idx = 0; prom_idx < internal_organisms_[indiv_id]->promoters.size(); prom_idx++) {
+//            if (prom != nullptr) {
+            int prom_pos;
+//                    double prom_error;
+            prom_pos = prom->pos;
+//                    prom_error = fabs(
+//                            ((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error));
 
-            if (internal_organisms_[indiv_id]->promoters[prom_idx] != nullptr) {
-                int rna_idx = prom_idx;
-                Promoter *prom;
-                prom = internal_organisms_[indiv_id]->promoters[rna_idx];
+            /* Search for terminators */
+            int cur_pos = prom_pos + 22;
+            cur_pos = cur_pos >= internal_organisms_[indiv_id]->length()
+                      ? cur_pos - internal_organisms_[indiv_id]->length()
+                      : cur_pos;
+            int start_pos = cur_pos;
 
-                if (prom != nullptr) {
-                    int prom_pos;
-                    double prom_error;
-                    prom_pos = internal_organisms_[indiv_id]->promoters[rna_idx]->pos;
-                    prom_error = fabs(
-                            ((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error));
+            bool terminator_found = false;
+//            bool no_terminator = false;
+            int term_dist_leading = 0;
 
-                    /* Search for terminators */
-                    int cur_pos =
-                            prom_pos + 22;
-                    cur_pos = cur_pos >= internal_organisms_[indiv_id]->length() ? cur_pos -
-                                                                                   internal_organisms_[indiv_id]->length()
-                                                                                 :
-                              cur_pos;
-                    int start_pos = cur_pos;
+            int loop_size = 0;
 
-                    bool terminator_found = false;
-                    bool no_terminator = false;
-                    int term_dist_leading = 0;
+            while (!terminator_found) {
+                loop_size++;
+                for (int t_motif_id = 0; t_motif_id < 4; t_motif_id++)
+                    term_dist_leading = internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos);
 
-                    int loop_size = 0;
-
-                    while (!terminator_found) {
-                        loop_size++;
-                        for (int t_motif_id = 0; t_motif_id < 4; t_motif_id++)
-                            term_dist_leading = internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos);
-
-                        if (term_dist_leading == 4)
-                            terminator_found = true;
-                        else {
-                            cur_pos = cur_pos + 1 >= internal_organisms_[indiv_id]->length() ? cur_pos + 1 -
-                                                                                               internal_organisms_[indiv_id]->length()
-                                                                                             :
-                                      cur_pos + 1;
-                            term_dist_leading = 0;
-                            if (cur_pos == start_pos) {
-                                no_terminator = true;
-                                terminator_found = true;
-                            }
-                        }
-                    }
-
-                    if (!no_terminator) {
-
-                        int32_t rna_end =
-                                cur_pos + 10 >= internal_organisms_[indiv_id]->length() ?
-                                cur_pos + 10 - internal_organisms_[indiv_id]->length() :
-                                cur_pos + 10;
-
-                        int32_t rna_length = 0;
-
-                        if (prom_pos
-                            > rna_end)
-                            rna_length = internal_organisms_[indiv_id]->length() -
-                                         prom_pos
-                                         + rna_end;
-                        else
-                            rna_length = rna_end - prom_pos;
-
-                        rna_length -= 21;
-
-                        if (rna_length > 0) {
-                            int glob_rna_idx = internal_organisms_[indiv_id]->rna_count_;
-                            internal_organisms_[indiv_id]->rna_count_ =
-                                    internal_organisms_[indiv_id]->rna_count_ + 1;
-
-                            internal_organisms_[indiv_id]->rnas[glob_rna_idx] = new RNA(
-                                    internal_organisms_[indiv_id]->promoters[rna_idx]->pos,
-                                    rna_end,
-                                    1.0 -
-                                    std::fabs(
-                                            ((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error)) /
-                                    5.0, rna_length);
-                        }
-
+                if (term_dist_leading == 4)
+                    terminator_found = true;
+                else {
+                    cur_pos = cur_pos + 1 >= internal_organisms_[indiv_id]->length()
+                              ? cur_pos + 1 - internal_organisms_[indiv_id]->length()
+                              : cur_pos + 1;
+                    term_dist_leading = 0;
+                    if (cur_pos == start_pos) {
+//                        no_terminator = true;
+                        break;
                     }
                 }
             }
+
+            if (terminator_found) {
+                int32_t rna_end =
+                        cur_pos + 10 >= internal_organisms_[indiv_id]->length() ?
+                        cur_pos + 10 - internal_organisms_[indiv_id]->length() :
+                        cur_pos + 10;
+
+                int32_t rna_length = 0;
+
+                rna_length = prom_pos > rna_end
+                             ? internal_organisms_[indiv_id]->length() - prom_pos + rna_end
+                             : rna_end - prom_pos;
+
+                rna_length -= 21;
+
+                if (rna_length > 0) {
+                    int glob_rna_idx = internal_organisms_[indiv_id]->rna_count_;
+                    internal_organisms_[indiv_id]->rna_count_ =
+                            internal_organisms_[indiv_id]->rna_count_ + 1;
+
+                    internal_organisms_[indiv_id]->rnas[glob_rna_idx] = new RNA(
+                            internal_organisms_[indiv_id]->promoters[rna_idx]->pos,
+                            rna_end,
+                            1.0 - std::fabs(((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error)) / 5.0,
+                            rna_length
+                    );
+                }
+
+            }
+//            }
         }
     }
+//    }
 }
 
 
