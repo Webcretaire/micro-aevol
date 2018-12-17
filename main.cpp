@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
     }
 
 #ifdef OMP_USE
-    omp_set_num_threads(1);
+    omp_set_num_threads(4);
 #endif // OMP_USE
 
     printf("Start ExpManager\n");
