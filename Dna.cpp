@@ -56,9 +56,7 @@ int Dna::promoter_at(int pos) {
 
     for (int motif_id = 0; motif_id < 22; motif_id++) {
         // Searching for the promoter
-        prom_dist[motif_id] =
-                PROM_SEQ[motif_id] ==
-                seq_[pos + motif_id >= seq_.size() ? pos + motif_id - seq_.size() : pos + motif_id] ? 0 : 1;
+        prom_dist[motif_id] = PROM_SEQ[motif_id] == seq_[pos + motif_id] ? 0 : 1;
 
     }
 
@@ -107,13 +105,12 @@ int Dna::terminator_at(int pos) {
 
 bool Dna::shine_dal_start(int pos) {
     bool start = false;
-    int t_pos, k_t;
+    int k_t;
 
     for (int k = 0; k < 9; k++) {
         k_t = k >= 6 ? k + 4 : k;
-        t_pos = pos + k_t >= seq_.size() ? pos + k_t - seq_.size() : pos + k_t;
 
-        if (seq_[t_pos] ==
+        if (seq_[pos + k_t] ==
             SHINE_DAL_SEQ[k]) {
             start = true;
         } else {
@@ -127,14 +124,9 @@ bool Dna::shine_dal_start(int pos) {
 
 bool Dna::protein_stop(int pos) {
     bool is_protein;
-    int t_k;
 
     for (int k = 0; k < 3; k++) {
-        t_k = pos + k >= seq_.size() ?
-              pos - seq_.size() + k :
-              pos + k;
-
-        if (seq_[t_k] ==
+        if (seq_[pos + k] ==
             PROTEIN_END[k]) {
             is_protein = true;
         } else {
@@ -149,14 +141,8 @@ bool Dna::protein_stop(int pos) {
 int Dna::codon_at(int pos) {
     int value = 0;
 
-    int t_pos;
-
     for (int i = 0; i < 3; i++) {
-        t_pos =
-                pos + i >= seq_.size() ? pos + i -
-                                         seq_.size()
-                                       : pos + i;
-        if (seq_[t_pos] ==
+        if (seq_[pos + i] ==
             '1')
             value += 1 << (CODON_SIZE - i - 1);
     }
