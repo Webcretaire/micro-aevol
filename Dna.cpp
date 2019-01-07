@@ -102,7 +102,8 @@ int Dna::terminator_at(int pos) {
         // Search for the terminators
         term_dist[motif_id] =
                 seq_[pos + motif_id >= seq_.size() ? pos + motif_id - seq_.size() : pos + motif_id]
-                != seq_[pos - motif_id + 10 >= seq_.size() ? pos - motif_id + 10 - seq_.size() : pos - motif_id + 10]
+                !=
+                seq_[pos - motif_id + 10 >= seq_.size() ? pos - motif_id + 10 - seq_.size() : pos - motif_id + 10]
                 ? 1 : 0;
     }
     int dist_term_lead = term_dist[0] +
