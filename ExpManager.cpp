@@ -32,7 +32,6 @@
 #include <err.h>
 #include <chrono>
 #include <iostream>
-#include <omp.h>
 
 using namespace std::chrono;
 using namespace std;
@@ -416,7 +415,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
 #pragma omp single
         {
             t2 = high_resolution_clock::now();
-             duration_selection = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+            duration_selection = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
         }
 
 #pragma omp single
@@ -428,7 +427,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
 #pragma omp single
         {
             t2 = high_resolution_clock::now();
-             duration_mutation = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+            duration_mutation = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
         }
 
 #pragma omp single
@@ -442,7 +441,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
 #pragma omp single
         {
             t2 = high_resolution_clock::now();
-             duration_start_stop_RNA = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+            duration_start_stop_RNA = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
         }
 
 #pragma omp single
@@ -456,7 +455,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
 #pragma omp single
         {
             t2 = high_resolution_clock::now();
-             duration_start_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+            duration_start_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
         }
 
 #pragma omp single
@@ -470,7 +469,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
 #pragma omp single
         {
             t2 = high_resolution_clock::now();
-             duration_compute_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+            duration_compute_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
         }
 
 #pragma omp single
@@ -518,10 +517,10 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
         //transfer_out(this);
 
 #pragma omp single
-        timeFile << "LOG generation " << AeTime::time() << "," << duration_selection << "," << duration_mutation << "," << duration_start_stop_RNA
-                  << "," << duration_start_protein << "," << duration_compute_protein << ","
-                  << duration_translate_protein << "," << duration_compute_phenotype << ","
-                  << duration_compute_fitness << std::endl;
+        timeFile << "LOG generation " << AeTime::time() << "," << duration_selection << "," << duration_mutation << ","
+                 << duration_start_stop_RNA << "," << duration_start_protein << "," << duration_compute_protein << ","
+                 << duration_translate_protein << "," << duration_compute_phenotype << ","
+                 << duration_compute_fitness << std::endl;
     }
     for (int indiv_id = 1; indiv_id < nb_indivs_; indiv_id++) {
         prev_internal_organisms_[indiv_id] = internal_organisms_[indiv_id];
