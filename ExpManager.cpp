@@ -467,8 +467,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
 
         //transfer_out(this);
 
-
-        std::cout << "LOG," << duration_selection << "," << duration_mutation << "," << duration_start_stop_RNA
+        timeFile << "LOG generation " << AeTime::time() << "," << duration_selection << "," << duration_mutation << "," << duration_start_stop_RNA
                   << "," << duration_start_protein << "," << duration_compute_protein << ","
                   << duration_translate_protein
                   << "," << duration_compute_phenotype << "," << duration_compute_phenotype << ","
@@ -1337,6 +1336,8 @@ void ExpManager::run_evolution(int nb_gen) {
         compute_fitness(indiv_id, selection_pressure_);
     }
 
+    timeFile.open("time", ofstream::out);
+
     printf("Running evolution from %d to %d\n", AeTime::time(), AeTime::time() + nb_gen);
     bool firstGen = true;
     for (int gen = 0; gen < nb_gen + 1; gen++) {
@@ -1355,6 +1356,8 @@ void ExpManager::run_evolution(int nb_gen) {
             save(AeTime::time());
         }
     }
+
+    timeFile.close();
 }
 
 
