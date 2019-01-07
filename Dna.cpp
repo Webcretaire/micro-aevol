@@ -8,11 +8,13 @@
 Dna::Dna(const Dna &clone) : seq_(clone.seq_) {
 }
 
-Dna::Dna(int length, Threefry::Gen &rng) : seq_(length) {
+Dna::Dna(int length, Threefry::Gen &rng) : seq_(2 * length) {
     // Generate a random genome
-    for (int32_t i = 0; i < length; i++) {
+    for (int32_t i = 0; i < length; i++)
         seq_[i] = '0' + rng.random(NB_BASE);
-    }
+
+    for (int32_t i = 0; i < length; i++)
+        seq_[i + length] = seq_[i];
 }
 
 Dna::Dna(char *genome, int length) : seq_(length) {
@@ -23,13 +25,13 @@ Dna::Dna(int length) : seq_(length) {
 }
 
 int Dna::length() const {
-    return seq_.size();
+    return seq_.size() / 2;
 }
 
 void Dna::save(gzFile backup_file) {
     int dna_length = length();
     gzwrite(backup_file, &dna_length, sizeof(dna_length));
-    gzwrite(backup_file, seq_.data(), seq_.size() * sizeof(seq_[0]));
+    gzwrite(backup_file, seq_.data(), seq_.size() / 2 * sizeof(seq_[0]));
 }
 
 void Dna::load(gzFile backup_file) {
@@ -56,14 +58,7 @@ int Dna::promoter_at(int pos) {
         // Searching for the promoter
         prom_dist[motif_id] =
                 PROM_SEQ[motif_id] ==
-                seq_[
-                        pos + motif_id >= seq_.size() ? pos +
-                                                        motif_id -
-                                                        seq_.size()
-                                                      : pos +
-                                                        motif_id]
-                ? 0
-                : 1;
+                seq_[pos + motif_id >= seq_.size() ? pos + motif_id - seq_.size() : pos + motif_id] ? 0 : 1;
 
     }
 
@@ -98,14 +93,10 @@ int Dna::promoter_at(int pos) {
 int Dna::terminator_at(int pos) {
     int term_dist[4];
     for (int motif_id = 0; motif_id < 4; motif_id++) {
-
         // Search for the terminators
-        term_dist[motif_id] =
-                seq_[pos + motif_id >= seq_.size() ? pos + motif_id - seq_.size() : pos + motif_id]
-                !=
-                seq_[pos - motif_id + 10 >= seq_.size() ? pos - motif_id + 10 - seq_.size() : pos - motif_id + 10]
-                ? 1 : 0;
+        term_dist[motif_id] = seq_[pos + motif_id] != seq_[pos - motif_id + 10] ? 1 : 0;
     }
+
     int dist_term_lead = term_dist[0] +
                          term_dist[1] +
                          term_dist[2] +
@@ -120,9 +111,7 @@ bool Dna::shine_dal_start(int pos) {
 
     for (int k = 0; k < 9; k++) {
         k_t = k >= 6 ? k + 4 : k;
-        t_pos = pos + k_t >= seq_.size() ? pos + k_t -
-                                           seq_.size()
-                                         : pos + k_t;
+        t_pos = pos + k_t >= seq_.size() ? pos + k_t - seq_.size() : pos + k_t;
 
         if (seq_[t_pos] ==
             SHINE_DAL_SEQ[k]) {
