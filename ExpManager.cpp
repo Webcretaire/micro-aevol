@@ -606,12 +606,12 @@ void ExpManager::opt_prom_compute_RNA(int indiv_id) {
 //            bool no_terminator = false;
             int term_dist_leading = 0;
 
-            int loop_size = 0;
+//            int loop_size = 0;
 
             while (!terminator_found) {
-                loop_size++;
-                for (int t_motif_id = 0; t_motif_id < 4; t_motif_id++)
-                    term_dist_leading = internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos);
+//                loop_size++;
+//                for (int t_motif_id = 0; t_motif_id < 4; t_motif_id++)
+                term_dist_leading = internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos);
 
                 if (term_dist_leading == 4)
                     terminator_found = true;
