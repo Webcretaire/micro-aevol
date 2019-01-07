@@ -569,7 +569,7 @@ void ExpManager::opt_prom_compute_RNA(int indiv_id) {
                     cur_pos = cur_pos + 1 >= internal_organisms_[indiv_id]->length()
                               ? cur_pos + 1 - internal_organisms_[indiv_id]->length()
                               : cur_pos + 1;
-                    term_dist_leading = 0;
+//                    term_dist_leading = 0;
                     if (cur_pos == start_pos) {
 //                        no_terminator = true;
                         break;
@@ -578,7 +578,7 @@ void ExpManager::opt_prom_compute_RNA(int indiv_id) {
             }
 
             if (terminator_found) {
-                int32_t rna_end =
+                int32_t rna_end = //cur_pos + 10;
                         cur_pos + 10 >= internal_organisms_[indiv_id]->length() ?
                         cur_pos + 10 - internal_organisms_[indiv_id]->length() :
                         cur_pos + 10;
@@ -631,15 +631,14 @@ void ExpManager::compute_RNA(int indiv_id) {
                     int k = internal_organisms_[indiv_id]->promoters[rna_idx]->pos + 22;
                     k = k >= internal_organisms_[indiv_id]->length() ? k - internal_organisms_[indiv_id]->length() : k;
 
-                    auto it_rna_end = internal_organisms_[indiv_id]->terminators.lower_bound(
-                            k);
+                    auto it_rna_end = internal_organisms_[indiv_id]->terminators.lower_bound(k);
 
                     if (it_rna_end ==
                         internal_organisms_[indiv_id]->terminators.end()) {
                         it_rna_end = internal_organisms_[indiv_id]->terminators.begin();
                     }
 
-                    int rna_end =
+                    int rna_end = //*it_rna_end + 10;
                             *it_rna_end + 10 >= internal_organisms_[indiv_id]->length() ?
                             *it_rna_end + 10 - internal_organisms_[indiv_id]->length() :
                             *it_rna_end + 10;
@@ -680,8 +679,7 @@ void ExpManager::compute_RNA(int indiv_id) {
  * @param indiv_id : Unique identification number of the organism
  */
 void ExpManager::start_protein(int indiv_id) {
-    for (int rna_idx = 0; rna_idx <
-                          (int) internal_organisms_[indiv_id]->rna_count_; rna_idx++) {
+    for (int rna_idx = 0; rna_idx < (int) internal_organisms_[indiv_id]->rna_count_; rna_idx++) {
         {
             if (internal_organisms_[indiv_id]->rnas[rna_idx]->is_init_) {
                 int c_pos = internal_organisms_[indiv_id]->rnas[rna_idx]->begin;
