@@ -33,7 +33,7 @@
 #include "DnaMutator.h"
 #include "Stats.h"
 
-
+#include <fstream>
 #include <memory>
 
 constexpr int8_t NB_BASE = 2;
@@ -139,6 +139,8 @@ public:
     double w_max_;
 
     int backup_step_;
+
+    std::ofstream timeFile;
 
 };
 
