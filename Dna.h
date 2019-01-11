@@ -12,6 +12,7 @@
 #include <zlib.h>
 
 #include "Threefry.h"
+#include "BitManager.h"
 
 constexpr int8_t CODON_SIZE = 3;
 constexpr int32_t TERMINATOR_MASK = 0b11110011110000000000000000000000;
@@ -45,7 +46,7 @@ public:
 
     int promoter_at(int pos);
 
-    int terminator_at(int pos);
+    bool terminator_at(int pos);
 
     bool shine_dal_start(int pos);
 
@@ -58,4 +59,6 @@ public:
     int32_t length_;
 
     int32_t chunk_number_;
+
+    BitManager bm;
 };
