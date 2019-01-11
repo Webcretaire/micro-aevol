@@ -8,7 +8,6 @@
 #include <cstdint>
 
 constexpr int8_t CHUNK_SIZE = 32;
-constexpr int8_t MAX_INTERESTING_SIZE = 22;
 
 /* a=target variable, b=bit number to act upon 0-n */
 #define BIT_SET(a, b) ((a) |= (1ULL<<(b)))
@@ -23,29 +22,32 @@ constexpr int8_t MAX_INTERESTING_SIZE = 22;
 #define BITMASK_CHECK_ALL(x, y) (((x) & (y)) == (y))   // warning: evaluates y twice
 #define BITMASK_CHECK_ANY(x, y) ((x) & (y))
 
-class BitManager {
-public:
-    int set_bit(int32_t *dna, int pos);
+int chunck_number__ = 0;
+int chunck_offset__ = 0;
 
-    int clear_bit(int32_t *dna, int pos);
+void updateOffset_bit(int pos) {
+    int chunck_number__ = pos / CHUNK_SIZE;
+    int chunck_offset__ = CHUNK_SIZE - 1 - (pos - chunck_number__ * CHUNK_SIZE);
+}
 
-    int flip_bit(int32_t *dna, int pos);
+int set_bit(int32_t *dna, int pos) {
+    updateOffset_bit(pos);
+    return BIT_SET(*(dna + chunck_number__), chunck_offset__);
+}
 
-    int access_bit(const int32_t *dna, int pos);
+int clear_bit(int32_t *dna, int pos) {
+    updateOffset_bit(pos);
+    return BIT_CLEAR(*(dna + chunck_number__), chunck_offset__);
+}
 
-    int32_t get_chunck(int32_t *dna, int pos);
+int flip_bit(int32_t *dna, int pos) {
+    updateOffset_bit(pos);
+    return BIT_FLIP(*(dna + chunck_number__), chunck_offset__);
+}
 
-    int access_bit(const int32_t &dna, int pos);
-
-    int def_bit(int32_t *dna, int pos, bool value);
-
-private:
-    int chunck_number__;
-
-    int chunck_offset__;
-
-    void updateOffset_bit(int pos);
-
-};
+int access_bit(const int32_t *dna, int pos) {
+    updateOffset_bit(pos);
+    return BIT_CHECK(*(dna + chunck_number__), chunck_offset__);
+}
 
 #endif //PDC_MINI_AEVOL_BITMANAGER_H
