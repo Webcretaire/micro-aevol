@@ -66,7 +66,7 @@ Organism::Organism(ExpManager *exp_m, char *genome, int indiv_id) {
     count_prom = 0;
     rna_count_ = 0;
 
-    dna_ = new Dna(genome, strlen(genome));
+//    dna_ = new Dna(genome, strlen(genome));
     parent_length_ = strlen(genome);
     indiv_id_ = indiv_id;
 

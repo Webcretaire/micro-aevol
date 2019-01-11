@@ -14,6 +14,7 @@
 #include "Threefry.h"
 
 constexpr int8_t CODON_SIZE = 3;
+constexpr int32_t TERMINATOR_MASK = 0b11110011110000000000000000000000;
 
 constexpr const char *PROM_SEQ = "0101011001110010010110";
 constexpr const char *SHINE_DAL_SEQ = "011011000";
@@ -30,9 +31,7 @@ public:
 
     Dna(int length, Threefry::Gen &rng);
 
-    Dna(char *genome, int length);
-
-    Dna(int length);
+    Dna(int32_t *genome, int length);
 
     ~Dna() = default;
 
@@ -41,8 +40,6 @@ public:
     void save(gzFile backup_file);
 
     void load(gzFile backup_file);
-
-    void set(int pos, char c);
 
     void do_switch(int pos);
 
@@ -56,5 +53,9 @@ public:
 
     int codon_at(int pos);
 
-    std::vector<char> seq_;
+    int32_t *seq_;
+
+    int32_t length_;
+
+    int32_t chunk_number_;
 };
