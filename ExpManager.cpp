@@ -390,22 +390,39 @@ ExpManager::~ExpManager() {
  * @param first_gen : is it the first generation simulated ? (generation 1 or first generation after a restore)
  */
 void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_gen) {
+    high_resolution_clock::time_point t_start_step;
+    high_resolution_clock::time_point t_end_step;
+    long duration_step;
+
+    high_resolution_clock::time_point t1;
+    high_resolution_clock::time_point t2;
+
+    long duration_selection;
+    long duration_mutation;
+    long duration_start_stop_RNA;
+    long duration_start_protein;
+    long duration_compute_protein;
+    long duration_translate_protein;
+    long duration_compute_phenotype;
+    long duration_compute_fitness;
 
     // Running the simulation process for each organism
+    t_start_step = high_resolution_clock::now();
+
     {
-        high_resolution_clock::time_point t1 = high_resolution_clock::now();
+        t1 = high_resolution_clock::now();
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             selection(indiv_id);
         }
-        high_resolution_clock::time_point t2 = high_resolution_clock::now();
-        auto duration_selection = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        t2 = high_resolution_clock::now();
+        duration_selection = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
         t1 = high_resolution_clock::now();
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             do_mutation(indiv_id);
         }
         t2 = high_resolution_clock::now();
-        auto duration_mutation = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        duration_mutation = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
         t1 = high_resolution_clock::now();
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
@@ -414,7 +431,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
             }
         }
         t2 = high_resolution_clock::now();
-        auto duration_start_stop_RNA = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        duration_start_stop_RNA = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
         t1 = high_resolution_clock::now();
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
@@ -423,7 +440,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
             }
         }
         t2 = high_resolution_clock::now();
-        auto duration_start_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        duration_start_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
 
         t1 = high_resolution_clock::now();
@@ -433,7 +450,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
             }
         }
         t2 = high_resolution_clock::now();
-        auto duration_compute_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        duration_compute_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
 
         t1 = high_resolution_clock::now();
@@ -443,7 +460,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
             }
         }
         t2 = high_resolution_clock::now();
-        auto duration_translate_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        duration_translate_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
 
         t1 = high_resolution_clock::now();
@@ -453,7 +470,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
             }
         }
         t2 = high_resolution_clock::now();
-        auto duration_compute_phenotype = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        duration_compute_phenotype = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
 
         t1 = high_resolution_clock::now();
@@ -463,19 +480,29 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
             }
         }
         t2 = high_resolution_clock::now();
-        auto duration_compute_fitness = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+        duration_compute_fitness = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 
         //transfer_out(this);
-
-        timeFile << "LOG generation " << AeTime::time() << "," << duration_selection << "," << duration_mutation << ","
-                 << duration_start_stop_RNA << "," << duration_start_protein << "," << duration_compute_protein << ","
-                 << duration_translate_protein << "," << duration_compute_phenotype << ","
-                 << duration_compute_fitness << std::endl;
     }
+    t_end_step = high_resolution_clock::now();
+    duration_step = std::chrono::duration_cast<std::chrono::microseconds>(t_end_step - t_start_step).count();
+
+    timeFile << AeTime::time() << "," << duration_selection << "," << duration_mutation << ","
+             << duration_start_stop_RNA << "," << duration_start_protein << "," << duration_compute_protein << ","
+             << duration_translate_protein << "," << duration_compute_phenotype << ","
+             << duration_compute_fitness << "," << duration_step << std::endl;
+
     for (int indiv_id = 1; indiv_id < nb_indivs_; indiv_id++) {
         prev_internal_organisms_[indiv_id] = internal_organisms_[indiv_id];
         internal_organisms_[indiv_id] = nullptr;
     }
+
+
+    /***********************************************************************
+     * The following part of the code is used for statistic on the evolution
+     * we will not try to optimized this part
+     *
+     ***********************************************************************/
 
     // Search for the best
     double best_fitness = prev_internal_organisms_[0]->fitness;
@@ -1334,6 +1361,9 @@ void ExpManager::run_evolution(int nb_gen) {
     }
 
     timeFile.open("time", ofstream::out);
+
+    timeFile << "generation,selection,mutation,start_stop_RNA,start_protein,compute_protein"
+                ",translate_protein,compute_phenotype,compute_fitness,total_step" << endl;
 
     printf("Running evolution from %d to %d\n", AeTime::time(), AeTime::time() + nb_gen);
     bool firstGen = true;
