@@ -394,110 +394,30 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
     high_resolution_clock::time_point t_end_step;
     long duration_step;
 
-    high_resolution_clock::time_point t1;
-    high_resolution_clock::time_point t2;
-
-    long duration_selection;
-    long duration_mutation;
-    long duration_start_stop_RNA;
-    long duration_start_protein;
-    long duration_compute_protein;
-    long duration_translate_protein;
-    long duration_compute_phenotype;
-    long duration_compute_fitness;
-
     // Running the simulation process for each organism
     t_start_step = high_resolution_clock::now();
-
-    {
-        t1 = high_resolution_clock::now();
 #pragma omp parallel for
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            selection(indiv_id);
+    for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
+        selection(indiv_id);
+
+        do_mutation(indiv_id);
+
+
+        if (dna_mutator_array_[indiv_id]->hasMutate()) {
+            opt_prom_compute_RNA(indiv_id);
+            start_protein(indiv_id);
+            compute_protein(indiv_id);
+            translate_protein(indiv_id, w_max);
+            compute_phenotype(indiv_id);
+            compute_fitness(indiv_id, selection_pressure);
         }
-        t2 = high_resolution_clock::now();
-        duration_selection = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
-        t1 = high_resolution_clock::now();
-#pragma omp parallel for
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            do_mutation(indiv_id);
-        }
-        t2 = high_resolution_clock::now();
-        duration_mutation = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
-        t1 = high_resolution_clock::now();
-#pragma omp parallel for
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
-                opt_prom_compute_RNA(indiv_id);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        duration_start_stop_RNA = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
-        t1 = high_resolution_clock::now();
-#pragma omp parallel for
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
-                start_protein(indiv_id);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        duration_start_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
-        t1 = high_resolution_clock::now();
-#pragma omp parallel for
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
-                compute_protein(indiv_id);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        duration_compute_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
-
-        t1 = high_resolution_clock::now();
-#pragma omp parallel for
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
-                translate_protein(indiv_id, w_max);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        duration_translate_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
-
-        t1 = high_resolution_clock::now();
-#pragma omp parallel for
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
-                compute_phenotype(indiv_id);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        duration_compute_phenotype = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
-
-        t1 = high_resolution_clock::now();
-#pragma omp parallel for
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
-                compute_fitness(indiv_id, selection_pressure);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        duration_compute_fitness = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
         //transfer_out(this);
     }
+
     t_end_step = high_resolution_clock::now();
     duration_step = std::chrono::duration_cast<std::chrono::microseconds>(t_end_step - t_start_step).count();
 
-    timeFile << AeTime::time() << "," << duration_selection << "," << duration_mutation << ","
-             << duration_start_stop_RNA << "," << duration_start_protein << "," << duration_compute_protein << ","
-             << duration_translate_protein << "," << duration_compute_phenotype << ","
-             << duration_compute_fitness << "," << duration_step << std::endl;
+    timeFile << AeTime::time() << "," << duration_step << std::endl;
 
     for (int indiv_id = 1; indiv_id < nb_indivs_; indiv_id++) {
         prev_internal_organisms_[indiv_id] = internal_organisms_[indiv_id];
@@ -681,7 +601,8 @@ void ExpManager::opt_prom_compute_RNA(int indiv_id) {
                     internal_organisms_[indiv_id]->rnas[glob_rna_idx] = new RNA(
                             internal_organisms_[indiv_id]->promoters[rna_idx]->pos,
                             rna_end,
-                            1.0 - std::fabs(((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error)) / 5.0,
+                            1.0 -
+                            std::fabs(((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error)) / 5.0,
                             rna_length
                     );
                 }
@@ -711,7 +632,8 @@ void ExpManager::compute_RNA(int indiv_id) {
 
 
                     int k = internal_organisms_[indiv_id]->promoters[rna_idx]->pos + 22;
-                    k = k >= internal_organisms_[indiv_id]->length() ? k - internal_organisms_[indiv_id]->length() : k;
+                    k = k >= internal_organisms_[indiv_id]->length() ? k - internal_organisms_[indiv_id]->length()
+                                                                     : k;
 
                     auto it_rna_end = internal_organisms_[indiv_id]->terminators.lower_bound(
                             k);
@@ -746,7 +668,8 @@ void ExpManager::compute_RNA(int indiv_id) {
                         internal_organisms_[indiv_id]->rnas[glob_rna_idx] = new RNA(
                                 internal_organisms_[indiv_id]->promoters[rna_idx]->pos,
                                 rna_end,
-                                1.0 - fabs(((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error)) / 5.0,
+                                1.0 -
+                                fabs(((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error)) / 5.0,
                                 rna_length);
                     }
                 }
@@ -877,10 +800,12 @@ void ExpManager::compute_protein(int indiv_id) {
                         if (internal_organisms_[indiv_id]->
                                 rnas[rna_idx]->start_prot[protein_idx] + 13 < t_k) {
                             prot_length =
-                                    t_k - (internal_organisms_[indiv_id]->rnas[rna_idx]->start_prot[protein_idx] + 13);
+                                    t_k -
+                                    (internal_organisms_[indiv_id]->rnas[rna_idx]->start_prot[protein_idx] + 13);
                         } else {
                             prot_length = internal_organisms_[indiv_id]->length() -
-                                          (internal_organisms_[indiv_id]->rnas[rna_idx]->start_prot[protein_idx] + 13) +
+                                          (internal_organisms_[indiv_id]->rnas[rna_idx]->start_prot[protein_idx] +
+                                           13) +
                                           t_k;
                         }
 
@@ -1244,7 +1169,8 @@ void ExpManager::compute_phenotype(int indiv_id) {
     }
 
     for (int fuzzy_idx = 0; fuzzy_idx < 300; fuzzy_idx++) {
-        internal_organisms_[indiv_id]->phenotype[fuzzy_idx] = activ_phenotype[fuzzy_idx] + inhib_phenotype[fuzzy_idx];
+        internal_organisms_[indiv_id]->phenotype[fuzzy_idx] =
+                activ_phenotype[fuzzy_idx] + inhib_phenotype[fuzzy_idx];
         if (internal_organisms_[indiv_id]->phenotype[fuzzy_idx] < 0)
             internal_organisms_[indiv_id]->phenotype[fuzzy_idx] = 0;
     }
