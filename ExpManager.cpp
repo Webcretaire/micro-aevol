@@ -574,6 +574,7 @@ void ExpManager::start_stop_RNA(int indiv_id) {
             }
         }
     }
+    cout << endl;
 }
 
 /**
@@ -682,8 +683,9 @@ void ExpManager::compute_RNA(int indiv_id) {
     internal_organisms_[indiv_id]->rnas.resize(
             internal_organisms_[indiv_id]->promoters.size());
 
-    for (int rna_idx = 0; rna_idx <
-                          (int) internal_organisms_[indiv_id]->promoters.size(); rna_idx++) {
+    for (int rna_idx = 0;
+         rna_idx < (int) internal_organisms_[indiv_id]->promoters.size();
+         rna_idx++) {
         {
             if (internal_organisms_[indiv_id]->promoters[rna_idx] != nullptr) {
                 if (!internal_organisms_[indiv_id]->terminators.empty()) {
