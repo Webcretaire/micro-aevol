@@ -407,10 +407,8 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
                 compute_protein(indiv_id);
                 translate_protein(indiv_id, w_max);
                 compute_phenotype(indiv_id);
-                compute_fitness(indiv_id, selection_pressure);
             }
         }
-        //transfer_out(this);
     }
     t_end_step = high_resolution_clock::now();
     duration_step = std::chrono::duration_cast<std::chrono::microseconds>(t_end_step - t_start_step).count();
@@ -525,90 +523,93 @@ void ExpManager::opt_prom_compute_RNA(int indiv_id) {
 /*
  * If is in run_a_step
  */
-//    if (dna_mutator_array_[indiv_id]->hasMutate()) {
-    internal_organisms_[indiv_id]->proteins.clear();
-    internal_organisms_[indiv_id]->rnas.clear();
-    internal_organisms_[indiv_id]->terminators.clear();
+    shared_ptr<Organism> org = internal_organisms_[indiv_id];
+    if (dna_mutator_array_[indiv_id]->hasMutate()) {
+        org->proteins.clear();
+        org->rnas.clear();
+        org->terminators.clear();
 
-    internal_organisms_[indiv_id]->rnas.resize(internal_organisms_[indiv_id]->promoters.size());
+        org->rnas.resize(org->promoters.size());
 
-    for (int prom_idx = 0; prom_idx < internal_organisms_[indiv_id]->promoters.size(); prom_idx++) {
-        if (internal_organisms_[indiv_id]->promoters[prom_idx] != nullptr) {
-            int rna_idx = prom_idx;
-            Promoter *prom;
-            prom = internal_organisms_[indiv_id]->promoters[rna_idx];
+        for (int prom_idx = 0; prom_idx < org->promoters.size(); prom_idx++) {
+            if (org->promoters[prom_idx] != nullptr) {
+                int rna_idx = prom_idx;
+                Promoter *prom;
+                prom = org->promoters[rna_idx];
 
 //            if (prom != nullptr) {
-            int prom_pos;
+                int prom_pos;
 //                    double prom_error;
-            prom_pos = prom->pos;
+                prom_pos = prom->pos;
 //                    prom_error = fabs(
-//                            ((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error));
+//                            ((float) org->promoters[rna_idx]->error));
 
-            /* Search for terminators */
-            int cur_pos = prom_pos + 22;
-            cur_pos = cur_pos >= internal_organisms_[indiv_id]->length()
-                      ? cur_pos - internal_organisms_[indiv_id]->length()
-                      : cur_pos;
-            int start_pos = cur_pos;
+                /* Search for terminators */
+                int cur_pos = prom_pos + 22;
+                cur_pos = cur_pos >= org->length()
+                          ? cur_pos - org->length()
+                          : cur_pos;
+                int start_pos = cur_pos;
 
-            bool terminator_found = false;
-//            bool no_terminator = false;
+                bool terminator_found = false;
+//                bool no_terminator = false;
 //            int term_dist_leading = 0;
 
 //            int loop_size = 0;
 
-            while (!terminator_found) {
+                while (!terminator_found) {
 //                loop_size++;
 //                for (int t_motif_id = 0; t_motif_id < 4; t_motif_id++)
-//                term_dist_leading = internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos);
+//                term_dist_leading = org->dna_->terminator_at(cur_pos);
 
-                if (internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos))
-                    terminator_found = true;
-                else {
-                    cur_pos = cur_pos + 1 >= internal_organisms_[indiv_id]->length()
-                              ? cur_pos + 1 - internal_organisms_[indiv_id]->length()
-                              : cur_pos + 1;
+                    if (org->dna_->terminator_at(cur_pos))
+                        terminator_found = true;
+                    else {
+                        ++cur_pos;
+                        cur_pos = cur_pos >= org->length()
+                                  ? cur_pos - org->length()
+                                  : cur_pos;
 //                    term_dist_leading = 0;
-                    if (cur_pos == start_pos) {
-//                        no_terminator = true;
-                        break;
+                        if (cur_pos == start_pos) {
+//                            no_terminator = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (terminator_found) {
-                int32_t rna_end = //cur_pos + 10;
-                        cur_pos + 10 >= internal_organisms_[indiv_id]->length() ?
-                        cur_pos + 10 - internal_organisms_[indiv_id]->length() :
-                        cur_pos + 10;
+                if (terminator_found) {
+                    int32_t rna_end = //cur_pos + 10;
+                            cur_pos + 10 >= org->length() ?
+                            cur_pos + 10 - org->length() :
+                            cur_pos + 10;
 
-                int32_t rna_length = 0;
+                    int32_t rna_length = 0;
 
-                rna_length = prom_pos > rna_end
-                             ? internal_organisms_[indiv_id]->length() - prom_pos + rna_end
-                             : rna_end - prom_pos;
+                    rna_length = prom_pos > rna_end
+                                 ? org->length() - prom_pos + rna_end
+                                 : rna_end - prom_pos;
 
-                rna_length -= 21;
+                    rna_length -= 21;
 
-                if (rna_length > 0) {
-                    int glob_rna_idx = internal_organisms_[indiv_id]->rna_count_;
-                    internal_organisms_[indiv_id]->rna_count_ =
-                            internal_organisms_[indiv_id]->rna_count_ + 1;
+                    if (rna_length > 0) {
+                        int glob_rna_idx = org->rna_count_;
+                        org->rna_count_ =
+                                org->rna_count_ + 1;
 
-                    internal_organisms_[indiv_id]->rnas[glob_rna_idx] = new RNA(
-                            internal_organisms_[indiv_id]->promoters[rna_idx]->pos,
-                            rna_end,
-                            1.0 - std::fabs(((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error)) / 5.0,
-                            rna_length
-                    );
+                        org->rnas[glob_rna_idx] = new RNA(
+                                org->promoters[rna_idx]->pos,
+                                rna_end,
+                                1.0 -
+                                std::fabs(((float) org->promoters[rna_idx]->error)) / 5.0,
+                                rna_length
+                        );
+                    }
+
                 }
-
-            }
 //            }
+            }
         }
     }
-//    }
 }
 
 
