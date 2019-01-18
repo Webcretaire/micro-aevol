@@ -36,7 +36,7 @@ public:
 
     ~Dna() = default;
 
-    double length() const;
+    int length() const;
 
     void save(gzFile backup_file);
 
@@ -57,9 +57,9 @@ public:
 private:
     int32_t *seq_;
 
-    double length_;
+    int length_;
 
-    int32_t chunk_number_;
+    int chunk_number_;
 
     BitManager bm;
 };

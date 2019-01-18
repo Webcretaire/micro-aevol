@@ -1,7 +1,3 @@
-//
-// Created by arrouan on 01/10/18.
-//
-
 #include "Dna.h"
 #include "ExpManager.h"
 #include "BitManager.h"
@@ -19,7 +15,7 @@ Dna::Dna(const Dna &clone) {
 Dna::Dna(int length, Threefry::Gen &rng) {
     bm = BitManager();
     length_ = 2 * length;
-    chunk_number_ = ceil(length_ / CHUNK_SIZE);
+    chunk_number_ = (int) ceil(length_ / CHUNK_SIZE);
     seq_ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
     // Generate a random genome
     for (int32_t i = 0; i < length; i++)
@@ -33,23 +29,23 @@ Dna::Dna(int32_t *genome, int length) {
     bm = BitManager();
     *seq_ = *genome;
     length_ = length * 2.0;
-    chunk_number_ = ceil(length_ / CHUNK_SIZE);
+    chunk_number_ = (int) ceil(length_ / CHUNK_SIZE);
 }
 
-double Dna::length() const {
+int Dna::length() const {
     return length_ / 2.0;
 }
 
 void Dna::save(gzFile backup_file) {
-    unsigned int dna_length = length();
+    int dna_length = length_;
     gzwrite(backup_file, &dna_length, sizeof(dna_length));
-    gzwrite(backup_file, seq_, chunk_number_ / 2.0 * sizeof(int32_t));
+    gzwrite(backup_file, seq_, chunk_number_ * sizeof(int32_t));
 }
 
 void Dna::load(gzFile backup_file) {
     unsigned int dna_length;
     gzread(backup_file, &dna_length, sizeof(dna_length));
-    gzread(backup_file, seq_, chunk_number_ / 2.0 * sizeof(int32_t));
+    gzread(backup_file, seq_, chunk_number_ * sizeof(int32_t));
 }
 
 void Dna::do_switch(int pos) {
