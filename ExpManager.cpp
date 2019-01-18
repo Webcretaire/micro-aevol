@@ -550,31 +550,27 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
  * @param indiv_id : Unique identification number of the organism
  */
 void ExpManager::start_stop_RNA(int indiv_id) {
-
     for (int dna_pos = 0; dna_pos < internal_organisms_[indiv_id]->length(); dna_pos++) {
-        if (internal_organisms_[indiv_id]->length() >= PROM_SIZE) {
-            int dist_lead = internal_organisms_[indiv_id]->dna_->promoter_at(dna_pos);
+        shared_ptr<Organism> org = internal_organisms_[indiv_id];
+        if (org->length() >= PROM_SIZE) {
+            int dist_lead = org->dna_->promoter_at(dna_pos);
 
             if (dist_lead <= 4) {
                 Promoter *nprom = new Promoter(dna_pos, dist_lead);
-                int prom_idx = internal_organisms_[indiv_id]->count_prom;
-                internal_organisms_[indiv_id]->count_prom =
-                        internal_organisms_[indiv_id]->count_prom + 1;
-
-                internal_organisms_[indiv_id]->promoters[prom_idx] = nprom;
-                internal_organisms_[indiv_id]->prom_pos[dna_pos] = prom_idx;
+                int prom_idx = org->count_prom;
+                org->count_prom = org->count_prom + 1;
+                org->promoters[prom_idx] = nprom;
+                org->prom_pos[dna_pos] = prom_idx;
             }
 
             // Computing if a terminator exists at that position
-//            int dist_term_lead = internal_organisms_[indiv_id]->dna_->terminator_at(dna_pos);
+//            int dist_term_lead = org->dna_->terminator_at(dna_pos);
 
-            if (internal_organisms_[indiv_id]->dna_->terminator_at(dna_pos)) {
-                internal_organisms_[indiv_id]->terminators.insert(
-                        dna_pos);
+            if (org->dna_->terminator_at(dna_pos)) {
+                org->terminators.insert(dna_pos);
             }
         }
     }
-    cout << endl;
 }
 
 /**
@@ -680,58 +676,49 @@ void ExpManager::opt_prom_compute_RNA(int indiv_id) {
  * @param indiv_id : Unique identification number of the organism
  */
 void ExpManager::compute_RNA(int indiv_id) {
-    internal_organisms_[indiv_id]->rnas.resize(
-            internal_organisms_[indiv_id]->promoters.size());
+    internal_organisms_[indiv_id]->rnas.resize(internal_organisms_[indiv_id]->promoters.size());
 
     for (int rna_idx = 0;
          rna_idx < (int) internal_organisms_[indiv_id]->promoters.size();
          rna_idx++) {
-        {
-            if (internal_organisms_[indiv_id]->promoters[rna_idx] != nullptr) {
-                if (!internal_organisms_[indiv_id]->terminators.empty()) {
+        if (internal_organisms_[indiv_id]->promoters[rna_idx] != nullptr) {
+            if (!internal_organisms_[indiv_id]->terminators.empty()) {
+                int k = internal_organisms_[indiv_id]->promoters[rna_idx]->pos + 22;
+                k = k >= internal_organisms_[indiv_id]->length() ? k - internal_organisms_[indiv_id]->length() : k;
 
+                auto it_rna_end = internal_organisms_[indiv_id]->terminators.lower_bound(k);
 
-                    int k = internal_organisms_[indiv_id]->promoters[rna_idx]->pos + 22;
-                    k = k >= internal_organisms_[indiv_id]->length() ? k - internal_organisms_[indiv_id]->length() : k;
+                if (it_rna_end == internal_organisms_[indiv_id]->terminators.end()) {
+                    it_rna_end = internal_organisms_[indiv_id]->terminators.begin();
+                }
 
-                    auto it_rna_end = internal_organisms_[indiv_id]->terminators.lower_bound(k);
+                int rna_end = *it_rna_end + 10 >= internal_organisms_[indiv_id]->length()
+                              ? *it_rna_end + 10 - internal_organisms_[indiv_id]->length()
+                              : *it_rna_end + 10;
 
-                    if (it_rna_end ==
-                        internal_organisms_[indiv_id]->terminators.end()) {
-                        it_rna_end = internal_organisms_[indiv_id]->terminators.begin();
-                    }
+                int rna_length = 0;
 
-                    int rna_end = //*it_rna_end + 10;
-                            *it_rna_end + 10 >= internal_organisms_[indiv_id]->length() ?
-                            *it_rna_end + 10 - internal_organisms_[indiv_id]->length() :
-                            *it_rna_end + 10;
+                if (internal_organisms_[indiv_id]->promoters[rna_idx]->pos > rna_end)
+                    rna_length = internal_organisms_[indiv_id]->length() -
+                                 internal_organisms_[indiv_id]->promoters[rna_idx]->pos
+                                 + rna_end;
+                else
+                    rna_length = rna_end - internal_organisms_[indiv_id]->promoters[rna_idx]->pos;
 
-                    int rna_length = 0;
+                rna_length -= 21;
 
-                    if (internal_organisms_[indiv_id]->promoters[rna_idx]->pos > rna_end)
-                        rna_length = internal_organisms_[indiv_id]->length() -
-                                     internal_organisms_[indiv_id]->promoters[rna_idx]->pos
-                                     + rna_end;
-                    else
-                        rna_length = rna_end - internal_organisms_[indiv_id]->promoters[rna_idx]->pos;
+                if (rna_length >= 0) {
+                    int glob_rna_idx = internal_organisms_[indiv_id]->rna_count_;
+                    internal_organisms_[indiv_id]->rna_count_ = internal_organisms_[indiv_id]->rna_count_ + 1;
 
-                    rna_length -= 21;
-
-                    if (rna_length >= 0) {
-
-
-                        int glob_rna_idx = internal_organisms_[indiv_id]->rna_count_;
-                        internal_organisms_[indiv_id]->rna_count_ = internal_organisms_[indiv_id]->rna_count_ + 1;
-
-                        internal_organisms_[indiv_id]->rnas[glob_rna_idx] = new RNA(
-                                internal_organisms_[indiv_id]->promoters[rna_idx]->pos,
-                                rna_end,
-                                1.0 - fabs(((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error)) / 5.0,
-                                rna_length);
-                    }
+                    internal_organisms_[indiv_id]->rnas[glob_rna_idx] = new RNA(
+                            internal_organisms_[indiv_id]->promoters[rna_idx]->pos,
+                            rna_end,
+                            1.0 - fabs(((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error)) / 5.0,
+                            rna_length
+                    );
                 }
             }
-
         }
     }
 }
