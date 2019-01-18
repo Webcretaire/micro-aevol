@@ -18,10 +18,10 @@ Dna::Dna(int length, Threefry::Gen &rng) {
     chunk_number_ = (int) ceil(length_ / CHUNK_SIZE);
     seq_ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
     // Generate a random genome
-    for (int32_t i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
         bm.def_bit(seq_, i, (bool) (rng.random(NB_BASE)));
 
-    for (int32_t i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
         bm.def_bit(seq_, i + length, (bool) bm.access_bit(seq_, i));
 }
 
