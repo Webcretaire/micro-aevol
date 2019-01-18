@@ -2,7 +2,7 @@
 /.idea/
 
 # Cmake related files
-/cmake-build-*
+cmake-build*
 Makefile
 CMakeCache.txt
 CMakeFiles/
