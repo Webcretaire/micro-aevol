@@ -15,7 +15,6 @@
 #include "BitManager.h"
 
 constexpr const int8_t CODON_SIZE = 3;
-constexpr const int32_t TERMINATOR_MASK = 0b11110011110000000000000000000000;
 
 constexpr const int32_t PROM_SEQ = 0b01010110011100100101100000000000;
 constexpr const int32_t SHINE_DAL_SEQ = 0b01101100000000000000000000000000;
