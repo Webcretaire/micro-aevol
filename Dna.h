@@ -14,12 +14,12 @@
 #include "Threefry.h"
 #include "BitManager.h"
 
-constexpr int8_t CODON_SIZE = 3;
-constexpr int32_t TERMINATOR_MASK = 0b11110011110000000000000000000000;
+constexpr const int8_t CODON_SIZE = 3;
+constexpr const int32_t TERMINATOR_MASK = 0b11110011110000000000000000000000;
 
-constexpr const char *PROM_SEQ = "0101011001110010010110";
-constexpr const char *SHINE_DAL_SEQ = "011011000";
-constexpr const char *PROTEIN_END = "001"; // CODON_STOP
+constexpr const int32_t PROM_SEQ = 0b01010110011100100101100000000000;
+constexpr const int32_t SHINE_DAL_SEQ = 0b01101100000000000000000000000000;
+constexpr const int32_t PROTEIN_END = 0b00100000000000000000000000000000; // CODON_STOP
 
 class ExpManager;
 
@@ -36,7 +36,7 @@ public:
 
     ~Dna() = default;
 
-    int length() const;
+    double length() const;
 
     void save(gzFile backup_file);
 
@@ -54,9 +54,10 @@ public:
 
     int codon_at(int pos);
 
+private:
     int32_t *seq_;
 
-    int32_t length_;
+    double length_;
 
     int32_t chunk_number_;
 

@@ -390,44 +390,102 @@ ExpManager::~ExpManager() {
  * @param first_gen : is it the first generation simulated ? (generation 1 or first generation after a restore)
  */
 void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_gen) {
-    high_resolution_clock::time_point t_start_step;
-    high_resolution_clock::time_point t_end_step;
-    long duration_step;
 
     // Running the simulation process for each organism
-    t_start_step = high_resolution_clock::now();
-
     {
+        high_resolution_clock::time_point t1 = high_resolution_clock::now();
+//        cout << " -- selection" << endl;
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             selection(indiv_id);
+        }
+        high_resolution_clock::time_point t2 = high_resolution_clock::now();
+        auto duration_selection = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
+        t1 = high_resolution_clock::now();
+//        cout << " -- do_mutation" << endl;
+        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             do_mutation(indiv_id);
+        }
+        t2 = high_resolution_clock::now();
+        auto duration_mutation = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
+        t1 = high_resolution_clock::now();
+//        cout << " -- opt_prom_compute_RNA" << endl;
+        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 opt_prom_compute_RNA(indiv_id);
+            }
+        }
+        t2 = high_resolution_clock::now();
+        auto duration_start_stop_RNA = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
+        t1 = high_resolution_clock::now();
+//        cout << " -- start_protein" << endl;
+        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
+            if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 start_protein(indiv_id);
+            }
+        }
+        t2 = high_resolution_clock::now();
+        auto duration_start_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
+
+        t1 = high_resolution_clock::now();
+//        cout << " -- compute_protein" << endl;
+        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
+            if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 compute_protein(indiv_id);
+            }
+        }
+        t2 = high_resolution_clock::now();
+        auto duration_compute_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
+
+        t1 = high_resolution_clock::now();
+//        cout << " -- translate_protein" << endl;
+        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
+            if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 translate_protein(indiv_id, w_max);
+            }
+        }
+        t2 = high_resolution_clock::now();
+        auto duration_translate_protein = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
+
+        t1 = high_resolution_clock::now();
+//        cout << " -- compute_phenotype" << endl;
+        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
+            if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 compute_phenotype(indiv_id);
+            }
+        }
+        t2 = high_resolution_clock::now();
+        auto duration_compute_phenotype = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
+
+        t1 = high_resolution_clock::now();
+//        cout << " -- compute_fitness" << endl;
+        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
+            if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 compute_fitness(indiv_id, selection_pressure);
             }
         }
+        t2 = high_resolution_clock::now();
+        auto duration_compute_fitness = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
         //transfer_out(this);
+
+        timeFile << "LOG generation " << AeTime::time() << "," << duration_selection << "," << duration_mutation << ","
+                 << duration_start_stop_RNA
+                 << "," << duration_start_protein << "," << duration_compute_protein << ","
+                 << duration_translate_protein
+                 << "," << duration_compute_phenotype << "," << duration_compute_phenotype << ","
+                 << duration_compute_fitness << std::endl;
     }
-    t_end_step = high_resolution_clock::now();
-    duration_step = std::chrono::duration_cast<std::chrono::microseconds>(t_end_step - t_start_step).count();
-
-    timeFile << AeTime::time() << "," << duration_step << std::endl;
-
     for (int indiv_id = 1; indiv_id < nb_indivs_; indiv_id++) {
         prev_internal_organisms_[indiv_id] = internal_organisms_[indiv_id];
         internal_organisms_[indiv_id] = nullptr;
     }
-
-
-    /***********************************************************************
-     * The following part of the code is used for statistic on the evolution
-     * we will not try to optimized this part
-     *
-     ***********************************************************************/
 
     // Search for the best
     double best_fitness = prev_internal_organisms_[0]->fitness;
@@ -525,90 +583,93 @@ void ExpManager::opt_prom_compute_RNA(int indiv_id) {
 /*
  * If is in run_a_step
  */
-//    if (dna_mutator_array_[indiv_id]->hasMutate()) {
-    internal_organisms_[indiv_id]->proteins.clear();
-    internal_organisms_[indiv_id]->rnas.clear();
-    internal_organisms_[indiv_id]->terminators.clear();
+    shared_ptr<Organism> org = internal_organisms_[indiv_id];
+    if (dna_mutator_array_[indiv_id]->hasMutate()) {
+        org->proteins.clear();
+        org->rnas.clear();
+        org->terminators.clear();
 
-    internal_organisms_[indiv_id]->rnas.resize(internal_organisms_[indiv_id]->promoters.size());
+        org->rnas.resize(org->promoters.size());
 
-    for (int prom_idx = 0; prom_idx < internal_organisms_[indiv_id]->promoters.size(); prom_idx++) {
-        if (internal_organisms_[indiv_id]->promoters[prom_idx] != nullptr) {
-            int rna_idx = prom_idx;
-            Promoter *prom;
-            prom = internal_organisms_[indiv_id]->promoters[rna_idx];
+        for (int prom_idx = 0; prom_idx < org->promoters.size(); prom_idx++) {
+            if (org->promoters[prom_idx] != nullptr) {
+                int rna_idx = prom_idx;
+                Promoter *prom;
+                prom = org->promoters[rna_idx];
 
 //            if (prom != nullptr) {
-            int prom_pos;
+                int prom_pos;
 //                    double prom_error;
-            prom_pos = prom->pos;
+                prom_pos = prom->pos;
 //                    prom_error = fabs(
-//                            ((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error));
+//                            ((float) org->promoters[rna_idx]->error));
 
-            /* Search for terminators */
-            int cur_pos = prom_pos + 22;
-            cur_pos = cur_pos >= internal_organisms_[indiv_id]->length()
-                      ? cur_pos - internal_organisms_[indiv_id]->length()
-                      : cur_pos;
-            int start_pos = cur_pos;
+                /* Search for terminators */
+                int cur_pos = prom_pos + 22;
+                cur_pos = cur_pos >= org->length()
+                          ? cur_pos - org->length()
+                          : cur_pos;
+                int start_pos = cur_pos;
 
-            bool terminator_found = false;
-//            bool no_terminator = false;
+                bool terminator_found = false;
+//                bool no_terminator = false;
 //            int term_dist_leading = 0;
 
 //            int loop_size = 0;
 
-            while (!terminator_found) {
+                while (!terminator_found) {
 //                loop_size++;
 //                for (int t_motif_id = 0; t_motif_id < 4; t_motif_id++)
-//                term_dist_leading = internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos);
+//                term_dist_leading = org->dna_->terminator_at(cur_pos);
 
-                if (internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos))
-                    terminator_found = true;
-                else {
-                    cur_pos = cur_pos + 1 >= internal_organisms_[indiv_id]->length()
-                              ? cur_pos + 1 - internal_organisms_[indiv_id]->length()
-                              : cur_pos + 1;
+                    if (org->dna_->terminator_at(cur_pos))
+                        terminator_found = true;
+                    else {
+                        ++cur_pos;
+                        cur_pos = cur_pos >= org->length()
+                                  ? cur_pos - org->length()
+                                  : cur_pos;
 //                    term_dist_leading = 0;
-                    if (cur_pos == start_pos) {
-//                        no_terminator = true;
-                        break;
+                        if (cur_pos == start_pos) {
+//                            no_terminator = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (terminator_found) {
-                int32_t rna_end = //cur_pos + 10;
-                        cur_pos + 10 >= internal_organisms_[indiv_id]->length() ?
-                        cur_pos + 10 - internal_organisms_[indiv_id]->length() :
-                        cur_pos + 10;
+                if (terminator_found) {
+                    int32_t rna_end = //cur_pos + 10;
+                            cur_pos + 10 >= org->length() ?
+                            cur_pos + 10 - org->length() :
+                            cur_pos + 10;
 
-                int32_t rna_length = 0;
+                    int32_t rna_length = 0;
 
-                rna_length = prom_pos > rna_end
-                             ? internal_organisms_[indiv_id]->length() - prom_pos + rna_end
-                             : rna_end - prom_pos;
+                    rna_length = prom_pos > rna_end
+                                 ? org->length() - prom_pos + rna_end
+                                 : rna_end - prom_pos;
 
-                rna_length -= 21;
+                    rna_length -= 21;
 
-                if (rna_length > 0) {
-                    int glob_rna_idx = internal_organisms_[indiv_id]->rna_count_;
-                    internal_organisms_[indiv_id]->rna_count_ =
-                            internal_organisms_[indiv_id]->rna_count_ + 1;
+                    if (rna_length > 0) {
+                        int glob_rna_idx = org->rna_count_;
+                        org->rna_count_ =
+                                org->rna_count_ + 1;
 
-                    internal_organisms_[indiv_id]->rnas[glob_rna_idx] = new RNA(
-                            internal_organisms_[indiv_id]->promoters[rna_idx]->pos,
-                            rna_end,
-                            1.0 - std::fabs(((float) internal_organisms_[indiv_id]->promoters[rna_idx]->error)) / 5.0,
-                            rna_length
-                    );
+                        org->rnas[glob_rna_idx] = new RNA(
+                                org->promoters[rna_idx]->pos,
+                                rna_end,
+                                1.0 -
+                                std::fabs(((float) org->promoters[rna_idx]->error)) / 5.0,
+                                rna_length
+                        );
+                    }
+
                 }
-
-            }
 //            }
+            }
         }
     }
-//    }
 }
 
 
@@ -1286,9 +1347,6 @@ void ExpManager::run_evolution(int nb_gen) {
     }
 
     timeFile.open("time", ofstream::out);
-
-    timeFile << "generation,selection,mutation,start_stop_RNA,start_protein,compute_protein"
-                ",translate_protein,compute_phenotype,compute_fitness,total_step" << endl;
 
     printf("Running evolution from %d to %d\n", AeTime::time(), AeTime::time() + nb_gen);
     bool firstGen = true;
