@@ -753,8 +753,7 @@ void ExpManager::start_protein(int indiv_id) {
 
                     while (c_pos != internal_organisms_[indiv_id]->rnas[rna_idx]->end) {
                         if (internal_organisms_[indiv_id]->dna_->shine_dal_start(c_pos)) {
-                            internal_organisms_[indiv_id]->rnas[rna_idx]->start_prot.
-                                    push_back(c_pos);
+                            internal_organisms_[indiv_id]->rnas[rna_idx]->start_prot.push_back(c_pos);
                         }
 
                         c_pos++;
@@ -787,8 +786,8 @@ void ExpManager::compute_protein(int indiv_id) {
     for (int rna_idx = 0; rna_idx < (int) internal_organisms_[indiv_id]->rna_count_; rna_idx++) {
         if (internal_organisms_[indiv_id]->rnas[rna_idx]->is_init_) {
             for (int protein_idx = 0;
-                 protein_idx < (int) internal_organisms_[indiv_id]->
-                         rnas[rna_idx]->start_prot.size(); protein_idx++) {
+                 protein_idx < (int) internal_organisms_[indiv_id]->rnas[rna_idx]->start_prot.size();
+                 protein_idx++) {
                 int start_protein_pos = internal_organisms_[indiv_id]->
                         rnas[rna_idx]->start_prot[protein_idx] + 13;
 
