@@ -400,44 +400,13 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
     {
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             selection(indiv_id);
-        }
-
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             do_mutation(indiv_id);
-        }
-
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 opt_prom_compute_RNA(indiv_id);
-            }
-        }
-
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 start_protein(indiv_id);
-            }
-        }
-
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 compute_protein(indiv_id);
-            }
-        }
-
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 translate_protein(indiv_id, w_max);
-            }
-        }
-
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 compute_phenotype(indiv_id);
-            }
-        }
-
-        for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
-            if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 compute_fitness(indiv_id, selection_pressure);
             }
         }
