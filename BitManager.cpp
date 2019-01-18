@@ -24,3 +24,7 @@ int BitManager::access_bit(const int32_t *dna, int pos) {
     updateOffset_bit(pos);
     return BIT_CHECK(*(dna + chunck_number__), chunck_offset__);
 }
+
+int BitManager::def_bit(int32_t *dna, int pos, bool value) {
+    return value ? set_bit(dna, pos) : clear_bit(dna, pos);
+}
