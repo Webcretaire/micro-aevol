@@ -397,66 +397,65 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
     // Running the simulation process for each organism
     t_start_step = high_resolution_clock::now();
 
+#pragma omp parallel
     {
-#pragma omp parallel for
+#pragma omp for
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             selection(indiv_id);
         }
 
-#pragma omp parallel for
+#pragma omp for
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             do_mutation(indiv_id);
         }
 
-#pragma omp parallel for
+#pragma omp for
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 opt_prom_compute_RNA(indiv_id);
             }
         }
 
-#pragma omp parallel for
+#pragma omp for
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 start_protein(indiv_id);
             }
         }
 
-#pragma omp parallel for
+#pragma omp for
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 compute_protein(indiv_id);
             }
         }
 
-#pragma omp parallel for
+#pragma omp for
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 translate_protein(indiv_id, w_max);
             }
         }
 
-#pragma omp parallel for
+#pragma omp for
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 compute_phenotype(indiv_id);
             }
         }
 
-#pragma omp parallel for
+#pragma omp for
         for (int indiv_id = 0; indiv_id < nb_indivs_; indiv_id++) {
             if (dna_mutator_array_[indiv_id]->hasMutate()) {
                 compute_fitness(indiv_id, selection_pressure);
             }
         }
-
         //transfer_out(this);
     }
     t_end_step = high_resolution_clock::now();
     duration_step = std::chrono::duration_cast<std::chrono::microseconds>(t_end_step - t_start_step).count();
 
     timeFile << AeTime::time() << "," << duration_step << std::endl;
-
     for (int indiv_id = 1; indiv_id < nb_indivs_; indiv_id++) {
         prev_internal_organisms_[indiv_id] = internal_organisms_[indiv_id];
         internal_organisms_[indiv_id] = nullptr;
