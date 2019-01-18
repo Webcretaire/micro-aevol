@@ -90,9 +90,10 @@ int Dna::promoter_at(int pos) {
 }
 
 bool Dna::terminator_at(int pos) {
-    for (int motif_id = 0; motif_id < 4; motif_id++)
+    for (int motif_id = 0; motif_id < 4; motif_id++) {
         if (bm.access_bit(seq_, pos + motif_id) == bm.access_bit(seq_, pos + 10 - motif_id))
             return false;
+    }
 
     return true;
 }
