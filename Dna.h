@@ -14,8 +14,11 @@
 #include "Threefry.h"
 #include "BitManager.h"
 
-constexpr const int8_t CODON_SIZE = 3;
+constexpr int8_t CODON_SIZE = 3;
 
+//constexpr const char *PROM_SEQ = "0101011001110010010110";
+//constexpr const char *SHINE_DAL_SEQ = "011011000";
+//constexpr const char *PROTEIN_END = "001"; // CODON_STOP
 constexpr const int32_t PROM_SEQ = 0b01010110011100100101100000000000;
 constexpr const int32_t SHINE_DAL_SEQ = 0b01101100000000000000000000000000;
 constexpr const int32_t PROTEIN_END = 0b00100000000000000000000000000000; // CODON_STOP
@@ -31,7 +34,9 @@ public:
 
     Dna(int length, Threefry::Gen &rng);
 
-    Dna(int32_t *genome, int length);
+    Dna(char *genome, int length);
+
+    Dna(int length);
 
     ~Dna() = default;
 
@@ -41,11 +46,13 @@ public:
 
     void load(gzFile backup_file);
 
+    void set(int pos, char c);
+
     void do_switch(int pos);
 
     int promoter_at(int pos);
 
-    bool terminator_at(int pos);
+    int terminator_at(int pos);
 
     bool shine_dal_start(int pos);
 
@@ -54,7 +61,8 @@ public:
     int codon_at(int pos);
 
 private:
-    int32_t *seq_;
+
+    int32_t *seq__;
 
     int length_;
 

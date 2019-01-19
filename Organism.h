@@ -126,15 +126,25 @@ public:
 
     bool do_switch(int pos);
 
+    void replace(int pos, char *seq, int seq_length);
+
     void remove_all_promoters();
 
     void remove_promoters_around(int32_t pos);
+
+    void remove_promoters_around(int32_t pos_1, int32_t pos_2);
 
     void remove_promoters_starting_between(int32_t pos_1, int32_t pos_2);
 
     void remove_promoters_starting_after(int32_t pos);
 
     void remove_promoters_starting_before(int32_t pos);
+
+    void move_all_promoters_after(int32_t pos, int32_t delta_pos);
+
+    void locate_promoters();
+
+    void look_for_new_promoters_around(int32_t pos_1, int32_t pos_2);
 
     void look_for_new_promoters_around(int32_t pos);
 
@@ -143,17 +153,6 @@ public:
     void look_for_new_promoters_starting_after(int32_t pos);
 
     void look_for_new_promoters_starting_before(int32_t pos);
-
-    /*
-    void replace(int pos, char *seq, int seq_length);
-
-    void remove_promoters_around(int32_t pos_1, int32_t pos_2);
-
-    void move_all_promoters_after(int32_t pos, int32_t delta_pos);
-
-    void locate_promoters();
-
-    void look_for_new_promoters_around(int32_t pos_1, int32_t pos_2);
 
     void insert_promoters_at(std::list<Promoter *> &promoters_to_insert, int32_t pos);
 
@@ -176,7 +175,6 @@ public:
                        int32_t pos1,
                        int32_t pos2,
                        std::list<Promoter *> &promoters_list);
-   */
 
     inline int32_t mod(int32_t a, int32_t b) {
 
