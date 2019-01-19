@@ -508,9 +508,9 @@ void ExpManager::start_stop_RNA(int indiv_id) {
             }
 
             // Computing if a terminator exists at that position
-            int dist_term_lead = internal_organisms_[indiv_id]->dna_->terminator_at(dna_pos);
+//            int dist_term_lead = internal_organisms_[indiv_id]->dna_->terminator_at(dna_pos);
 
-            if (dist_term_lead == 4) {
+            if (internal_organisms_[indiv_id]->dna_->terminator_at(dna_pos)) {
                 internal_organisms_[indiv_id]->terminators.insert(
                         dna_pos);
             }
@@ -554,22 +554,22 @@ void ExpManager::opt_prom_compute_RNA(int indiv_id) {
 
             bool terminator_found = false;
 //            bool no_terminator = false;
-            int term_dist_leading = 0;
+//            int term_dist_leading = 0;
 
 //            int loop_size = 0;
 
             while (!terminator_found) {
 //                loop_size++;
 //                for (int t_motif_id = 0; t_motif_id < 4; t_motif_id++)
-                term_dist_leading = internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos);
+//                term_dist_leading = internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos);
 
-                if (term_dist_leading == 4)
+                if (internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos))
                     terminator_found = true;
                 else {
                     cur_pos = cur_pos + 1 >= internal_organisms_[indiv_id]->length()
                               ? cur_pos + 1 - internal_organisms_[indiv_id]->length()
                               : cur_pos + 1;
-                    term_dist_leading = 0;
+//                    term_dist_leading = 0;
                     if (cur_pos == start_pos) {
 //                        no_terminator = true;
                         break;

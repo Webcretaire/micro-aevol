@@ -52,7 +52,7 @@ public:
 
     int promoter_at(int pos);
 
-    int terminator_at(int pos);
+    bool terminator_at(int pos);
 
     bool shine_dal_start(int pos);
 
