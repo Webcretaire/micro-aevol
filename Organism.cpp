@@ -66,7 +66,7 @@ Organism::Organism(ExpManager *exp_m, char *genome, int indiv_id) {
     count_prom = 0;
     rna_count_ = 0;
 
-//    dna_ = new Dna(genome, strlen(genome));
+    dna_ = new Dna(genome, strlen(genome));
     parent_length_ = strlen(genome);
     indiv_id_ = indiv_id;
 
@@ -185,6 +185,30 @@ void Organism::reset_stats() {
 }
 
 /**
+ * Replace the sequence of the DNA of the organism at a given position by a given sequence
+ *
+ * @param pos : where to replace the DNA by the given sequence
+ * @param seq : the sequence itself
+ * @param seq_length : length of the sequence
+ */
+void Organism::replace(int pos, char *seq, int seq_length) {
+// Invert the sequence between positions 'first' and 'last'
+    // Check pos value
+    assert(pos >= 0 && pos < dna_->length());
+
+    // If the sequence's length was not provided, compute it
+    if (seq_length == -1) {
+        seq_length = strlen(seq);
+    }
+
+    // Check that the sequence is contiguous
+    assert(pos + seq_length <= dna_->length());
+
+    // Perform the replacement
+    memcpy(&dna_[pos], seq, seq_length * sizeof(char));
+}
+
+/**
  * Switch the DNA base-pair at a given position
  *
  * @param pos : the position where to switch the base-pair
@@ -234,154 +258,71 @@ Optimize promoters search
 
 void Organism::remove_promoters_around(int32_t pos) {
     if (dna_->length() >= PROM_SIZE) {
-        remove_promoters_starting_between(pos - PROM_SIZE + 1, pos);
+        remove_promoters_starting_between(mod(pos - PROM_SIZE + 1, dna_->length()), pos);
     } else {
         remove_all_promoters();
     }
 }
 
-void Organism::look_for_new_promoters_around(int32_t pos) {
-    if (dna_->length() >= PROM_SIZE) {
-        look_for_new_promoters_starting_between(pos - PROM_SIZE + 1, pos);
-    }
-}
-
-
-void Organism::remove_all_promoters() {
-    prom_pos.clear();
-
-    for (auto it = promoters.begin(),
-                 nextit = it;
-         it != promoters.end();
-         it = nextit) {
-        delete it->second;
-        nextit = next(it);
-        promoters.erase(it);
-    }
-
-    promoters.clear();
-    count_prom = 0;
-}
-
-/** LEADING promoters **/
-/** REMOVE **/
-void Organism::remove_promoters_starting_between(int32_t pos_1, int32_t pos_2) {
-    if (pos_1 > pos_2) {
-        remove_promoters_starting_after(pos_1);
-        remove_promoters_starting_before(pos_2);
+/*
+void Organism::remove_promoters_around(int32_t pos_1, int32_t pos_2) {
+    if (mod(pos_1 - pos_2, dna_->length()) >= PROM_SIZE) {
+    remove_promoters_starting_between(mod(pos_1 - PROM_SIZE + 1, dna_->length()), pos_2);
     } else {
-        // STL Warning: don't erase the current iterator in the for-loop!
-        for (auto it = prom_pos.lower_bound(pos_1), nextit = it;
-             it != prom_pos.end() and it->first < pos_2;
-             it = nextit) {
-
-            int pidx = it->second;
-            auto it_p = promoters[pidx];
-
-            delete it_p;
-            promoters.erase(pidx);
-            nextit = next(it);
-            prom_pos.erase(it);
-        }
+        remove_all_promoters();
     }
 }
+*/
 
-void Organism::remove_promoters_starting_after(int32_t pos) {
-    auto init_it = prom_pos.lower_bound(pos);
-    if (init_it == prom_pos.end())
-        return;
+void Organism::move_all_promoters_after(int32_t pos, int32_t delta_pos) {
+    std::map<int32_t, int32_t> tmp_prom;
 
-    for (auto it = init_it,
-                 nextit = it;
+    for (auto it = prom_pos.lower_bound(pos), nextit = it;
          it != prom_pos.end();
          it = nextit) {
-        delete promoters[it->second];
-        promoters.erase(it->second);
+
+        int32_t new_pos = mod(it->first + delta_pos, dna_->length());
+        int32_t prom_idx = it->second;
+
+        promoters[it->second]->pos = new_pos;
         nextit = next(it);
+
+        if (tmp_prom.find(new_pos) == tmp_prom.end()) {
+            tmp_prom[new_pos] = prom_idx;
+        } else {
+            promoters.erase(it->second);
+        }
         prom_pos.erase(it);
+
     }
-}
 
-void Organism::remove_promoters_starting_before(int32_t pos) {
-// Delete RNAs until we reach pos (or we reach the end of the list)
-    for (auto it = prom_pos.begin(),
-                 nextit = it;
-         it != prom_pos.end() and it->first < pos;
-         it = nextit) {
-        delete promoters[it->second];
-        promoters.erase(it->second);
-        nextit = next(it);
-        prom_pos.erase(it);
-    }
-}
-
-void Organism::look_for_new_promoters_starting_between(int32_t pos_1, int32_t pos_2) {
-    // When pos_1 > pos_2, we will perform the search in 2 steps.
-    // As positions  0 and dna_->length() are equivalent, it's preferable to
-    // keep 0 for pos_1 and dna_->length() for pos_2.
-
-    if (pos_1 >= pos_2) {
-        look_for_new_promoters_starting_after(pos_1);
-        look_for_new_promoters_starting_before(pos_2);
-        return;
-    }
-    // Hamming distance of the sequence from the promoter consensus
-
-    for (int32_t i = pos_1; i < pos_2; i++) {
-        int8_t dist = dna_->promoter_at(i);
-
-        if (dist <= 4) {
-            if (prom_pos.find(i) == prom_pos.end()) {
-                Promoter *nprom = new Promoter(i, dist);
-                int prom_idx = count_prom;
-                count_prom = count_prom + 1;
-
-                promoters[prom_idx] = nprom;
-                prom_pos[i] = prom_idx;
-            }
+    for (auto to_insert : tmp_prom) {
+        if (prom_pos.find(to_insert.first) == prom_pos.end()) {
+            prom_pos[to_insert.first] = to_insert.second;
+        } else {
+            promoters.erase(to_insert.second);
         }
     }
-}
-
-void Organism::look_for_new_promoters_starting_after(int32_t pos) {
-    for (int32_t i = pos; i < dna_->length(); i++) {
-        int dist = dna_->promoter_at(i);
-
-        if (dist <= 4) { // dist takes the hamming distance of the sequence from the consensus
-            if (prom_pos.find(i) == prom_pos.end()) {
-                Promoter *nprom = new Promoter(i, dist);
-                int prom_idx = count_prom;
-                count_prom = count_prom + 1;
-
-                promoters[prom_idx] = nprom;
-                prom_pos[i] = prom_idx;
-            }
-        }
-    }
-}
-
-void Organism::look_for_new_promoters_starting_before(int32_t pos) {
-    // Hamming distance of the sequence from the promoter consensus
-
-    for (int32_t i = 0; i < pos; i++) {
-
-        int dist = dna_->promoter_at(i);
-
-        if (dist <= 4) { // dist takes the hamming distance of the sequence from the consensus
-            if (prom_pos.find(i) == prom_pos.end()) {
-                Promoter *nprom = new Promoter(i, dist);
-                int prom_idx = count_prom;
-                count_prom = count_prom + 1;
-
-                promoters[prom_idx] = nprom;
-                prom_pos[i] = prom_idx;
-            }
-        }
-    }
-
 }
 
 /*
+void Organism::look_for_new_promoters_around(int32_t pos_1, int32_t pos_2) {
+    if (dna_->length() >= PROM_SIZE) {
+        look_for_new_promoters_starting_between(
+                mod(pos_1 - PROM_SIZE + 1,
+                    dna_->length()), pos_2);
+    }
+}
+*/
+
+void Organism::look_for_new_promoters_around(int32_t pos) {
+    if (dna_->length() >= PROM_SIZE) {
+        look_for_new_promoters_starting_between(
+                mod(pos - PROM_SIZE + 1, dna_->length()),
+                pos);
+    }
+}
+
 void Organism::insert_promoters_at(std::list<Promoter *> &promoters_to_insert, int32_t pos) {
 
     if (promoters_to_insert.size() <= 0) {
@@ -456,6 +397,206 @@ void Organism::insert_promoters(std::list<Promoter *> &promoters_to_insert) {
 
 }
 
+void Organism::remove_all_promoters() {
+    prom_pos.clear();
+
+    for (auto it = promoters.begin(),
+                 nextit = it;
+         it != promoters.end();
+         it = nextit) {
+        delete it->second;
+        nextit = next(it);
+        promoters.erase(it);
+    }
+
+    promoters.clear();
+    count_prom = 0;
+}
+
+/** LEADING promoters **/
+/** REMOVE **/
+void Organism::remove_promoters_starting_between(int32_t pos_1, int32_t pos_2) {
+    if (pos_1 > pos_2) {
+        remove_promoters_starting_after(pos_1);
+        remove_promoters_starting_before(pos_2);
+    } else {
+        // STL Warning: don't erase the current iterator in the for-loop!
+        for (auto it = prom_pos.lower_bound(pos_1), nextit = it;
+             it != prom_pos.end() and it->first < pos_2;
+             it = nextit) {
+
+            int pidx = it->second;
+            auto it_p = promoters[pidx];
+
+            delete it_p;
+            promoters.erase(pidx);
+            nextit = next(it);
+            prom_pos.erase(it);
+        }
+    }
+}
+
+void Organism::remove_promoters_starting_after(int32_t pos) {
+    auto init_it = prom_pos.lower_bound(pos);
+    if (init_it == prom_pos.end())
+        return;
+
+    for (auto it = init_it,
+                 nextit = it;
+         it != prom_pos.end();
+         it = nextit) {
+        delete promoters[it->second];
+        promoters.erase(it->second);
+        nextit = next(it);
+        prom_pos.erase(it);
+    }
+}
+
+void Organism::remove_promoters_starting_before(int32_t pos) {
+// Delete RNAs until we reach pos (or we reach the end of the list)
+    for (auto it = prom_pos.begin(),
+                 nextit = it;
+         it != prom_pos.end() and it->first < pos;
+         it = nextit) {
+        delete promoters[it->second];
+        promoters.erase(it->second);
+        nextit = next(it);
+        prom_pos.erase(it);
+    }
+}
+
+
+/** LOOK **/
+void Organism::locate_promoters() {
+    look_for_new_promoters_starting_between(0, dna_->length());
+}
+
+void Organism::look_for_new_promoters_starting_between(int32_t pos_1, int32_t pos_2) {
+    // When pos_1 > pos_2, we will perform the search in 2 steps.
+    // As positions  0 and dna_->length() are equivalent, it's preferable to
+    // keep 0 for pos_1 and dna_->length() for pos_2.
+
+    if (pos_1 >= pos_2) {
+        look_for_new_promoters_starting_after(pos_1);
+        look_for_new_promoters_starting_before(pos_2);
+        return;
+    }
+    // Hamming distance of the sequence from the promoter consensus
+
+    for (int32_t i = pos_1; i < pos_2; i++) {
+        int8_t dist = dna_->promoter_at(i);
+
+        if (dist <= 4) {
+            if (prom_pos.find(i) == prom_pos.end()) {
+                Promoter *nprom = new Promoter(i, dist);
+                int prom_idx = count_prom;
+                count_prom = count_prom + 1;
+
+                promoters[prom_idx] = nprom;
+                prom_pos[i] = prom_idx;
+            }
+        }
+    }
+}
+
+void Organism::look_for_new_promoters_starting_after(int32_t pos) {
+    for (int32_t i = pos; i < dna_->length(); i++) {
+        int dist = dna_->promoter_at(i);
+
+        if (dist <= 4) { // dist takes the hamming distance of the sequence from the consensus
+            if (prom_pos.find(i) == prom_pos.end()) {
+                Promoter *nprom = new Promoter(i, dist);
+                int prom_idx = count_prom;
+                count_prom = count_prom + 1;
+
+                promoters[prom_idx] = nprom;
+                prom_pos[i] = prom_idx;
+            }
+        }
+    }
+}
+
+void Organism::look_for_new_promoters_starting_before(int32_t pos) {
+    // Hamming distance of the sequence from the promoter consensus
+
+    for (int32_t i = 0; i < pos; i++) {
+
+        int dist = dna_->promoter_at(i);
+
+        if (dist <= 4) { // dist takes the hamming distance of the sequence from the consensus
+            if (prom_pos.find(i) == prom_pos.end()) {
+                Promoter *nprom = new Promoter(i, dist);
+                int prom_idx = count_prom;
+                count_prom = count_prom + 1;
+
+                promoters[prom_idx] = nprom;
+                prom_pos[i] = prom_idx;
+            }
+        }
+    }
+
+}
+
+/** EXTRACT **/
+void Organism::extract_promoters_starting_between(int32_t pos_1,
+                                                  int32_t pos_2, std::list<Promoter *> &extracted_promoters) {
+    if (pos_2 < pos_1) {
+
+        auto first = prom_pos.lower_bound(pos_1);
+
+        if (first == prom_pos.end() or first->first >= pos_2) {
+            return;
+        }
+
+        // Extract the promoters (remove them from the individual's list and put them in extracted_promoters)
+
+        for (auto it = first;
+             it != prom_pos.end();
+             it++) {
+            extracted_promoters.push_back(promoters[it->second]);
+            promoters.erase(it->second);
+        }
+
+        prom_pos.erase(first, prom_pos.end());
+
+        // Find the last promoters in the interval
+        auto end = prom_pos.lower_bound(pos_2);
+
+
+        // Extract the promoters (remove them from the individual's list and put them in extracted_promoters)
+        for (auto it = prom_pos.begin();
+             it != end;
+             it++) {
+            extracted_promoters.push_back(promoters[it->second]);
+            promoters.erase(it->second);
+        }
+
+        prom_pos.erase(prom_pos.begin(), end);
+
+    } else {
+
+        auto first = prom_pos.lower_bound(pos_1);
+
+        if (first == prom_pos.end() or first->first >= pos_2) {
+            return;
+        }
+
+        // Find the last promoters in the interval
+        auto end = prom_pos.lower_bound(pos_2);
+
+
+        // Extract the promoters (remove them from the individual's list and put them in extracted_promoters)
+        for (auto it = first;
+             it != end;
+             it++) {
+            extracted_promoters.push_back(promoters[it->second]);
+            promoters.erase(it->second);
+        }
+
+        prom_pos.erase(first, end);
+    }
+}
+
 void Organism::promoters_included_in(int32_t pos_1, int32_t pos_2, std::list<Promoter *> &promoters_list) {
     if (pos_1 < pos_2) {
         int32_t seg_length = pos_2 - pos_1;
@@ -521,141 +662,3 @@ void Organism::lst_promoters(Position before_after_btw, // with regard to the st
         promoters_list.push_back(promoters[it->second]);
     }
 }
-
-void Organism::extract_promoters_starting_between(int32_t pos_1,
-                                                  int32_t pos_2, std::list<Promoter *> &extracted_promoters) {
-    if (pos_2 < pos_1) {
-
-        auto first = prom_pos.lower_bound(pos_1);
-
-        if (first == prom_pos.end() or first->first >= pos_2) {
-            return;
-        }
-
-        // Extract the promoters (remove them from the individual's list and put them in extracted_promoters)
-
-        for (auto it = first;
-             it != prom_pos.end();
-             it++) {
-            extracted_promoters.push_back(promoters[it->second]);
-            promoters.erase(it->second);
-        }
-
-        prom_pos.erase(first, prom_pos.end());
-
-        // Find the last promoters in the interval
-        auto end = prom_pos.lower_bound(pos_2);
-
-
-        // Extract the promoters (remove them from the individual's list and put them in extracted_promoters)
-        for (auto it = prom_pos.begin();
-             it != end;
-             it++) {
-            extracted_promoters.push_back(promoters[it->second]);
-            promoters.erase(it->second);
-        }
-
-        prom_pos.erase(prom_pos.begin(), end);
-
-    } else {
-
-        auto first = prom_pos.lower_bound(pos_1);
-
-        if (first == prom_pos.end() or first->first >= pos_2) {
-            return;
-        }
-
-        // Find the last promoters in the interval
-        auto end = prom_pos.lower_bound(pos_2);
-
-
-        // Extract the promoters (remove them from the individual's list and put them in extracted_promoters)
-        for (auto it = first;
-             it != end;
-             it++) {
-            extracted_promoters.push_back(promoters[it->second]);
-            promoters.erase(it->second);
-        }
-
-        prom_pos.erase(first, end);
-    }
-}
- */
-/**
- * Replace the sequence of the DNA of the organism at a given position by a given sequence
- *
- * @param pos : where to replace the DNA by the given sequence
- * @param seq : the sequence itself
- * @param seq_length : length of the sequence
- */
- /*
-void Organism::replace(int pos, char *seq, int seq_length) {
-// Invert the sequence between positions 'first' and 'last'
-    // Check pos value
-    assert(pos >= 0 && pos < dna_->length());
-
-    // If the sequence's length was not provided, compute it
-    if (seq_length == -1) {
-        seq_length = strlen(seq);
-    }
-
-    // Check that the sequence is contiguous
-    assert(pos + seq_length <= dna_->length());
-
-    // Perform the replacement
-    memcpy(&dna_[pos], seq, seq_length * sizeof(char));
-}
-
-
- void Organism::locate_promoters() {
-     look_for_new_promoters_starting_between(0, dna_->length());
- }
-
-void Organism::look_for_new_promoters_around(int32_t pos_1, int32_t pos_2) {
-    if (dna_->length() >= PROM_SIZE) {
-        look_for_new_promoters_starting_between(
-                mod(pos_1 - PROM_SIZE + 1,
-                    dna_->length()), pos_2);
-    }
-}
-
-void Organism::remove_promoters_around(int32_t pos_1, int32_t pos_2) {
-    if (mod(pos_1 - pos_2, dna_->length()) >= PROM_SIZE) {
-    remove_promoters_starting_between(mod(pos_1 - PROM_SIZE + 1, dna_->length()), pos_2);
-    } else {
-        remove_all_promoters();
-    }
-}
-
-
- void Organism::move_all_promoters_after(int32_t pos, int32_t delta_pos) {
-     std::map<int32_t, int32_t> tmp_prom;
-
-     for (auto it = prom_pos.lower_bound(pos), nextit = it;
-          it != prom_pos.end();
-          it = nextit) {
-
-         int32_t new_pos = it->first + delta_pos;
-         int32_t prom_idx = it->second;
-
-         promoters[it->second]->pos = new_pos;
-         nextit = next(it);
-
-         if (tmp_prom.find(new_pos) == tmp_prom.end()) {
-             tmp_prom[new_pos] = prom_idx;
-         } else {
-             promoters.erase(it->second);
-         }
-         prom_pos.erase(it);
-
-     }
-
-     for (auto to_insert : tmp_prom) {
-         if (prom_pos.find(to_insert.first) == prom_pos.end()) {
-             prom_pos[to_insert.first] = to_insert.second;
-         } else {
-             promoters.erase(to_insert.second);
-         }
-     }
- }
-*/
