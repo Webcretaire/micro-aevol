@@ -1,51 +1,68 @@
-//
-// Created by arrouan on 01/10/18.
-//
-
 #include "Dna.h"
 #include "ExpManager.h"
+#include "BitManager.h"
+#include <math.h>
 
-Dna::Dna(const Dna &clone) : seq_(clone.seq_) {
+Dna::Dna(const Dna &clone) {
+    bm = BitManager();
+    length_ = clone.length_;
+    chunk_number_ = clone.chunk_number_;
+    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
+    for (int i = 0; i < length_; i++)
+        bm.def_bit(seq__, i, (bool) bm.access_bit(clone.seq__, i));
 }
 
-Dna::Dna(int length, Threefry::Gen &rng) : seq_(length) {
-    // Generate a random genome
-    for (int32_t i = 0; i < length; i++) {
-        seq_[i] = '0' + rng.random(NB_BASE);
-    }
+Dna::Dna(int length, Threefry::Gen &rng) {
+    bm = BitManager();
+
+    length_ = length;
+    chunk_number_ = (int) ceil(length_ / CHUNK_SIZE);
+    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
+    // Copy
+    for (int i = 0; i < length; i++)
+        bm.def_bit(seq__, i, (bool) rng.random(NB_BASE));
 }
 
-Dna::Dna(char *genome, int length) : seq_(length) {
-    strcpy(seq_.data(), genome);
+Dna::Dna(char *genome, int length) {
+    bm = BitManager();
+    length_ = length;
+    chunk_number_ = (int) ceil(length_ / CHUNK_SIZE);
+    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
+    // Copy
+    for (int i = 0; i < length; i++)
+        bm.def_bit(seq__, i, genome[i] == '1');
 }
 
-Dna::Dna(int length) : seq_(length) {
+Dna::Dna(int length) {
+    bm = BitManager();
+
+    length_ = length;
+    chunk_number_ = (int) ceil(length_ / CHUNK_SIZE);
+    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
 }
 
 int Dna::length() const {
-    return seq_.size();
+    return length_;
 }
 
 void Dna::save(gzFile backup_file) {
-    int dna_length = length();
+    int dna_length = length_;
     gzwrite(backup_file, &dna_length, sizeof(dna_length));
-    gzwrite(backup_file, seq_.data(), seq_.size() * sizeof(seq_[0]));
+    gzwrite(backup_file, seq__, chunk_number_ * sizeof(int32_t));
 }
 
 void Dna::load(gzFile backup_file) {
     int dna_length;
     gzread(backup_file, &dna_length, sizeof(dna_length));
-
-    gzread(backup_file, seq_.data(), sizeof(*seq_.data()));
+    gzread(backup_file, seq__, chunk_number_ * sizeof(int32_t));
 }
 
 void Dna::set(int pos, char c) {
-    seq_[pos] = c;
+    bm.def_bit(seq__, pos, c == '1');
 }
 
 void Dna::do_switch(int pos) {
-    if (seq_[pos] == '0') seq_[pos] = '1';
-    else seq_[pos] = '0';
+    bm.flip_bit(seq__, pos);
 }
 
 
@@ -55,16 +72,8 @@ int Dna::promoter_at(int pos) {
     for (int motif_id = 0; motif_id < 22; motif_id++) {
         // Searching for the promoter
         prom_dist[motif_id] =
-                PROM_SEQ[motif_id] ==
-                seq_[
-                        pos + motif_id >= seq_.size() ? pos +
-                                                        motif_id -
-                                                        seq_.size()
-                                                      : pos +
-                                                        motif_id]
-                ? 0
-                : 1;
-
+                bm.access_bit(&PROM_SEQ, motif_id)
+                != bm.access_bit(seq__, pos + motif_id >= length_ ? pos + motif_id - length_ : pos + motif_id);
     }
 
 
@@ -95,23 +104,14 @@ int Dna::promoter_at(int pos) {
     return dist_lead;
 }
 
-int Dna::terminator_at(int pos) {
-    int term_dist[4];
-    for (int motif_id = 0; motif_id < 4; motif_id++) {
+bool Dna::terminator_at(int pos) {
+    for (int motif_id = 0; motif_id < 4; motif_id++)
+        if (bm.access_bit(seq__, pos + motif_id >= length_ ? pos + motif_id - length_ : pos + motif_id)
+            ==
+            bm.access_bit(seq__, pos - motif_id + 10 >= length_ ? pos - motif_id + 10 - length_ : pos - motif_id + 10))
+            return false;
 
-        // Search for the terminators
-        term_dist[motif_id] =
-                seq_[pos + motif_id >= seq_.size() ? pos + motif_id - seq_.size() : pos + motif_id]
-                !=
-                seq_[pos - motif_id + 10 >= seq_.size() ? pos - motif_id + 10 - seq_.size() : pos - motif_id + 10]
-                ? 1 : 0;
-    }
-    int dist_term_lead = term_dist[0] +
-                         term_dist[1] +
-                         term_dist[2] +
-                         term_dist[3];
-
-    return dist_term_lead;
+    return true;
 }
 
 bool Dna::shine_dal_start(int pos) {
@@ -120,12 +120,11 @@ bool Dna::shine_dal_start(int pos) {
 
     for (int k = 0; k < 9; k++) {
         k_t = k >= 6 ? k + 4 : k;
-        t_pos = pos + k_t >= seq_.size() ? pos + k_t -
-                                           seq_.size()
-                                         : pos + k_t;
+        t_pos = pos + k_t >= length_
+                ? pos + k_t - length_
+                : pos + k_t;
 
-        if (seq_[t_pos] ==
-            SHINE_DAL_SEQ[k]) {
+        if (bm.access_bit(seq__, t_pos) == bm.access_bit(&SHINE_DAL_SEQ, k)) {
             start = true;
         } else {
             start = false;
@@ -141,12 +140,12 @@ bool Dna::protein_stop(int pos) {
     int t_k;
 
     for (int k = 0; k < 3; k++) {
-        t_k = pos + k >= seq_.size() ?
-              pos - seq_.size() + k :
+        t_k = pos + k >= length_ ?
+              pos - length_ + k :
               pos + k;
 
-        if (seq_[t_k] ==
-            PROTEIN_END[k]) {
+        if (bm.access_bit(seq__, t_k) ==
+            bm.access_bit(&PROTEIN_END, k)) {
             is_protein = true;
         } else {
             is_protein = false;
@@ -164,11 +163,10 @@ int Dna::codon_at(int pos) {
 
     for (int i = 0; i < 3; i++) {
         t_pos =
-                pos + i >= seq_.size() ? pos + i -
-                                         seq_.size()
-                                       : pos + i;
-        if (seq_[t_pos] ==
-            '1')
+                pos + i >= length_ ? pos + i -
+                                     length_
+                                   : pos + i;
+        if (bm.access_bit(seq__, t_pos))
             value += 1 << (CODON_SIZE - i - 1);
     }
 

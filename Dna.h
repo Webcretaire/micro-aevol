@@ -12,12 +12,16 @@
 #include <zlib.h>
 
 #include "Threefry.h"
+#include "BitManager.h"
 
 constexpr int8_t CODON_SIZE = 3;
 
-constexpr const char *PROM_SEQ = "0101011001110010010110";
-constexpr const char *SHINE_DAL_SEQ = "011011000";
-constexpr const char *PROTEIN_END = "001"; // CODON_STOP
+//constexpr const char *PROM_SEQ = "0101011001110010010110";
+//constexpr const char *SHINE_DAL_SEQ = "011011000";
+//constexpr const char *PROTEIN_END = "001"; // CODON_STOP
+constexpr const int32_t PROM_SEQ = 0b01010110011100100101100000000000;
+constexpr const int32_t SHINE_DAL_SEQ = 0b01101100000000000000000000000000;
+constexpr const int32_t PROTEIN_END = 0b00100000000000000000000000000000; // CODON_STOP
 
 class ExpManager;
 
@@ -48,7 +52,7 @@ public:
 
     int promoter_at(int pos);
 
-    int terminator_at(int pos);
+    bool terminator_at(int pos);
 
     bool shine_dal_start(int pos);
 
@@ -56,5 +60,13 @@ public:
 
     int codon_at(int pos);
 
-    std::vector<char> seq_;
+private:
+
+    int32_t *seq__;
+
+    int length_;
+
+    int chunk_number_;
+
+    BitManager bm;
 };
