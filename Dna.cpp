@@ -104,25 +104,14 @@ int Dna::promoter_at(int pos) {
     return dist_lead;
 }
 
-int Dna::terminator_at(int pos) {
-    int term_dist[4];
-    for (int motif_id = 0; motif_id < 4; motif_id++) {
+bool Dna::terminator_at(int pos) {
+    for (int motif_id = 0; motif_id < 4; motif_id++)
+        if (bm.access_bit(seq__, pos + motif_id >= length_ ? pos + motif_id - length_ : pos + motif_id)
+            ==
+            bm.access_bit(seq__, pos - motif_id + 10 >= length_ ? pos - motif_id + 10 - length_ : pos - motif_id + 10))
+            return false;
 
-        // Search for the terminators
-        term_dist[motif_id] =
-                bm.access_bit(seq__, pos + motif_id >= length_ ? pos + motif_id - length_ : pos + motif_id)
-                !=
-                bm.access_bit(seq__,
-                              pos - motif_id + 10 >= length_ ? pos - motif_id + 10 - length_ : pos - motif_id +
-                                                                                               10)
-                ? 1 : 0;
-    }
-    int dist_term_lead = term_dist[0] +
-                         term_dist[1] +
-                         term_dist[2] +
-                         term_dist[3];
-
-    return dist_term_lead;
+    return true;
 }
 
 bool Dna::shine_dal_start(int pos) {
