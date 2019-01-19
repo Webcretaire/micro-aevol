@@ -425,7 +425,7 @@ void ExpManager::run_a_step(double w_max, double selection_pressure, bool first_
 
     /***********************************************************************
      * The following part of the code is used for statistic on the evolution
-     * we will not try to optimized this part
+     * we will not try to optimize this part
      *
      ***********************************************************************/
 
