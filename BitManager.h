@@ -32,6 +32,8 @@ public:
 
     int access_bit(const int32_t *dna, int pos);
 
+    int access_bit(const int32_t &dna, int pos);
+
     int def_bit(int32_t *dna, int pos, bool value);
 
 private:
