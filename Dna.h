@@ -15,6 +15,7 @@
 #include "BitManager.h"
 
 constexpr int8_t CODON_SIZE = 3;
+constexpr int8_t CYCLE_SIZE = 22;
 
 //constexpr const char *PROM_SEQ = "0101011001110010010110";
 //constexpr const char *SHINE_DAL_SEQ = "011011000";
@@ -65,6 +66,8 @@ private:
     int32_t *seq__;
 
     int length_;
+
+    int dna_length_;
 
     int chunk_number_;
 

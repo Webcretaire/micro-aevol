@@ -28,3 +28,7 @@ int BitManager::access_bit(const int32_t *dna, int pos) {
 int BitManager::def_bit(int32_t *dna, int pos, bool value) {
     return value ? set_bit(dna, pos) : clear_bit(dna, pos);
 }
+
+int BitManager::access_bit(const int32_t &dna, int pos) {
+    return BIT_CHECK(dna, CHUNK_SIZE - pos - 1);
+}
