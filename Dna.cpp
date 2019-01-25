@@ -77,7 +77,6 @@ void Dna::do_switch(int pos) {
         bm.flip_bit(seq__, dna_length_ + pos);
 }
 
-
 int Dna::promoter_at(int pos) {
     int dist_lead = 0;
 
