@@ -80,7 +80,9 @@ int main(int argc, char *argv[]) {
     int backup_step = -1;
     int seed = -1;
 
-    const char *options_list = "e:::n:w:h:m:g:b:r:s:";
+    int nb_threads = 1;
+
+    const char *options_list = "en:w:h:m:g:b:r:s:t:";
     static struct option long_options_list[] = {
             // Print help
             {"help",          no_argument,       NULL, 'e'},
@@ -100,6 +102,8 @@ int main(int argc, char *argv[]) {
             {"backup_step",   required_argument, NULL, 'b'},
             // Seed
             {"seed",          required_argument, NULL, 's'},
+            // Number of threads
+            {"threads",       required_argument, NULL, 't'},
             {0,               0,                 0,    0}
     };
 
@@ -148,6 +152,10 @@ int main(int argc, char *argv[]) {
                 nbstep = atoi(optarg);
                 break;
             }
+            case 't' : {
+                nb_threads = atoi(optarg);
+                break;
+            }
             default : {
                 // An error message is printed in getopt_long, we just need to exit
                 printf("Error unknown parameter\n");
@@ -157,7 +165,7 @@ int main(int argc, char *argv[]) {
     }
 
 #ifdef OMP_USE
-    omp_set_num_threads(4);
+    omp_set_num_threads(nb_threads);
 #endif // OMP_USE
 
     printf("Start ExpManager\n");
