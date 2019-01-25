@@ -82,9 +82,9 @@ ExpManager::ExpManager(int grid_height, int grid_width, int seed, double mutatio
     mutation_rate_ = mutation_rate;
 
     // Building the target environment
-    Gaussian *g1 = new Gaussian(1.2, 0.52, 0.12);
-    Gaussian *g2 = new Gaussian(-1.4, 0.5, 0.07);
-    Gaussian *g3 = new Gaussian(0.3, 0.8, 0.03);
+    auto *g1 = new Gaussian(1.2, 0.52, 0.12);
+    auto *g2 = new Gaussian(-1.4, 0.5, 0.07);
+    auto *g3 = new Gaussian(0.3, 0.8, 0.03);
 
     target = new double[300];
     for (int i = 0; i < 300; i++) {
