@@ -78,12 +78,7 @@ void Dna::do_switch(int pos) {
 }
 
 int Dna::promoter_at(int pos) {
-    int dist_lead = 0;
-
-    for (int motif_id = 0; motif_id < 22; motif_id++)
-        dist_lead += bm.access_bit(PROM_SEQ, motif_id) != bm.access_bit(seq__, pos + motif_id);
-
-    return dist_lead;
+    return __builtin_popcount((bm.get_chunck(seq__, pos) & PROM_MASK) ^ PROM_SEQ);
 }
 
 bool Dna::terminator_at(int pos) {
