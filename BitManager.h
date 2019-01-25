@@ -8,6 +8,7 @@
 #include <cstdint>
 
 constexpr int8_t CHUNK_SIZE = 32;
+constexpr int8_t MAX_INTERESTING_SIZE = 22;
 
 /* a=target variable, b=bit number to act upon 0-n */
 #define BIT_SET(a, b) ((a) |= (1ULL<<(b)))
@@ -31,6 +32,8 @@ public:
     int flip_bit(int32_t *dna, int pos);
 
     int access_bit(const int32_t *dna, int pos);
+
+    int32_t get_chunck(int32_t *dna, int pos);
 
     int access_bit(const int32_t &dna, int pos);
 
