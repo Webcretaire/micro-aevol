@@ -258,7 +258,7 @@ Optimize promoters search
 
 void Organism::remove_promoters_around(int32_t pos) {
     if (dna_->length() >= PROM_SIZE) {
-        remove_promoters_starting_between(mod(pos - PROM_SIZE + 1, dna_->length()), pos);
+        remove_promoters_starting_between(mod(pos - PROM_SIZE + 1, dna_->length()), mod(pos + 1, dna_->length()));
     } else {
         remove_all_promoters();
     }
@@ -319,7 +319,7 @@ void Organism::look_for_new_promoters_around(int32_t pos) {
     if (dna_->length() >= PROM_SIZE) {
         look_for_new_promoters_starting_between(
                 mod(pos - PROM_SIZE + 1, dna_->length()),
-                pos);
+                mod(pos+1, dna_->length()));
     }
 }
 

@@ -1297,8 +1297,7 @@ void ExpManager::run_evolution(int nb_gen) {
 
     timeFile.open("time", ofstream::out);
 
-    timeFile << "generation,selection,mutation,start_stop_RNA,start_protein,compute_protein"
-                ",translate_protein,compute_phenotype,compute_fitness,total_step" << endl;
+    timeFile << "generation,total_step" << endl;
 
     printf("Running evolution from %d to %d\n", AeTime::time(), AeTime::time() + nb_gen);
     bool firstGen = true;
