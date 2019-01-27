@@ -25,11 +25,11 @@ constexpr int8_t MAX_INTERESTING_SIZE = 22;
 
 class BitManager {
 public:
-    int set_bit(int32_t *dna, int pos);
+    void set_bit(int32_t *dna, int pos);
 
-    int clear_bit(int32_t *dna, int pos);
+    void clear_bit(int32_t *dna, int pos);
 
-    int flip_bit(int32_t *dna, int pos);
+    void flip_bit(int32_t *dna, int pos);
 
     int access_bit(const int32_t *dna, int pos);
 
@@ -37,7 +37,7 @@ public:
 
     int access_bit(const int32_t &dna, int pos);
 
-    int def_bit(int32_t *dna, int pos, bool value);
+    void def_bit(int32_t *dna, int pos, bool value);
 
 private:
     int chunck_number__;

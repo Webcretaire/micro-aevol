@@ -94,7 +94,7 @@ bool Dna::shine_dal_start(int pos) {
             return false;
 
     for (int k = 10; k < 13; k++)
-        if (bm.access_bit(seq__, pos + k) != bm.access_bit(SHINE_DAL_SEQ, k))
+        if (bm.access_bit(seq__, pos + k)) // At these positions all SHINE_DAL_SEQ bits are 0
             return false;
 
     return true;
