@@ -1,7 +1,6 @@
 #include "Dna.h"
 #include "ExpManager.h"
 #include "BitManager.h"
-#include <math.h>
 
 Dna::Dna(const Dna &clone) {
     bm = BitManager();
@@ -17,7 +16,7 @@ Dna::Dna(int length, Threefry::Gen &rng) {
     bm = BitManager();
     length_ = length + CYCLE_SIZE;
     dna_length_ = length;
-    chunk_number_ = (int) ceil(length_ / CHUNK_SIZE);
+    chunk_number_ = (length_ + CHUNK_SIZE - 1) / CHUNK_SIZE;
     seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
 
     for (int i = 0; i < length; i++)
@@ -32,7 +31,7 @@ Dna::Dna(char *genome, int length) {
     bm = BitManager();
     length_ = length + CYCLE_SIZE;
     dna_length_ = length;
-    chunk_number_ = (int) ceil(length_ / CHUNK_SIZE);
+    chunk_number_ = (length_ + CHUNK_SIZE - 1) / CHUNK_SIZE;
     seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
     // Copy
     for (int i = 0; i < length; i++)
@@ -47,7 +46,7 @@ Dna::Dna(int length) {
     bm = BitManager();
     length_ = length + CYCLE_SIZE;
     dna_length_ = length;
-    chunk_number_ = (int) ceil(length_ / CHUNK_SIZE);
+    chunk_number_ = (length_ + CHUNK_SIZE - 1) / CHUNK_SIZE;
     seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
 }
 
@@ -90,8 +89,12 @@ bool Dna::terminator_at(int pos) {
 }
 
 bool Dna::shine_dal_start(int pos) {
-    for (int k = 0; k < 9; k++)
-        if (bm.access_bit(seq__, pos + (k >= 6 ? k + 4 : k)) != bm.access_bit(SHINE_DAL_SEQ, k))
+    for (int k = 0; k < 6; k++)
+        if (bm.access_bit(seq__, pos + k) != bm.access_bit(SHINE_DAL_SEQ, k))
+            return false;
+
+    for (int k = 10; k < 13; k++)
+        if (bm.access_bit(seq__, pos + k)) // At these positions all SHINE_DAL_SEQ bits are 0
             return false;
 
     return true;

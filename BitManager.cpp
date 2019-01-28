@@ -6,19 +6,19 @@ void BitManager::updateOffset_bit(int pos) {
     chunck_offset__ = pos - chunck_number__ * CHUNK_SIZE;
 }
 
-int BitManager::set_bit(int32_t *dna, int pos) {
+void BitManager::set_bit(int32_t *dna, int pos) {
     updateOffset_bit(pos);
-    return BIT_SET(*(dna + chunck_number__), chunck_offset__);
+    BIT_SET(*(dna + chunck_number__), chunck_offset__);
 }
 
-int BitManager::clear_bit(int32_t *dna, int pos) {
+void BitManager::clear_bit(int32_t *dna, int pos) {
     updateOffset_bit(pos);
-    return BIT_CLEAR(*(dna + chunck_number__), chunck_offset__);
+    BIT_CLEAR(*(dna + chunck_number__), chunck_offset__);
 }
 
-int BitManager::flip_bit(int32_t *dna, int pos) {
+void BitManager::flip_bit(int32_t *dna, int pos) {
     updateOffset_bit(pos);
-    return BIT_FLIP(*(dna + chunck_number__), chunck_offset__);
+    BIT_FLIP(*(dna + chunck_number__), chunck_offset__);
 }
 
 int BitManager::access_bit(const int32_t *dna, int pos) {
@@ -26,7 +26,7 @@ int BitManager::access_bit(const int32_t *dna, int pos) {
     return BIT_CHECK(*(dna + chunck_number__), chunck_offset__);
 }
 
-int BitManager::def_bit(int32_t *dna, int pos, bool value) {
+void BitManager::def_bit(int32_t *dna, int pos, bool value) {
     return value ? set_bit(dna, pos) : clear_bit(dna, pos);
 }
 
