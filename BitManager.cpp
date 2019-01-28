@@ -18,7 +18,9 @@ int access_bit(const int32_t *dna, int pos) {
 }
 
 void def_bit(int32_t *dna, int pos, bool value) {
-    return value ? set_bit(dna, pos) : clear_bit(dna, pos);
+    value
+    ? BIT_SET(*(dna + CHUNCK_NUMBER(pos)), CHUNCK_OFFSET(pos))
+    : BIT_CLEAR(*(dna + CHUNCK_NUMBER(pos)), CHUNCK_OFFSET(pos));
 }
 
 int32_t get_chunck(int32_t *dna, int pos) {
@@ -32,8 +34,4 @@ int32_t get_chunck(int32_t *dna, int pos) {
     }
 
     return *(dna + cn) >> co;
-}
-
-int access_bit(const int32_t &dna, int pos) {
-    return BIT_CHECK(dna, pos);
 }

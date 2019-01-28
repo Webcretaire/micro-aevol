@@ -22,7 +22,7 @@ Dna::Dna(int length, Threefry::Gen &rng) {
 
     // Cyclic DNA
     for (int i = 0; i < CYCLE_SIZE; i++)
-        def_bit(seq__, i + length, (bool) access_bit(*seq__, i));
+        def_bit(seq__, i + length, (bool) BIT_CHECK(*seq__, i));
 }
 
 Dna::Dna(char *genome, int length) {
@@ -36,7 +36,7 @@ Dna::Dna(char *genome, int length) {
 
     // Cyclic DNA
     for (int i = 0; i < CYCLE_SIZE; i++)
-        def_bit(seq__, i + length, (bool) access_bit(*seq__, i));
+        def_bit(seq__, i + length, (bool) BIT_CHECK(*seq__, i));
 }
 
 Dna::Dna(int length) {
@@ -86,7 +86,7 @@ bool Dna::terminator_at(int pos) {
 
 bool Dna::shine_dal_start(int pos) {
     for (int k = 0; k < 6; k++)
-        if (access_bit(seq__, pos + k) != access_bit(SHINE_DAL_SEQ, k))
+        if (access_bit(seq__, pos + k) != BIT_CHECK(SHINE_DAL_SEQ, k))
             return false;
 
     for (int k = 10; k < 13; k++)
@@ -98,7 +98,7 @@ bool Dna::shine_dal_start(int pos) {
 
 bool Dna::protein_stop(int pos) {
     for (int k = 0; k < 3; k++)
-        if (access_bit(seq__, pos + k) != access_bit(PROTEIN_END, k))
+        if (access_bit(seq__, pos + k) != BIT_CHECK(PROTEIN_END, k))
             return false;
 
     return true;
