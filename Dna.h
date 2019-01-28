@@ -71,6 +71,4 @@ private:
     int dna_length_;
 
     int chunk_number_;
-
-    BitManager bm;
 };
