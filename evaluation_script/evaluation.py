@@ -1,5 +1,4 @@
 import os
-import csv
 import sys
 
 import tools
@@ -21,31 +20,27 @@ def compilation(tags, project_dir):
         tools.build_cmake(tag, project_dir, omp)
 
 
-def measure(tags, rows):
-    measures = {}
+def measure(tags, rows, output_file):
     os.chdir('experiments')
-    for tag in tags:
-        print('Measures on tag {}'.format(tag))
-        measures[tag] = []
-
-        prog_name = '../build-{}/{}'.format(tag, PROGRAM_NAME)
-
-        for row in rows:
-            print('\t{} {} {} {}'.format(row[0], row[1], row[2], row[3]))
+    for row in rows:
+        print('{} {} {} {}'.format(row[0], row[1], row[2], row[3]))
+        output_file.write('{},{},{},{}'.format(row[0], row[1], row[2], row[3]))
+        output_file.flush()
+        for tag in tags:
+            prog_name = '../build-{}/{}'.format(tag, PROGRAM_NAME)
+            print('\tOn tag {}'.format(tag))
             if 'seq_' in tag:
                 if row[3] > 1:  # do not execute sequential program with multiple threads
-                    measures[tag].append('N/A')
+                    value = 'N/A'
                 else:
-                    measures[tag].append(evaluate_time.evaluate(prog_name, row[0], row[1], row[2]))
+                    value = evaluate_time.evaluate(prog_name, row[0], row[1], row[2])
             else:
-                measures[tag].append(evaluate_time.evaluate(prog_name, row[0], row[1], row[2], row[3]))
-
-        f = open(tag, 'w')
-        f.write(str(measures[tag]))
-        f.close()
-
+                value = evaluate_time.evaluate(prog_name, row[0], row[1], row[2], row[3])
+            output_file.write(',{}'.format(value))
+            output_file.flush()
+        output_file.write('\n')
+        output_file.flush()
     os.chdir('..')
-    return measures
 
 
 def generate_rows(max_grid_size, max_genome_size, max_mutation_rate, max_threads):
@@ -77,13 +72,6 @@ def generate_rows(max_grid_size, max_genome_size, max_mutation_rate, max_threads
     return rows
 
 
-def generate_output(rows, output_file):
-    output_file = open(output_file, 'w')
-    csv_writer = csv.writer(output_file, delimiter=',')
-    csv_writer.writerows(rows)
-    output_file.close()
-
-
 def main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, project_dir, output_file):
     if not os.path.exists(project_dir + '/CMakeLists.txt'):
         print('A CMake project should exist')
@@ -108,15 +96,18 @@ def main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, project
     compilation(tags, project_dir)
     print('Compilation step completed !')
 
-    measures = measure(tags, rows)
+    file = open(output_file, 'w')
+    for i, label in enumerate(labels):
+        if i == 0:
+            file.write(label)
+        else:
+            file.write(',{}'.format(label))
+    file.write('\n')
+    file.flush()
 
-    for i, r in enumerate(rows):
-        for tag in tags:
-            rows[i].append(measures[tag][i])
+    measure(tags, rows, file)
 
-    rows.insert(0, labels)
-
-    generate_output(rows, output_file)
+    file.close()
 
     os.chdir(project_dir)
     tools.checkout('evaluation')
