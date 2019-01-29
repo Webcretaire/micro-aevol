@@ -6,7 +6,6 @@ import tools
 import evaluate_time
 
 PROGRAM_NAME = 'pdc_mini_aevol'
-OUTPUTFILE_NAME = 'experiments/output.csv'
 
 
 def measure(tags, rows, project_dir):
@@ -22,7 +21,7 @@ def measure(tags, rows, project_dir):
         os.chdir(cwd)
 
         omp = 'omp_' in tag
-        tools.build_cmake(omp)
+        tools.build_cmake(project_dir, omp)
 
         os.chdir('experiments')
 
@@ -47,13 +46,12 @@ def generate_rows(max_grid_size, max_genome_size, max_mutation_rate, max_threads
     rows = []
 
     current_grid_size = 16
-    current_genome_size = 1000
-    current_mutation_rate = 0.00001
-    current_num_threads = 1
-
     while current_grid_size <= max_grid_size:
+        current_genome_size = 1000
         while current_genome_size <= max_genome_size:
+            current_mutation_rate = 0.00001
             while current_mutation_rate <= max_mutation_rate:
+                current_num_threads = 1
                 while current_num_threads <= max_threads:
                     rows.append([current_grid_size, current_genome_size, current_mutation_rate, current_num_threads])
                     if current_num_threads == 1:
@@ -78,7 +76,7 @@ def generate_output(rows, output_file):
     output_file.close()
 
 
-def main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, project_dir, output_file=OUTPUTFILE_NAME):
+def main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, project_dir, output_file):
     if not os.path.exists(project_dir + '/CMakeLists.txt'):
         print('A CMake project should exist')
         return False
@@ -113,14 +111,14 @@ def main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, project
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 6:
+    if len(sys.argv) < 7:
         print('Not enough arguments given')
         exit(1)
 
-    max_grid_size = sys.argv[1]
-    max_genome_size = sys.argv[2]
-    max_mutation_rate = sys.argv[3]
-    max_threads = sys.argv[4]
+    max_grid_size = int(sys.argv[1])
+    max_genome_size = int(sys.argv[2])
+    max_mutation_rate = float(sys.argv[3])
+    max_threads = int(sys.argv[4])
     project_dir = sys.argv[5]
     output_file = sys.argv[6]
 

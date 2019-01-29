@@ -9,7 +9,10 @@ def fetch():
 
 def checkout(ref):
     cmd = ['git', 'checkout', ref]
-    subprocess.call(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    error = subprocess.call(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if error:
+        print('Error : Could not checkout')
+        exit(1)
     print('You are on {}'.format(ref))
 
 
@@ -36,8 +39,14 @@ def build_cmake(project_dir, omp=False):
         options.append('-DOMP')
 
     cmd = ['cmake', cmake_location] + options
-    subprocess.call(cmd, stdout=subprocess.PIPE)
+    error = subprocess.call(cmd, stdout=subprocess.PIPE)
+    if error:
+        print('Error : CMake pre compiling failed')
+        exit(1)
     subprocess.call('make', stdout=subprocess.PIPE)
+    if error:
+        print('Error : compilation failed')
+        exit(1)
     print('compilation done !')
     os.chdir('..')
     return True
