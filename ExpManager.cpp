@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <sys/stat.h>
 #include <err.h>
-#include<chrono>
+#include <chrono>
 #include <iostream>
 
 using namespace std::chrono;
@@ -539,9 +539,9 @@ void ExpManager::start_stop_RNA(int indiv_id) {
             }
 
             // Computing if a terminator exists at that position
-//            int dist_term_lead = internal_organisms_[indiv_id]->dna_->terminator_at(dna_pos);
+            int dist_term_lead = internal_organisms_[indiv_id]->dna_->terminator_at(dna_pos);
 
-            if (internal_organisms_[indiv_id]->dna_->terminator_at(dna_pos)) {
+            if (dist_term_lead == 4) {
                 internal_organisms_[indiv_id]->terminators.insert(
                         dna_pos);
             }
@@ -585,22 +585,22 @@ void ExpManager::opt_prom_compute_RNA(int indiv_id) {
 
             bool terminator_found = false;
 //            bool no_terminator = false;
-//            int term_dist_leading = 0;
+            int term_dist_leading = 0;
 
 //            int loop_size = 0;
 
             while (!terminator_found) {
 //                loop_size++;
 //                for (int t_motif_id = 0; t_motif_id < 4; t_motif_id++)
-//                term_dist_leading = internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos);
+                term_dist_leading = internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos);
 
-                if (internal_organisms_[indiv_id]->dna_->terminator_at(cur_pos))
+                if (term_dist_leading == 4)
                     terminator_found = true;
                 else {
                     cur_pos = cur_pos + 1 >= internal_organisms_[indiv_id]->length()
                               ? cur_pos + 1 - internal_organisms_[indiv_id]->length()
                               : cur_pos + 1;
-//                    term_dist_leading = 0;
+                    term_dist_leading = 0;
                     if (cur_pos == start_pos) {
 //                        no_terminator = true;
                         break;
@@ -609,7 +609,7 @@ void ExpManager::opt_prom_compute_RNA(int indiv_id) {
             }
 
             if (terminator_found) {
-                int32_t rna_end = //cur_pos + 10;
+                int32_t rna_end =
                         cur_pos + 10 >= internal_organisms_[indiv_id]->length() ?
                         cur_pos + 10 - internal_organisms_[indiv_id]->length() :
                         cur_pos + 10;
@@ -669,7 +669,7 @@ void ExpManager::compute_RNA(int indiv_id) {
                         it_rna_end = internal_organisms_[indiv_id]->terminators.begin();
                     }
 
-                    int rna_end = //*it_rna_end + 10;
+                    int rna_end =
                             *it_rna_end + 10 >= internal_organisms_[indiv_id]->length() ?
                             *it_rna_end + 10 - internal_organisms_[indiv_id]->length() :
                             *it_rna_end + 10;
@@ -1318,8 +1318,7 @@ void ExpManager::run_evolution(int nb_gen) {
 
     timeFile.open("time", ofstream::out);
 
-    timeFile << "generation,selection,mutation,start_stop_RNA,start_protein,compute_protein"
-                ",translate_protein,compute_phenotype,compute_fitness,total_step" << endl;
+    timeFile << "generation,total_step" << endl;
 
     printf("Running evolution from %d to %d\n", AeTime::time(), AeTime::time() + nb_gen);
     bool firstGen = true;
