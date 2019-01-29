@@ -8,24 +8,27 @@ import evaluate_time
 PROGRAM_NAME = 'pdc_mini_aevol'
 
 
-def measure(tags, rows, project_dir):
-    measures = {}
+def compilation(tags, project_dir):
     cwd = os.getcwd()
     for tag in tags:
-        # print('measures on tag {}'.format(tag))
-        measures[tag] = []
-        print(tag)
+        print('Compilation of tag {}'.format(tag))
 
         os.chdir(project_dir)
         tools.checkout(tag)
         os.chdir(cwd)
 
         omp = 'omp_' in tag
-        tools.build_cmake(project_dir, omp)
+        tools.build_cmake(tag, project_dir, omp)
 
-        os.chdir('experiments')
 
-        prog_name = '../build/' + PROGRAM_NAME
+def measure(tags, rows):
+    measures = {}
+    os.chdir('experiments')
+    for tag in tags:
+        print('Measures on tag {}'.format(tag))
+        measures[tag] = []
+
+        prog_name = '../build-{}/{}'.format(tag, PROGRAM_NAME)
 
         for row in rows:
             print('\t{} {} {} {}'.format(row[0], row[1], row[2], row[3]))
@@ -37,8 +40,11 @@ def measure(tags, rows, project_dir):
             else:
                 measures[tag].append(evaluate_time.evaluate(prog_name, row[0], row[1], row[2], row[3]))
 
-        os.chdir('..')
+        f = open(tag, 'w')
+        f.write(str(measures[tag]))
+        f.close()
 
+    os.chdir('..')
     return measures
 
 
@@ -66,6 +72,8 @@ def generate_rows(max_grid_size, max_genome_size, max_mutation_rate, max_threads
             current_genome_size *= 2
         current_grid_size *= 2
 
+    for row in rows:
+        print(row)
     return rows
 
 
@@ -97,15 +105,21 @@ def main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, project
     os.chdir(cwd)
     os.makedirs('experiments', exist_ok=True)
 
-    measures = measure(tags, rows, project_dir)
+    compilation(tags, project_dir)
+    print('Compilation step completed !')
+
+    measures = measure(tags, rows)
 
     for i, r in enumerate(rows):
         for tag in tags:
-            rows[i] += measures[tag]
+            rows[i].append(measures[tag][i])
 
     rows.insert(0, labels)
 
     generate_output(rows, output_file)
+
+    os.chdir(project_dir)
+    tools.checkout('evaluation')
 
     return True
 

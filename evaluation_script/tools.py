@@ -25,13 +25,15 @@ def tags():
     return list_out
 
 
-def build_cmake(project_dir, omp=False):
+def build_cmake(tag, project_dir, omp=False):
     if not os.path.exists(project_dir + '/CMakeLists.txt'):
         print('Error :Not a CMake project')
         exit(1)
 
-    os.makedirs('build', exist_ok=True)
-    os.chdir('build')
+    comp_dir = 'build-' + tag
+
+    os.makedirs(comp_dir, exist_ok=True)
+    os.chdir(comp_dir)
 
     cmake_location = '../' + project_dir
     options = ['-DCMAKE_BUILD_TYPE=Release']
@@ -44,9 +46,10 @@ def build_cmake(project_dir, omp=False):
         print('Error : CMake pre compiling failed')
         exit(1)
     subprocess.call('make', stdout=subprocess.PIPE)
+    print('\tCMake done !')
     if error:
         print('Error : compilation failed')
         exit(1)
-    print('compilation done !')
+    print('\tCompilation done !')
     os.chdir('..')
     return True
