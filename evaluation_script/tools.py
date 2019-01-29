@@ -38,7 +38,7 @@ def build_cmake(tag, project_dir, omp=False):
     cmake_location = '../' + project_dir
     options = ['-DCMAKE_BUILD_TYPE=Release']
     if omp:
-        options.append('-DOMP')
+        options.append('-DOMP=1')
 
     cmd = ['cmake', cmake_location] + options
     error = subprocess.call(cmd, stdout=subprocess.PIPE)
