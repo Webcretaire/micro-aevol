@@ -1,178 +1,116 @@
-//
-// Created by arrouan on 01/10/18.
-//
-
 #include "Dna.h"
 #include "ExpManager.h"
+#include "BitManager.h"
 
-Dna::Dna(const Dna &clone) : seq_(clone.seq_) {
+Dna::Dna(const Dna &clone) {
+    length_ = clone.length_;
+    dna_length_ = clone.dna_length_;
+    chunk_number_ = clone.chunk_number_;
+    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
+    for (int i = 0; i < chunk_number_; i++)
+        seq__[i] = clone.seq__[i];
 }
 
-Dna::Dna(int length, Threefry::Gen &rng) : seq_(length) {
-    // Generate a random genome
-    for (int32_t i = 0; i < length; i++) {
-        seq_[i] = '0' + rng.random(NB_BASE);
-    }
+Dna::Dna(int length, Threefry::Gen &rng) {
+    length_ = length + CYCLE_SIZE;
+    dna_length_ = length;
+    chunk_number_ = (length_ + CHUNK_SIZE - 1) / CHUNK_SIZE;
+    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
+
+    for (int i = 0; i < length; i++)
+        def_bit(seq__, i, (bool) rng.random(NB_BASE));
+
+    // Cyclic DNA
+    for (int i = 0; i < CYCLE_SIZE; i++)
+        def_bit(seq__, i + length, (bool) BIT_CHECK(*seq__, i));
 }
 
-Dna::Dna(char *genome, int length) : seq_(length) {
-    strcpy(seq_.data(), genome);
+Dna::Dna(char *genome, int length) {
+    length_ = length + CYCLE_SIZE;
+    dna_length_ = length;
+    chunk_number_ = (length_ + CHUNK_SIZE - 1) / CHUNK_SIZE;
+    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
+    // Copy
+    for (int i = 0; i < length; i++)
+        def_bit(seq__, i, genome[i] == '1');
+
+    // Cyclic DNA
+    for (int i = 0; i < CYCLE_SIZE; i++)
+        def_bit(seq__, i + length, (bool) BIT_CHECK(*seq__, i));
 }
 
-Dna::Dna(int length) : seq_(length) {
+Dna::Dna(int length) {
+    length_ = length + CYCLE_SIZE;
+    dna_length_ = length;
+    chunk_number_ = (length_ + CHUNK_SIZE - 1) / CHUNK_SIZE;
+    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
 }
 
 int Dna::length() const {
-    return seq_.size();
+    return dna_length_;
 }
 
 void Dna::save(gzFile backup_file) {
-    int dna_length = length();
+    int dna_length = length_;
     gzwrite(backup_file, &dna_length, sizeof(dna_length));
-    gzwrite(backup_file, seq_.data(), seq_.size() * sizeof(seq_[0]));
+    gzwrite(backup_file, seq__, chunk_number_ * sizeof(int32_t));
 }
 
 void Dna::load(gzFile backup_file) {
     int dna_length;
     gzread(backup_file, &dna_length, sizeof(dna_length));
-
-    gzread(backup_file, seq_.data(), sizeof(*seq_.data()));
+    gzread(backup_file, seq__, chunk_number_ * sizeof(int32_t));
 }
 
 void Dna::set(int pos, char c) {
-    seq_[pos] = c;
+    def_bit(seq__, pos, c == '1');
 }
 
 void Dna::do_switch(int pos) {
-    if (seq_[pos] == '0') seq_[pos] = '1';
-    else seq_[pos] = '0';
+    flip_bit(seq__, pos);
+    if (pos < CYCLE_SIZE)
+        flip_bit(seq__, dna_length_ + pos);
 }
 
-/*
- * TODO: This function is used a lot (41.05 % of time)
- */
 int Dna::promoter_at(int pos) {
-    int prom_dist[22];
-
-    for (int motif_id = 0; motif_id < 22; motif_id++) {
-        // Searching for the promoter
-        prom_dist[motif_id] =
-                PROM_SEQ[motif_id] ==
-                seq_[
-                        pos + motif_id >= seq_.size() ? pos +
-                                                        motif_id -
-                                                        seq_.size()
-                                                      : pos +
-                                                        motif_id]
-                ? 0
-                : 1;
-
-    }
-
-
-    // Computing if a promoter exists at that position
-    int dist_lead = prom_dist[0] +
-                    prom_dist[1] +
-                    prom_dist[2] +
-                    prom_dist[3] +
-                    prom_dist[4] +
-                    prom_dist[5] +
-                    prom_dist[6] +
-                    prom_dist[7] +
-                    prom_dist[8] +
-                    prom_dist[9] +
-                    prom_dist[10] +
-                    prom_dist[11] +
-                    prom_dist[12] +
-                    prom_dist[13] +
-                    prom_dist[14] +
-                    prom_dist[15] +
-                    prom_dist[16] +
-                    prom_dist[17] +
-                    prom_dist[18] +
-                    prom_dist[19] +
-                    prom_dist[20] +
-                    prom_dist[21];
-
-    return dist_lead;
+    return __builtin_popcount((get_chunck(seq__, pos) & PROM_MASK) ^ PROM_SEQ);
 }
 
-int Dna::terminator_at(int pos) {
-    int term_dist[4];
-    for (int motif_id = 0; motif_id < 4; motif_id++) {
+bool Dna::terminator_at(int pos) {
+    for (int motif_id = 0; motif_id < 4; motif_id++)
+        if (access_bit(seq__, pos + motif_id) == access_bit(seq__, pos - motif_id + 10))
+            return false;
 
-        // Search for the terminators
-        term_dist[motif_id] =
-                seq_[pos + motif_id >= seq_.size() ? pos + motif_id - seq_.size() : pos + motif_id]
-                !=
-                seq_[pos - motif_id + 10 >= seq_.size() ? pos - motif_id + 10 - seq_.size() : pos - motif_id + 10]
-                ? 1 : 0;
-    }
-    int dist_term_lead = term_dist[0] +
-                         term_dist[1] +
-                         term_dist[2] +
-                         term_dist[3];
-
-    return dist_term_lead;
+    return true;
 }
 
 bool Dna::shine_dal_start(int pos) {
-    bool start = false;
-    int t_pos, k_t;
+    for (int k = 0; k < 6; k++)
+        if (access_bit(seq__, pos + k) != BIT_CHECK(SHINE_DAL_SEQ, k))
+            return false;
 
-    for (int k = 0; k < 9; k++) {
-        k_t = k >= 6 ? k + 4 : k;
-        t_pos = pos + k_t >= seq_.size() ? pos + k_t -
-                                           seq_.size()
-                                         : pos + k_t;
+    for (int k = 10; k < 13; k++)
+        if (access_bit(seq__, pos + k)) // At these positions all SHINE_DAL_SEQ bits are 0
+            return false;
 
-        if (seq_[t_pos] ==
-            SHINE_DAL_SEQ[k]) {
-            start = true;
-        } else {
-            start = false;
-            break;
-        }
-    }
-
-    return start;
+    return true;
 }
 
 bool Dna::protein_stop(int pos) {
-    bool is_protein;
-    int t_k;
+    for (int k = 0; k < 3; k++)
+        if (access_bit(seq__, pos + k) != BIT_CHECK(PROTEIN_END, k))
+            return false;
 
-    for (int k = 0; k < 3; k++) {
-        t_k = pos + k >= seq_.size() ?
-              pos - seq_.size() + k :
-              pos + k;
-
-        if (seq_[t_k] ==
-            PROTEIN_END[k]) {
-            is_protein = true;
-        } else {
-            is_protein = false;
-            break;
-        }
-    }
-
-    return is_protein;
+    return true;
 }
 
 int Dna::codon_at(int pos) {
     int value = 0;
 
-    int t_pos;
-
-    for (int i = 0; i < 3; i++) {
-        t_pos =
-                pos + i >= seq_.size() ? pos + i -
-                                         seq_.size()
-                                       : pos + i;
-        if (seq_[t_pos] ==
-            '1')
+    for (int i = 0; i < 3; i++)
+        if (access_bit(seq__, pos + i))
             value += 1 << (CODON_SIZE - i - 1);
-    }
+
 
     return value;
 }
