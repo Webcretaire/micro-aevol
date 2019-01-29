@@ -61,8 +61,10 @@ def generate_rows(max_grid_size, max_genome_size, max_mutation_rate, max_threads
                         current_num_threads += 2
                     elif current_num_threads < 20:
                         current_num_threads += 4
-                    else:
+                    elif current_num_threads < 32:
                         current_num_threads += 6
+                    else:
+                        current_num_threads += 16
                 current_mutation_rate *= 10
             current_genome_size *= 2
         current_grid_size *= 2
