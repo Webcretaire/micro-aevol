@@ -8,13 +8,19 @@ import evaluate_time
 PROGRAM_NAME = 'pdc_mini_aevol'
 OUTPUTFILE_NAME = 'experiments/output.csv'
 
-def measure(tags, rows):
+
+def measure(tags, rows, project_dir):
     measures = {}
+    cwd = os.getcwd()
     for tag in tags:
         # print('measures on tag {}'.format(tag))
         measures[tag] = []
         print(tag)
+
+        os.chdir(project_dir)
         tools.checkout(tag)
+        os.chdir(cwd)
+
         omp = 'omp_' in tag
         tools.build_cmake(omp)
 
@@ -72,11 +78,13 @@ def generate_output(rows, output_file):
     output_file.close()
 
 
-def main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, output_file=OUTPUTFILE_NAME):
-    if not os.path.exists('CMakeLists.txt'):
-        print('You should be at the root of the project')
+def main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, project_dir, output_file=OUTPUTFILE_NAME):
+    if not os.path.exists(project_dir + '/CMakeLists.txt'):
+        print('A CMake project should exist')
         return False
 
+    cwd = os.getcwd()
+    os.chdir(project_dir)
     tools.fetch()
 
     tags = tools.tags()
@@ -87,9 +95,11 @@ def main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, output_
     labels += tags
 
     rows = generate_rows(max_grid_size, max_genome_size, max_mutation_rate, max_threads)
+
+    os.chdir(cwd)
     os.makedirs('experiments', exist_ok=True)
 
-    measures = measure(tags, rows)
+    measures = measure(tags, rows, project_dir)
 
     for i, r in enumerate(rows):
         for tag in tags:
@@ -103,7 +113,7 @@ def main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, output_
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 6:
         print('Not enough arguments given')
         exit(1)
 
@@ -111,9 +121,10 @@ if __name__ == '__main__':
     max_genome_size = sys.argv[2]
     max_mutation_rate = sys.argv[3]
     max_threads = sys.argv[4]
-    output_file = sys.argv[5]
+    project_dir = sys.argv[5]
+    output_file = sys.argv[6]
 
-    if main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, output_file):
+    if main(max_grid_size, max_genome_size, max_mutation_rate, max_threads, project_dir, output_file):
         print('Evaluation Done !')
     else:
         print('Aouch, something went wrong')

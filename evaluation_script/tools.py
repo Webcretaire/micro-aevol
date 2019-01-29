@@ -22,15 +22,20 @@ def tags():
     return list_out
 
 
-def build_cmake(omp=False):
-    if not os.path.exists('CMakeLists.txt'):
-        return False
+def build_cmake(project_dir, omp=False):
+    if not os.path.exists(project_dir + '/CMakeLists.txt'):
+        print('Error :Not a CMake project')
+        exit(1)
 
     os.makedirs('build', exist_ok=True)
     os.chdir('build')
-    cmd = ['cmake', '..', '-DCMAKE_BUILD_TYPE=Release']
+
+    cmake_location = '../' + project_dir
+    options = ['-DCMAKE_BUILD_TYPE=Release']
     if omp:
-        cmd.append('-DOMP')
+        options.append('-DOMP')
+
+    cmd = ['cmake', cmake_location] + options
     subprocess.call(cmd, stdout=subprocess.PIPE)
     subprocess.call('make', stdout=subprocess.PIPE)
     print('compilation done !')
