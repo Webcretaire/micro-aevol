@@ -46,12 +46,12 @@ def measure(tags, rows, output_file):
 def generate_rows(max_grid_size, max_genome_size, max_mutation_rate, max_threads):
     rows = []
 
-    current_grid_size = 16
-    while current_grid_size <= max_grid_size:
-        current_genome_size = 1000
-        while current_genome_size <= max_genome_size:
-            current_mutation_rate = 0.00001
-            while current_mutation_rate <= max_mutation_rate:
+    current_mutation_rate = 0.000001
+    while current_mutation_rate <= max_mutation_rate:
+        current_grid_size = 16
+        while current_grid_size <= max_grid_size:
+            current_genome_size = 1000
+            while current_genome_size <= max_genome_size:
                 current_num_threads = 1
                 while current_num_threads <= max_threads:
                     rows.append([current_grid_size, current_genome_size, current_mutation_rate, current_num_threads])
@@ -65,9 +65,9 @@ def generate_rows(max_grid_size, max_genome_size, max_mutation_rate, max_threads
                         current_num_threads += 6
                     else:
                         current_num_threads += 16
-                current_mutation_rate *= 10
-            current_genome_size *= 2
-        current_grid_size *= 2
+                current_genome_size *= 2
+            current_grid_size *= 2
+        current_mutation_rate *= 10
 
     for row in rows:
         print(row)
