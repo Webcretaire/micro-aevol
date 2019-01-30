@@ -6,7 +6,7 @@ Dna::Dna(const Dna &clone) {
     length_ = clone.length_;
     dna_length_ = clone.dna_length_;
     chunk_number_ = clone.chunk_number_;
-    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
+    seq__ = (u_int32_t *) malloc(chunk_number_ * sizeof(u_int32_t));
     for (int i = 0; i < chunk_number_; i++)
         seq__[i] = clone.seq__[i];
 }
@@ -15,7 +15,7 @@ Dna::Dna(int length, Threefry::Gen &rng) {
     length_ = length + CYCLE_SIZE;
     dna_length_ = length;
     chunk_number_ = (length_ + CHUNK_SIZE - 1) / CHUNK_SIZE;
-    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
+    seq__ = (u_int32_t *) malloc(chunk_number_ * sizeof(u_int32_t));
 
     for (int i = 0; i < length; i++)
         def_bit(seq__, i, (bool) rng.random(NB_BASE));
@@ -29,7 +29,7 @@ Dna::Dna(char *genome, int length) {
     length_ = length + CYCLE_SIZE;
     dna_length_ = length;
     chunk_number_ = (length_ + CHUNK_SIZE - 1) / CHUNK_SIZE;
-    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
+    seq__ = (u_int32_t *) malloc(chunk_number_ * sizeof(u_int32_t));
     // Copy
     for (int i = 0; i < length; i++)
         def_bit(seq__, i, genome[i] == '1');
@@ -43,7 +43,7 @@ Dna::Dna(int length) {
     length_ = length + CYCLE_SIZE;
     dna_length_ = length;
     chunk_number_ = (length_ + CHUNK_SIZE - 1) / CHUNK_SIZE;
-    seq__ = (int32_t *) malloc(chunk_number_ * sizeof(int32_t));
+    seq__ = (u_int32_t *) malloc(chunk_number_ * sizeof(u_int32_t));
 }
 
 int Dna::length() const {
@@ -53,13 +53,13 @@ int Dna::length() const {
 void Dna::save(gzFile backup_file) {
     int dna_length = length_;
     gzwrite(backup_file, &dna_length, sizeof(dna_length));
-    gzwrite(backup_file, seq__, chunk_number_ * sizeof(int32_t));
+    gzwrite(backup_file, seq__, chunk_number_ * sizeof(u_int32_t));
 }
 
 void Dna::load(gzFile backup_file) {
     int dna_length;
     gzread(backup_file, &dna_length, sizeof(dna_length));
-    gzread(backup_file, seq__, chunk_number_ * sizeof(int32_t));
+    gzread(backup_file, seq__, chunk_number_ * sizeof(u_int32_t));
 }
 
 void Dna::set(int pos, char c) {

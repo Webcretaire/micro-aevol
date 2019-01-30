@@ -14,16 +14,16 @@
 #include "Threefry.h"
 #include "BitManager.h"
 
-constexpr int8_t CODON_SIZE = 3;
-constexpr int8_t CYCLE_SIZE = 22;
+constexpr u_int8_t CODON_SIZE = 3;
+constexpr u_int8_t CYCLE_SIZE = 22;
 
 //constexpr const char *PROM_SEQ = "0101011001110010010110";
 //constexpr const char *SHINE_DAL_SEQ = "011011000";
 //constexpr const char *PROTEIN_END = "001"; // CODON_STOP
-constexpr const int32_t PROM_SEQ = 0b00000000000110100100111001101010;
-constexpr const int32_t PROM_MASK = 0b00000000001111111111111111111111;
-constexpr const int32_t SHINE_DAL_SEQ = 0b00000000000000000000000000110110;
-constexpr const int32_t PROTEIN_END = 0b00000000000000000000000000000100; // CODON_STOP
+constexpr const u_int32_t PROM_SEQ = 0b00000000000110100100111001101010;
+constexpr const u_int32_t PROM_MASK = 0b00000000001111111111111111111111;
+constexpr const u_int32_t SHINE_DAL_SEQ = 0b00000000000000000000000000110110;
+constexpr const u_int32_t PROTEIN_END = 0b00000000000000000000000000000100; // CODON_STOP
 
 class ExpManager;
 
@@ -64,7 +64,7 @@ public:
 
 private:
 
-    int32_t *seq__;
+    u_int32_t *seq__;
 
     int length_;
 
