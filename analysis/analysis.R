@@ -2,6 +2,8 @@ library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(rstudioapi)
+library(tikzDevice)
+library(scales)
 
 export.png <-
   function(out_name,
@@ -13,48 +15,72 @@ export.png <-
     dev.off()
   }
 
+export.tikz <-
+  function(out_name,
+           graph,
+           width = 19 * 0.393701,
+           # Conversion pouces / centimètres
+           height = 16 * 0.393701) {
+    tikz(file = out_name, width, height)
+    print(graph)
+    dev.off()
+  }
+
 # Set working directory to script location
 setwd(dirname(getActiveDocumentContext()$path))
 
 data <- read.csv("out.csv")
 
+names(data) <- c(
+  "gridSize",
+  "genomeSize",
+  "mutationRate",
+  "numThreads",
+  "ompMeasureMultipleParallelFor",
+  "ompMeasureOneParallelFor",
+  "ompMeasureOneParallelForBitset",
+  "ompMeasureOneParallelSectionMultipleFor",
+  "seqMeasureMultipleFor",
+  "seqMeasureOneFor",
+  "seqMeasureOneForBitset"
+)
+
 g_size <- 32000
 
-filtered_data <- subset(data, genome_size == g_size)
+filtered_data <- subset(data, genomeSize == g_size)
 
 gathered_data <-
-  gather(
-    filtered_data,
-    algorithm,
-    time,
-    starts_with('omp_singleMeasure')
-  )
+  gather(filtered_data,
+         algorithm,
+         time,
+         starts_with('ompMeasure'))
 
 plot <-
-  ggplot(gathered_data, aes(x = num_threads, y = time, colour = algorithm)) +
-  facet_wrap(grid_size ~ mutation_rate) +
-  scale_y_log10() +
+  ggplot(gathered_data, aes(x = numThreads, y = time, colour = algorithm)) +
+  facet_wrap(gridSize ~ mutationRate) +
+  scale_y_log10(labels = trans_format("log10", math_format(10 ^ .x))) +
   geom_line() +
-  geom_point()
+  geom_point() +
+  theme(legend.position = "bottom") + guides(col = guide_legend(nrow = 4))
 
-export.png("omp.png", plot)
+export.tikz("omp.tex", plot)
 
-filtered_data <- subset(data, seq_singleMeasure_oneFor != -1)
+filtered_data <- subset(data, seqMeasureOneFor != -1)
 
 gathered_data <-
-  gather(
-    filtered_data,
-    algorithm,
-    time,
-    starts_with('seq_singleMeasure')
-  )
+  gather(filtered_data,
+         algorithm,
+         time,
+         starts_with('seqMeasure'))
 
 plot <-
-  ggplot(gathered_data, aes(x = genome_size, y = time, colour = algorithm)) +
-  facet_wrap(grid_size ~ mutation_rate) +
-  scale_y_log10() +
+  ggplot(gathered_data, aes(x = genomeSize, y = time, colour = algorithm)) +
+  facet_wrap(gridSize ~ mutationRate) +
+  scale_y_log10(labels = trans_format("log10", math_format(10 ^ .x))) +
   geom_line() +
-  geom_point()
+  geom_point() +
+  theme(legend.position = "bottom") + guides(col = guide_legend(nrow = 3))
 
-export.png("seq.png", plot)
+print(plot)
 
+export.tikz("seq.tex", plot)
