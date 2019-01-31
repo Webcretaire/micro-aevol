@@ -5,31 +5,13 @@ library(rstudioapi)
 library(tikzDevice)
 library(scales)
 
-export.png <-
-  function(out_name,
-           graph,
-           width = 1920,
-           height = 1080) {
-    png(out_name, width, height, units = "px")
-    print(graph)
-    dev.off()
-  }
-
-export.tikz <-
-  function(out_name,
-           graph,
-           width = 19 * 0.393701,
-           # Conversion pouces / centimètres
-           height = 16 * 0.393701) {
-    tikz(file = out_name, width, height)
-    print(graph)
-    dev.off()
-  }
-
 # Set working directory to script location
 setwd(dirname(getActiveDocumentContext()$path))
 
-data <- read.csv("out.csv")
+source("util.R")
+source("exports.R")
+
+data <- read.csv("data.csv")
 
 names(data) <- c(
   "gridSize",
@@ -56,14 +38,20 @@ gathered_data <-
          starts_with('ompMeasure'))
 
 plot <-
-  ggplot(gathered_data, aes(x = numThreads, y = time, colour = algorithm)) +
+  ggplot(gathered_data,
+         aes(x = numThreads,
+             y = time,
+             fill = algorithm)) +
   facet_wrap(gridSize ~ mutationRate) +
+  scale_x_continuous(trans = 'log2') +
   scale_y_log10(labels = trans_format("log10", math_format(10 ^ .x))) +
-  geom_line() +
-  geom_point() +
-  theme(legend.position = "bottom") + guides(col = guide_legend(nrow = 4))
+  geom_bar(stat = "identity",
+           position = position_dodge(),
+           colour = "black") +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(nrow = 4))
 
-export.tikz("omp.tex", plot)
+export.all("fort", plot)
 
 filtered_data <- subset(data, seqMeasureOneFor != -1)
 
@@ -74,13 +62,43 @@ gathered_data <-
          starts_with('seqMeasure'))
 
 plot <-
-  ggplot(gathered_data, aes(x = genomeSize, y = time, colour = algorithm)) +
+  ggplot(gathered_data,
+         aes(x = genomeSize,
+             y = time,
+             fill = algorithm)) +
   facet_wrap(gridSize ~ mutationRate) +
+  scale_x_log10() +
   scale_y_log10(labels = trans_format("log10", math_format(10 ^ .x))) +
-  geom_line() +
-  geom_point() +
-  theme(legend.position = "bottom") + guides(col = guide_legend(nrow = 3))
+  geom_bar(stat = "identity",
+           position = position_dodge(),
+           colour = "black") +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(nrow = 3))
+
+export.all("seq", plot)
+
+filtered_data <- subset(data, genomeSize == 1000 * numThreads)
+
+gathered_data <-
+  gather(filtered_data,
+         algorithm,
+         time,
+         starts_with('ompMeasure'))
+
+plot <-
+  ggplot(gathered_data,
+         aes(x = numThreads,
+             y = time,
+             fill = algorithm)) +
+  facet_wrap(gridSize ~ mutationRate) +
+  scale_x_continuous(trans = 'log2') +
+  scale_y_log10(labels = trans_format("log10", math_format(10 ^ .x))) +
+  geom_bar(stat = "identity",
+           position = position_dodge(),
+           colour = "black") +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(nrow = 4))
 
 print(plot)
 
-export.tikz("seq.tex", plot)
+export.all("faible", plot)
