@@ -13,7 +13,7 @@ plot.sequential <-
                y = time,
                fill = algorithm
              )) +
-        facet_wrap(gridSize ~ mutationRate) +
+        facet_wrap(gridSize ~ mutationRate, labeller = label_both) +
         scale_x_log10() +
         scale_y_log10(labels = trans_format("log10", math_format(10 ^ .x))) +
         geom_bar(
@@ -41,7 +41,7 @@ plot.parallel <-
                y = time,
                fill = algorithm
              )) +
-        facet_wrap(gridSize ~ mutationRate) +
+        facet_wrap(gridSize ~ mutationRate, labeller = label_both) +
         scale_x_continuous(trans = 'log2') +
         scale_y_log10(labels = trans_format("log10", math_format(10 ^ .x))) +
         geom_bar(
