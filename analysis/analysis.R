@@ -42,4 +42,8 @@ filtered_data <- subset(data, genomeSize == 1000 * numThreads)
 plot <- plot.parallel(filtered_data)
 export.all("faible", plot)
 
+filtered_data <- subset(data, genomeSize == 4000 & gridSize == 32 & mutationRate > 5e-06 & mutationRate < 5e-05)
+plot <- plot.mixed(filtered_data)
+export.all("comp_original", plot)
+
 print(plot)
