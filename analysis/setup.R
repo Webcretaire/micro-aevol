@@ -1,0 +1,6 @@
+install.packages('ggplot2')
+install.packages('tidyr')
+install.packages('dplyr')
+install.packages('rstudioapi')
+install.packages('tikzDevice')
+install.packages('scales')
